@@ -517,15 +517,30 @@ ul {
   padding: 0;
 }
 
+.footer-links li {
+  display: flex;
+  align-items: center;
+}
+
 .footer-links a {
   color: var(--text-muted);
   transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .footer-links a:hover {
   color: var(--primary-color);
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+.footer-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  fill: currentColor;
 }
 
 .copyright {
