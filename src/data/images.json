@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Cyberpunk City",
+        "url": "https://example.com/image1.jpg",
+        "tool": "Midjourney",
+        "comment": "ネオン輝く未来都市の風景。",
+        "createdAt": "2025-11-22"
+    },
+    {
+        "title": "Fantasy Forest",
+        "url": "https://example.com/image2.jpg",
+        "tool": "Stable Diffusion",
+        "comment": "魔法の光が差し込む静かな森。",
+        "createdAt": "2025-11-21"
+    },
+    {
+        "title": "Abstract Dreams",
+        "url": "https://example.com/image3.jpg",
+        "tool": "Midjourney",
+        "comment": "夢の中のような抽象的な色彩。",
+        "createdAt": "2025-11-20"
+    },
+    {
+        "title": "Cinematic Space",
+        "url": "https://example.com/video1.mp4",
+        "tool": "Sora",
+        "comment": "宇宙ステーションからの眺め（動画生成）。",
+        "createdAt": "2025-11-19"
+    }
+]
