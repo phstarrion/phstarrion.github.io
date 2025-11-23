@@ -232,6 +232,9 @@ ul {
   padding: var(--spacing-md);
   backdrop-filter: blur(var(--glass-blur));
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .glass-card:hover {
@@ -248,6 +251,9 @@ ul {
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .music-card:hover {
@@ -279,6 +285,9 @@ ul {
 
 .music-info {
   padding: var(--spacing-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .music-info h3 {
@@ -292,6 +301,7 @@ ul {
   font-size: 0.9rem;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
+  flex: 1;
 }
 
 .btn-suno {
@@ -305,6 +315,7 @@ ul {
   font-weight: 600;
   font-size: 0.9rem;
   transition: opacity 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-suno:hover {
@@ -318,6 +329,7 @@ ul {
   overflow: hidden;
   aspect-ratio: 1 / 1;
   cursor: pointer;
+  height: 100%;
 }
 
 .image-card img {
@@ -367,6 +379,12 @@ ul {
 }
 
 /* App Cards */
+.app-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .app-card h3 {
   font-family: var(--font-display);
   font-size: 1.3rem;
@@ -378,6 +396,7 @@ ul {
   color: var(--text-muted);
   margin-bottom: 1rem;
   font-size: 0.95rem;
+  flex: 1;
 }
 
 .tech-stack {
@@ -403,11 +422,35 @@ ul {
   border-radius: 20px;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  text-align: center;
 }
 
 .btn-app:hover {
   background: var(--primary-color);
   color: white;
+}
+
+/* More Buttons */
+.more-btn-container {
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.btn-more {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-more:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* Blog List */
@@ -443,12 +486,52 @@ ul {
 
 /* Footer */
 .site-footer {
-  padding: var(--spacing-md) 0;
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.85rem;
+  padding: var(--spacing-lg) 0;
+  background: var(--bg-secondary);
   border-top: 1px solid var(--glass-border);
   margin-top: var(--spacing-xl);
+  font-size: 0.9rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+}
+
+.footer-links h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.footer-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.copyright {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: var(--spacing-md);
 }
 
 /* Responsive */

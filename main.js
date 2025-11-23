@@ -64,67 +64,8 @@ document.querySelectorAll('.section').forEach(section => {
   sectionObserver.observe(section);
 });
 
-// --- Data Rendering Functions ---
+// --- Card Rendering Functions ---
 
-function createCard(item, type) {
-  let content = '';
-  let link = '';
-  let label = '';
-
-  if (type === 'music') {
-    const hash = item.title.length % 3;
-    const gradientClass = `placeholder-gradient-${hash + 1}`;
-    link = './music.html';
-    label = 'Music';
-    content = `
-      <div class="music-thumbnail ${gradientClass}">
-        <span class="music-icon">🎵</span>
-      </div>
-      <div class="music-info">
-        <h3>${item.title}</h3>
-        <p>${item.comment}</p>
-        <span class="btn-suno">▶ Listen</span>
-      </div>
-    `;
-  } else if (type === 'image') {
-    link = './images.html';
-    label = 'Image';
-    content = `
-      <div class="image-card-inner">
-        <img src="${item.url}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400?text=AI+Image'">
-        <div class="image-overlay">
-          <span class="tool-tag">${item.tool}</span>
-          <h3>${item.title}</h3>
-          <p>${item.comment}</p>
-        </div>
-      </div>
-    `;
-  } else if (type === 'app') {
-    link = './apps.html';
-    label = 'App';
-    const techTags = item.techStack.map(tech => `<span class="tech-tag">${tech}</span>`).join('');
-    content = `
-      <div class="glass-card app-card">
-        <h3>${item.title}</h3>
-        <p class="app-desc">${item.description}</p>
-        <div class="tech-stack">${techTags}</div>
-        <span class="btn-app">View App</span>
-      </div>
-    `;
-  }
-
-  // Wrap in anchor for Latest Works, or div for specific pages if needed
-  // For simplicity, we'll make the whole card clickable or just return the inner HTML
-  // But user asked for "link to the detail page" in Latest Works.
-
-  return `
-    <a href="${link}" class="card-item ${type}-item">
-      ${content}
-    </a>
-  `;
-}
-
-// Specific card creators for category pages (reusing logic where possible or keeping distinct)
 function createMusicCard(song) {
   const hash = song.title.length % 3;
   const gradientClass = `placeholder-gradient-${hash + 1}`;
@@ -185,67 +126,17 @@ async function initData() {
     const images = await imagesRes.json();
     const apps = await appsRes.json();
 
-    renderLatestWorks(songs, images, apps);
+    // Render Category Pages (Full List)
     renderCategoryPages(songs, images, apps);
+
+    // Render Latest Works (Split Categories)
+    loadLatestMusic(songs);
+    loadLatestImages(images);
+    loadLatestApps(apps);
 
   } catch (error) {
     console.error('Error loading data:', error);
   }
-}
-
-function renderLatestWorks(songs, images, apps) {
-  const latestWorksContainer = document.getElementById('latest-works');
-  if (!latestWorksContainer) return;
-
-  // Combine all items with type and date
-  const allItems = [
-    ...songs.map(item => ({ ...item, type: 'music', date: new Date(item.createdAt) })),
-    ...images.map(item => ({ ...item, type: 'image', date: new Date(item.createdAt) })),
-    ...apps.map(item => ({ ...item, type: 'app', date: new Date(item.createdAt) }))
-  ];
-
-  // Sort by date desc
-  allItems.sort((a, b) => b.date - a.date);
-
-  // Take top 3 (or more if desired, user said "Latest Works" list)
-  // Let's show top 6 for a nice grid
-  const topItems = allItems.slice(0, 6);
-
-  latestWorksContainer.innerHTML = topItems.map(item => {
-    // We can reuse specific card creators or make a generic one. 
-    // For Latest Works, we want to link to the detail page.
-    // Let's use a simplified card style for the home page.
-
-    let thumbnail = '';
-    let link = '';
-    let categoryLabel = '';
-
-    if (item.type === 'music') {
-      const hash = item.title.length % 3;
-      thumbnail = `<div class="music-thumbnail placeholder-gradient-${hash + 1}" style="aspect-ratio: 16/9;"><span class="music-icon">🎵</span></div>`;
-      link = './music.html';
-      categoryLabel = 'Music';
-    } else if (item.type === 'image') {
-      thumbnail = `<div style="aspect-ratio: 16/9; overflow: hidden;"><img src="${item.url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/400x400?text=AI+Image'"></div>`;
-      link = './images.html';
-      categoryLabel = 'Image';
-    } else if (item.type === 'app') {
-      thumbnail = `<div class="glass-card" style="aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);"><span>📱 App</span></div>`;
-      link = './apps.html';
-      categoryLabel = 'App';
-    }
-
-    return `
-      <a href="${link}" class="glass-card" style="display: block; text-decoration: none; color: inherit; padding: 0; overflow: hidden;">
-        ${thumbnail}
-        <div style="padding: 1rem;">
-            <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--primary-color); letter-spacing: 1px;">${categoryLabel}</span>
-            <h3 style="margin: 0.5rem 0; font-size: 1.1rem;">${item.title}</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${item.comment || item.description}</p>
-        </div>
-      </a>
-    `;
-  }).join('');
 }
 
 function renderCategoryPages(songs, images, apps) {
@@ -269,6 +160,33 @@ function renderCategoryPages(songs, images, apps) {
     const sorted = [...apps].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     appsGrid.innerHTML = sorted.map(createAppCard).join('');
   }
+}
+
+function loadLatestMusic(songs) {
+  const container = document.getElementById('latest-music');
+  if (!container || songs.length === 0) return;
+
+  const sorted = [...songs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const latest = sorted.slice(0, 3);
+  container.innerHTML = latest.map(createMusicCard).join('');
+}
+
+function loadLatestImages(images) {
+  const container = document.getElementById('latest-images');
+  if (!container || images.length === 0) return;
+
+  const sorted = [...images].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const latest = sorted.slice(0, 3);
+  container.innerHTML = latest.map(createImageCard).join('');
+}
+
+function loadLatestApps(apps) {
+  const container = document.getElementById('latest-apps');
+  if (!container || apps.length === 0) return;
+
+  const sorted = [...apps].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const latest = sorted.slice(0, 3);
+  container.innerHTML = latest.map(createAppCard).join('');
 }
 
 // Initialize
