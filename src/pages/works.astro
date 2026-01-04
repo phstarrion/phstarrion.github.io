@@ -1,0 +1,182 @@
+---
+import "../styles/global.css";
+
+// 楽曲ポートフォリオ - HOMEと同じ情報量
+const tracks = [
+	{
+		title: "Sugar Crash Protocol",
+		description: "甘さと混沌の対比。キュートなボイスとアグレッシブなビート",
+		genre: "Drum and Bass / Electronic",
+		releaseDate: "2025.12.30",
+		sunoId: "2a8bafd4-651e-4c13-bf40-181e197d9c7b",
+	},
+	{
+		title: "ビットコインがいっぱい⭐︎",
+		description: "キラキラ輝くJ-POP。夢とBitcoinが空から降ってくる",
+		genre: "Pop / J-Pop / Anime",
+		releaseDate: "2025.08.15",
+		sunoId: "421a4725-9321-4ea7-b049-1402f186bdb7",
+	},
+	{
+		title: "終末ノ宴 ✠ Apocalypse Rave ✠",
+		description: "破滅と快楽のビート。終末の祝祭で狂気のダンスを",
+		genre: "Electronic / Rave / Industrial",
+		releaseDate: "2025.09.20",
+		sunoId: "7fbbc774-16dc-4785-a380-c303955de67f",
+	},
+	{
+		title: "Neonに溶けて (Cover)",
+		description:
+			"都会の夜、ネオンに溶けていく感情。City Pop × Lo-Fi Hip Hop",
+		genre: "City Pop / Lo-Fi Hip Hop",
+		releaseDate: "2025.09.23",
+		sunoId: "2a605374-4f3e-4350-ad5b-0d0b444a3054",
+	},
+	{
+		title: "Bubble Time Café🧡",
+		description:
+			"恋のドキドキと秘密を泡に閉じ込めたポップチューン。K-POP × Synth Pop",
+		genre: "K-Pop / Synth Pop / Dance",
+		releaseDate: "2025.10.18",
+		sunoId: "2933afa2-6a4e-4cb1-9eae-e0197001e649",
+	},
+	{
+		title: "無限ループ（Endless Loop）",
+		description: "光と影の狭間でループするリズム。Hard Techno / Industrial",
+		genre: "Hard Techno / Industrial",
+		releaseDate: "2025.10.16",
+		sunoId: "8d3b412e-31d8-44d0-b320-64186c4e7326",
+	},
+];
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<meta
+			name="description"
+			content="Gen-AI Works - Kanon Studioの生成AI作品ポートフォリオ"
+		/>
+		<title>Works | Kanon Studio</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			.font-zen {
+				font-family: "Zen Kaku Gothic New", sans-serif;
+			}
+		</style>
+	</head>
+	<body class="gradient-bg min-h-screen">
+		<!-- Navigation（Homeと統一） -->
+		<nav class="fixed top-0 left-0 right-0 z-50 glass">
+			<div
+				class="container mx-auto px-4 py-3 flex justify-between items-center"
+			>
+				<a href="/" class="text-xl font-bold text-white">Kanon Studio</a
+				>
+				<div class="flex gap-6">
+					<a
+						href="/"
+						class="text-white/70 hover:text-white transition-colors"
+						>Home</a
+					>
+					<a
+						href="/works"
+						class="text-white hover:text-white/80 transition-colors"
+						>Works</a
+					>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Header Section -->
+		<section class="pt-28 pb-6 px-4">
+			<div class="container mx-auto max-w-4xl text-center">
+				<h1 class="text-4xl md:text-5xl font-black mb-2 text-white">
+					<span class="text-purple-400">✦</span> 楽曲一覧 <span
+						class="text-purple-400">✦</span
+					>
+				</h1>
+				<p class="text-xs text-white/50 mb-3">WORKS</p>
+			</div>
+		</section>
+
+		<!-- Tracks Grid（HOMEと同じカードスタイル） -->
+		<section class="py-8 px-4 pb-20">
+			<div class="container mx-auto max-w-4xl">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+					{
+						tracks.map((track) => (
+							<div class="glass rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300 glow-accent-hover">
+								{track.sunoId ? (
+									<div class="aspect-square rounded-xl mb-4 overflow-hidden">
+										<iframe
+											src={`https://suno.com/embed/${track.sunoId}`}
+											width="100%"
+											height="100%"
+											style="border:none; border-radius: 12px;"
+											allow="autoplay"
+										/>
+									</div>
+								) : (
+									<div class="aspect-square bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+										<div class="text-center z-10">
+											<div class="text-5xl mb-2">🎵</div>
+											<p class="text-sm text-white/50">
+												Coming Soon
+											</p>
+										</div>
+										<div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-pulse-glow" />
+									</div>
+								)}
+								<div class="space-y-2">
+									<div class="space-y-1">
+										<h3 class="text-base font-bold text-white leading-tight">
+											{track.title}
+										</h3>
+										<span class="text-xs text-white/40 block">
+											{track.releaseDate}
+										</span>
+									</div>
+									<p class="text-sm text-purple-400/80 font-medium">
+										{track.genre}
+									</p>
+									<p class="text-white/60 text-sm leading-relaxed font-zen">
+										{track.description}
+									</p>
+								</div>
+								{track.sunoId && (
+									<div class="mt-4 flex gap-2">
+										<a
+											href={`https://suno.com/song/${track.sunoId}`}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="flex-1 px-4 py-2 text-center glass rounded-lg text-sm font-semibold hover:scale-105 transition-transform glow-accent-hover"
+										>
+											Sunoで聴く
+										</a>
+									</div>
+								)}
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="py-6 px-4 border-t border-white/10">
+			<div class="container mx-auto text-center">
+				<p class="text-white/50 text-sm">© 2026 Kanon Studio</p>
+			</div>
+		</footer>
+	</body>
+</html>

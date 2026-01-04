@@ -1,16 +1,412 @@
 ---
+import "../styles/global.css";
 
+// SNSリンク
+const socialLinks = [
+	{
+		name: "X",
+		url: "https://x.com/phstarrion",
+		icon: "𝕏",
+		color: "hover:text-white",
+	},
+	{
+		name: "TikTok",
+		url: "https://tiktok.com/@yourhandle",
+		icon: "🎵",
+		color: "hover:text-pink-400",
+	},
+	{
+		name: "YouTube",
+		url: "https://youtube.com/@phstarrion",
+		icon: "▶",
+		color: "hover:text-red-500",
+	},
+	{
+		name: "Suno",
+		url: "https://suno.com/@phstarrion",
+		icon: "🎼",
+		color: "hover:text-purple-400",
+	},
+];
+
+// 最新楽曲（3曲）- WORKSと同じ情報量
+const latestTracks = [
+	{
+		title: "Sugar Crash Protocol",
+		description: "甘さと混沌の対比。キュートなボイスとアグレッシブなビート",
+		genre: "Drum and Bass / Electronic",
+		releaseDate: "2025.12.30",
+		sunoId: "2a8bafd4-651e-4c13-bf40-181e197d9c7b",
+	},
+	{
+		title: "無限ループ（Endless Loop）",
+		description: "光と影の狭間でループするリズム。Hard Techno / Industrial",
+		genre: "Hard Techno / Industrial",
+		releaseDate: "2025.10.16",
+		sunoId: "8d3b412e-31d8-44d0-b320-64186c4e7326",
+	},
+	{
+		title: "Bubble Time Café🧡",
+		description:
+			"恋のドキドキと秘密を泡に閉じ込めたポップチューン。K-POP × Synth Pop",
+		genre: "K-Pop / Synth Pop / Dance",
+		releaseDate: "2025.10.18",
+		sunoId: "2933afa2-6a4e-4cb1-9eae-e0197001e649",
+	},
+];
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="ja">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<meta
+			name="description"
+			content="Kanon Studio - Gen-AI Creator | 生成AI作品公開中"
+		/>
+		<title>Kanon Studio | Gen-AI Creator</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			.font-zen {
+				font-family: "Zen Kaku Gothic New", sans-serif;
+			}
+		</style>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="gradient-bg min-h-screen">
+		<!-- Navigation -->
+		<nav class="fixed top-0 left-0 right-0 z-50 glass">
+			<div
+				class="container mx-auto px-4 py-3 flex justify-between items-center"
+			>
+				<a href="/" class="text-xl font-bold text-white">Kanon Studio</a
+				>
+				<div class="flex gap-6">
+					<a
+						href="/"
+						class="text-white hover:text-white/80 transition-colors"
+						>Home</a
+					>
+					<a
+						href="/works"
+						class="text-white/70 hover:text-white transition-colors"
+						>Works</a
+					>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Hero: Site Name + Profile -->
+		<section class="pt-20 pb-6 px-4">
+			<div class="container mx-auto max-w-4xl text-center">
+				<!-- サイト名を大きく表示 -->
+				<h1 class="text-5xl md:text-7xl font-black mb-6 text-white">
+					Kanon Studio
+				</h1>
+
+				<!-- プロフィール（改善版） -->
+				<div class="glass rounded-2xl p-6 max-w-2xl mx-auto">
+					<div class="flex items-center justify-center gap-4 mb-5">
+						<div
+							class="w-20 h-20 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20"
+						>
+							<img
+								src="/kanon-avatar.jpg"
+								alt="花音 Kanon"
+								class="w-full h-full object-cover"
+							/>
+						</div>
+						<div class="text-left">
+							<p class="text-xl font-bold text-white">
+								花音 Kanon
+							</p>
+							<p class="text-sm text-purple-300 font-medium">
+								✦ Gen-AI Creator ✦
+							</p>
+						</div>
+					</div>
+
+					<!-- BIO（改行とアイコン付き） -->
+					<div class="font-zen space-y-3 text-center">
+						<p class="text-white/90 text-base leading-relaxed">
+							<span class="text-yellow-400">₿</span> ビットコインで生活資金確保しつつ
+						</p>
+						<p class="text-white/90 text-base leading-relaxed">
+							<span class="text-purple-400">🤖</span> AI使ってスモールビジネス起こして
+						</p>
+						<p class="text-white/90 text-base leading-relaxed">
+							<span class="text-green-400">🍅</span> 趣味でトマト育てたい
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SNS Hub Section -->
+		<section class="py-6 px-4">
+			<div class="container mx-auto max-w-3xl">
+				<div class="text-center mb-4">
+					<h2 class="text-xl font-bold text-white">
+						<span class="text-purple-400">✦</span> ソーシャル <span
+							class="text-purple-400">✦</span
+						>
+					</h2>
+					<p class="text-xs text-white/50 mt-1">SNS</p>
+				</div>
+				<div class="grid grid-cols-4 gap-3">
+					{
+						socialLinks.map((social) => (
+							<a
+								href={social.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class={`glass rounded-xl p-4 flex flex-col items-center justify-center hover:scale-105 transition-all duration-300 glow-accent-hover ${social.color}`}
+							>
+								<span class="text-3xl mb-1">{social.icon}</span>
+								<span class="text-xs font-medium text-white/80">
+									{social.name}
+								</span>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<!-- Latest Tracks Section -->
+		<section class="py-8 px-4">
+			<div class="container mx-auto max-w-4xl">
+				<div class="text-center mb-6">
+					<h2 class="text-xl font-bold text-white">
+						<span class="text-purple-400">✦</span> 最新の楽曲 <span
+							class="text-purple-400">✦</span
+						>
+					</h2>
+					<p class="text-xs text-white/50 mt-1">WORKS</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+					{
+						latestTracks.map((track) => (
+							<div class="glass rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300 glow-accent-hover">
+								{track.sunoId ? (
+									<div class="aspect-square rounded-xl mb-4 overflow-hidden">
+										<iframe
+											src={`https://suno.com/embed/${track.sunoId}`}
+											width="100%"
+											height="100%"
+											style="border:none; border-radius: 12px;"
+											allow="autoplay"
+										/>
+									</div>
+								) : (
+									<div class="aspect-square bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+										<div class="text-center z-10">
+											<div class="text-5xl mb-2">🎵</div>
+											<p class="text-sm text-white/50">
+												Coming Soon
+											</p>
+										</div>
+										<div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-pulse-glow" />
+									</div>
+								)}
+								<div class="space-y-2">
+									<div class="space-y-1">
+										<h3 class="text-base font-bold text-white leading-tight">
+											{track.title}
+										</h3>
+										<span class="text-xs text-white/40 block">
+											{track.releaseDate}
+										</span>
+									</div>
+									<p class="text-sm text-purple-400/80 font-medium">
+										{track.genre}
+									</p>
+									<p class="text-white/60 text-sm leading-relaxed font-zen">
+										{track.description}
+									</p>
+								</div>
+								{track.sunoId && (
+									<div class="mt-4 flex gap-2">
+										<a
+											href={`https://suno.com/song/${track.sunoId}`}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="flex-1 px-4 py-2 text-center glass rounded-lg text-sm font-semibold hover:scale-105 transition-transform glow-accent-hover"
+										>
+											Sunoで聴く
+										</a>
+									</div>
+								)}
+							</div>
+						))
+					}
+				</div>
+
+				<div class="text-center mt-6">
+					<a
+						href="/works"
+						class="px-5 py-2 glass rounded-full text-sm font-medium text-white hover:scale-105 transition-transform glow-accent-hover"
+					>
+						すべての楽曲を見る →
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- About This Site Section - 猫メイド画像付き -->
+		<section class="py-10 px-4">
+			<div class="container mx-auto max-w-5xl">
+				<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					<!-- 左側: 猫メイド画像 -->
+					<div class="lg:col-span-1">
+						<div class="glass rounded-2xl p-3">
+							<div class="rounded-xl overflow-hidden">
+								<img
+									src="/kanon-maid.jpg"
+									alt="Kanon"
+									class="w-full h-auto object-cover"
+								/>
+							</div>
+							<p
+								class="text-center text-xs text-white/50 mt-2 italic"
+							>
+								Generated with AI ✨
+							</p>
+						</div>
+					</div>
+
+					<!-- 右側: 技術スタック詳細 -->
+					<div class="lg:col-span-2">
+						<div class="glass rounded-2xl p-8">
+							<div class="text-center mb-6">
+								<h2 class="text-xl font-bold text-white">
+									<span class="text-purple-400">✦</span> このサイトについて
+									<span class="text-purple-400">✦</span>
+								</h2>
+								<p class="text-xs text-white/50 mt-1">ABOUT</p>
+							</div>
+							<p class="text-white/70 mb-8 font-zen text-center">
+								このウェブサイトは、最先端のAI開発ツールとモダンな技術スタックで構築されています。
+								コードを1行も手で書かずに、AIとの対話だけで完成させました。
+							</p>
+
+							<div class="space-y-8">
+								<!-- Antigravity -->
+								<div class="flex gap-4">
+									<div
+										class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center flex-shrink-0"
+									>
+										<span class="text-2xl">🤖</span>
+									</div>
+									<div>
+										<h3
+											class="font-bold text-white text-lg mb-1"
+										>
+											Antigravity × Claude Sonnet 4
+										</h3>
+										<p
+											class="text-sm text-white/60 leading-relaxed font-zen"
+										>
+											Google
+											DeepMindが開発したAIコーディングアシスタント「Antigravity」と、
+											AnthropicのClaude Sonnet
+											4を組み合わせて使用。
+											プロンプトでデザインの意図を伝えるだけで、サイト全体を数分で生成しました。
+											ファイル操作、コード生成、ブラウザ確認まで全て自動化されています。
+										</p>
+									</div>
+								</div>
+
+								<!-- Astro -->
+								<div class="flex gap-4">
+									<div
+										class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center flex-shrink-0"
+									>
+										<span class="text-2xl">🚀</span>
+									</div>
+									<div>
+										<h3
+											class="font-bold text-white text-lg mb-1"
+										>
+											Astro 5 + Tailwind CSS 4
+										</h3>
+										<p
+											class="text-sm text-white/60 leading-relaxed font-zen"
+										>
+											2026年最新のAstro
+											v5は、静的サイトジェネレーターとして最速クラス。
+											Tailwind CSS v4の新機能（@import
+											"tailwindcss"、@layer構文）を活用し、
+											glassmorphism、ダークモード、micro-animationsなどのモダンUIを実現しています。
+										</p>
+									</div>
+								</div>
+
+								<!-- GitHub/Vercel -->
+								<div class="flex gap-4">
+									<div
+										class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 flex items-center justify-center flex-shrink-0"
+									>
+										<span class="text-2xl">⚡</span>
+									</div>
+									<div>
+										<h3
+											class="font-bold text-white text-lg mb-1"
+										>
+											GitHub → Vercel 自動デプロイ
+										</h3>
+										<p
+											class="text-sm text-white/60 leading-relaxed font-zen"
+										>
+											ソースコードはGitHubでバージョン管理。mainブランチにpushすると、
+											Vercelが自動的にビルド＆デプロイします。
+											CI/CDパイプラインの設定不要で、即座に本番環境に反映される開発体験を実現。
+										</p>
+									</div>
+								</div>
+
+								<!-- AI × Human -->
+								<div class="flex gap-4">
+									<div
+										class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 flex items-center justify-center flex-shrink-0"
+									>
+										<span class="text-2xl">✨</span>
+									</div>
+									<div>
+										<h3
+											class="font-bold text-white text-lg mb-1"
+										>
+											AI × Human Creativity
+										</h3>
+										<p
+											class="text-sm text-white/60 leading-relaxed font-zen"
+										>
+											このサイト自体が、AIと人間のコラボレーションの証です。
+											デザインコンセプトとフィードバックは人間が担当し、実装はAIが生成。
+											音楽制作と同様に、テクノロジーと創造性の融合を体現しています。
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="py-6 px-4 border-t border-white/10">
+			<div class="container mx-auto text-center">
+				<p class="text-white/50 text-sm">© 2026 Kanon Studio</p>
+			</div>
+		</footer>
 	</body>
 </html>

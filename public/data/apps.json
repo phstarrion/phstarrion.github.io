@@ -1,0 +1,34 @@
+[
+    {
+        "title": "AI Chat Assistant",
+        "url": "https://example.com/app1",
+        "description": "自然な会話ができるAIチャットボット。",
+        "techStack": [
+            "OpenAI API",
+            "React",
+            "Node.js"
+        ],
+        "createdAt": "2025-11-15"
+    },
+    {
+        "title": "Image Generator Pro",
+        "url": "https://example.com/app2",
+        "description": "プロンプトから高品質な画像を生成するツール。",
+        "techStack": [
+            "Stable Diffusion",
+            "Python",
+            "FastAPI"
+        ],
+        "createdAt": "2025-11-10"
+    },
+    {
+        "title": "Voice Clone Tool",
+        "url": "https://example.com/app3",
+        "description": "数秒の音声から声をクローンするアプリ。",
+        "techStack": [
+            "Coqui TTS",
+            "Vue.js"
+        ],
+        "createdAt": "2025-11-05"
+    }
+]

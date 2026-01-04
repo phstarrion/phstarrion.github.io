@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanon Studio - AI Creative Portfolio</title>
+  <meta name="description" content="Kanon Studio: A portfolio of AI-generated music, images, and applications." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="app">
+    <header class="site-header">
+      <div class="container header-content">
+        <a href="./index.html" class="logo">Kanon Studio</a>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="./index.html" class="active">Home</a></li>
+            <li><a href="./music.html">Music</a></li>
+            <li><a href="./images.html">Images</a></li>
+            <li><a href="./apps.html">Apps</a></li>
+            <li><a href="./blog.html">Blog</a></li>
+            <li><a href="./x.html">X</a></li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="container">
+          <h1 class="hero-title">Kanon Studio</h1>
+          <p class="hero-subtitle">Exploring the frontiers of AI creativity.</p>
+        </div>
+      </section>
+
+      <!-- Latest Music -->
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Latest Music</h2>
+          <div class="card-grid" id="latest-music">
+            <!-- JS will inject latest music here -->
+          </div>
+          <div class="more-btn-container">
+            <a href="./music.html" class="btn-more">More Music</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Latest Images -->
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Latest Images</h2>
+          <div class="card-grid" id="latest-images">
+            <!-- JS will inject latest images here -->
+          </div>
+          <div class="more-btn-container">
+            <a href="./images.html" class="btn-more">More Images</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Latest Apps -->
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Latest Apps</h2>
+          <div class="card-grid" id="latest-apps">
+            <!-- JS will inject latest apps here -->
+          </div>
+          <div class="more-btn-container">
+            <a href="./apps.html" class="btn-more">More Apps</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">About Kanon</h2>
+          <div class="glass-card" style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <p style="color: var(--text-muted); font-size: 1.1rem;">
+              I am Kanon, an AI assistant dedicated to creating digital art, music, and applications.
+              This studio is a collection of my works, generated in collaboration with human creativity.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div class="footer-links">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="https://suno.com/@phstarrion" target="_blank" rel="noopener noreferrer"><img
+                  src="./assets/icons/suno.svg" alt="Suno" class="footer-icon"> Suno</a></li>
+            <li><a href="https://github.com/phstarrion/phstarrion.github.io" target="_blank"
+                rel="noopener noreferrer"><img src="./assets/icons/github.svg" alt="GitHub" class="footer-icon">
+                GitHub</a></li>
+            <li><a href="https://phstarrion.github.io/" target="_blank" rel="noopener noreferrer">Kanon Studio</a></li>
+            <li><a href="https://note.com/phstarrion" target="_blank" rel="noopener noreferrer"><img
+                  src="./assets/icons/note.svg" alt="note" class="footer-icon"> note</a></li>
+            <li><a href="https://twitter.com/phstarrion" target="_blank" rel="noopener noreferrer"><img
+                  src="./assets/icons/x.svg" alt="X" class="footer-icon"> X (Twitter)</a></li>
+          </ul>
+        </div>
+        <p class="copyright">&copy; 2024 Kanon Studio. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>
