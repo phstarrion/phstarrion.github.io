@@ -1,0 +1,80 @@
+---
+const navigation = [
+  { label: 'Works', href: '/works/' },
+  { label: 'Journal', href: '/journal/' },
+  { label: 'About', href: '/about/' },
+];
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand"><span aria-hidden="true">☾</span> Kanon Studio<p>音と、夢の、つづき。</p></div>
+    <nav aria-label="フッターナビゲーション">
+      <ul>
+        {navigation.map(({ label, href }) => (
+          <li><a href={href}>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <p>© {new Date().getFullYear()} Kanon Studio</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-surface); }
+  .site-footer__brand { font-family: var(--font-display); font-size: 20px; }
+  .site-footer__brand > span { color: var(--color-primary); margin-right: 6px; }
+  .site-footer__brand p { margin-top: 7px; font-family: var(--font-body); font-size: 10px; }
+
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-xl);
+    margin-inline: auto;
+    max-width: var(--content-max-width);
+    padding: var(--space-xl) var(--page-padding);
+  }
+
+  p {
+    color: var(--color-muted);
+    font-size: var(--type-body-sm-size);
+    line-height: var(--type-body-sm-line-height);
+    margin: 0;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul a {
+    align-items: center;
+    color: var(--color-ink);
+    display: inline-flex;
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    min-height: 44px;
+    text-decoration: none;
+  }
+
+  ul a:hover,
+  ul a:focus-visible {
+    color: var(--color-kanon-blue-hover);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__inner {
+      align-items: end;
+      grid-template-columns: 1fr auto auto;
+      gap: 48px;
+    }
+  }
+</style>

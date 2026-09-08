@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found — Kanon Studio"
+  description="お探しのページは見つかりませんでした。Kanon Studioのホームまたは作品一覧へ戻れます。"
+>
+  <section class="not-found" aria-labelledby="not-found-title">
+    <p class="not-found__folio">404 / Not found</p>
+    <h1 id="not-found-title">ページが見つかりません</h1>
+    <p class="not-found__message">
+      URLが変更されたか、ページが移動した可能性があります。
+    </p>
+    <nav aria-label="404ページから移動">
+      <a class="not-found__primary" href="/">Homeへ戻る</a>
+      <a class="not-found__secondary" href="/works/">Worksを見る</a>
+    </nav>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-lg);
+    max-width: var(--reading-max-width);
+    padding-top: var(--space-md);
+  }
+
+  .not-found__folio {
+    color: var(--color-coral-hover);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    line-height: var(--type-label-line-height);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 4vw, 2.625rem);
+    font-weight: var(--type-display-weight);
+    letter-spacing: var(--type-display-letter-spacing);
+    line-height: var(--type-display-line-height);
+    margin: 0;
+  }
+
+  .not-found__message {
+    color: var(--color-muted);
+    line-height: var(--type-body-lg-line-height);
+    margin: 0;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
+  }
+
+  nav a {
+    align-items: center;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    justify-content: center;
+    letter-spacing: var(--type-label-letter-spacing);
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .not-found__primary {
+    background: var(--color-coral);
+    color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .not-found__primary:hover,
+  .not-found__primary:focus-visible {
+    background: var(--color-coral-hover);
+  }
+
+  .not-found__secondary {
+    color: var(--color-kanon-blue);
+  }
+
+  .not-found__secondary:hover,
+  .not-found__secondary:focus-visible {
+    color: var(--color-kanon-blue-hover);
+  }
+</style>

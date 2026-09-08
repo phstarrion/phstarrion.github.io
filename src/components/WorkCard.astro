@@ -1,0 +1,141 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { paths } from '../lib/paths';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { work, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+const categoryLabels = {
+  music: 'Music',
+  visual: 'Visual',
+  video: 'Video',
+} as const;
+const year = work.data.publishedAt.getUTCFullYear();
+const { cover, coverAlt, coverWidth, coverHeight } = work.data;
+---
+
+<article class:list={['work-card', `work-card--${work.data.category}`]} data-work-card="true">
+  <a class="work-card__link" href={paths.work(work.id)}>
+    {cover && coverAlt && coverWidth && coverHeight ? (
+      <div class="work-card__media">
+        <img
+          src={cover}
+          alt={coverAlt}
+          width={coverWidth}
+          height={coverHeight}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    ) : (
+      <div
+        class="work-card__media work-card__media--editorial"
+        data-work-media="editorial"
+        aria-hidden="true"
+      >
+        <span class="work-card__editorial-title">{work.data.title}</span>
+      </div>
+    )}
+    <div class="work-card__caption">
+      <p class="work-card__category">{categoryLabels[work.data.category]}</p>
+      <Heading>{work.data.title}</Heading>
+      <p class="work-card__year">{year}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .work-card {
+    min-width: 0;
+  }
+
+  .work-card__link {
+    color: var(--color-ink);
+    display: block;
+    text-decoration: none;
+  }
+
+  .work-card__media {
+    background: var(--color-surface);
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    transition: transform 180ms ease-out;
+  }
+
+  .work-card__media--editorial {
+    align-content: center;
+    aspect-ratio: 4 / 5;
+    border-block: 1px solid var(--color-ink);
+    display: grid;
+    padding: var(--space-lg);
+  }
+
+  .work-card__editorial-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, var(--type-headline-lg-size));
+    font-weight: var(--type-headline-lg-weight);
+    letter-spacing: var(--type-headline-lg-letter-spacing);
+    line-height: var(--type-headline-lg-line-height);
+  }
+
+  img {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 5px;
+    transition: transform 180ms ease-out;
+    width: 100%;
+  }
+
+  .work-card__caption {
+    display: grid;
+    gap: var(--space-xs);
+    grid-template-columns: 1fr auto;
+    padding: 12px 0 0;
+  }
+
+  .work-card__category {
+    color: var(--color-kanon-blue);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    grid-column: 1 / -1;
+    letter-spacing: var(--type-label-letter-spacing);
+    line-height: var(--type-label-line-height);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: var(--type-headline-md-weight);
+    letter-spacing: var(--type-headline-md-letter-spacing);
+    line-height: var(--type-headline-md-line-height);
+    margin: 0;
+  }
+
+  .work-card__year {
+    color: var(--color-muted);
+    font-size: var(--type-body-sm-size);
+    line-height: var(--type-body-sm-line-height);
+    margin: 0;
+  }
+
+  .work-card__link:hover .work-card__media,
+  .work-card__link:focus-visible .work-card__media {
+    transform: translateY(-4px);
+  }
+
+  .work-card__link:hover img,
+  .work-card__link:focus-visible img {
+    transform: scale(1.015);
+  }
+</style>

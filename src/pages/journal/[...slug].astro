@@ -1,0 +1,44 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal');
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'journal'>;
+}
+
+const { entry }: Props = Astro.props;
+const { Content, headings } = await render(entry);
+
+// `asciiHeadingIds` in astro.config.mjs renumbers every h2–h6 in document order, so the same
+// document-order index reproduces each heading's anchor without depending on its Japanese text.
+const sections = headings
+  .map((heading, index) => ({ ...heading, id: `section-${index + 1}` }))
+  .filter((heading) => heading.depth === 2);
+---
+
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  category={entry.data.category}
+  publishedAt={entry.data.publishedAt}
+  kicker={entry.data.kicker}
+  lead={entry.data.lead}
+  byline={entry.data.byline}
+  cover={entry.data.cover}
+  coverAlt={entry.data.coverAlt}
+  coverWidth={entry.data.coverWidth}
+  coverHeight={entry.data.coverHeight}
+  coverCaption={entry.data.coverCaption}
+  sections={sections}
+>
+  <Content />
+</ArticleLayout>

@@ -1,164 +1,45 @@
-# PHStarrion - AI Music Creator Portfolio
+# Kanon Studio
 
-AI Generated Beats & Vibes - AI楽曲クリエイターの個人ホームページ
+Kanon Studio の既存公開サイトを置き換える、静的なポートフォリオサイトです。音楽、生成ビジュアル、映像／MV と制作記録を、作品を中心に掲載します。デザインの基準とトークンは [DESIGN.md](./DESIGN.md) を唯一の正としています。
 
-## 🎵 概要
+## Local development
 
-このサイトは、Astro + Tailwind CSSで構築された、AI楽曲クリエイターのポートフォリオサイトです。
-2026年トレンドのglassmorphism、ダークモード、micro-animationsを取り入れた没入感のあるデザインが特徴です。
+Node.js 20 を使います。最初にロックファイルどおりの依存関係をインストールしてください。
 
-### 主な機能
-
-- **Heroセクション**: キャッチーなタイトルとCTAボタン
-- **最新楽曲**: Suno AIで生成された楽曲の埋め込み（プレースホルダー配置済み）
-- **SNSハブ**: X (Twitter)、TikTok、YouTube、Sunoへのリンク
-- **楽曲ポートフォリオ**: グリッドレイアウトの楽曲一覧
-- **自己紹介ページ**: プロフィール、ビジョン、技術スタック
-
-### デザイン特徴
-
-- ✨ **Glassmorphism**: 透明感のあるガラスモーフィズムデザイン
-- 🌙 **ダークモード**: デフォルトでダークテーマ
-- 🎨 **グラデーション**: A.I.Aqua系（シアン〜ブルー）のアクセントカラー
-- 🎭 **Micro-animations**: フローティング、ホバー効果、スクロールアニメーション
-- 📱 **レスポンシブ**: モバイル・タブレット・デスクトップ完全対応
-
-## 🚀 プロジェクト構成
-
-```text
-/
-├── public/              # 静的ファイル（favicon等）
-├── src/
-│   ├── pages/          # ページファイル
-│   │   ├── index.astro # Homeページ
-│   │   ├── works.astro # 楽曲ポートフォリオ
-│   │   └── about.astro # 自己紹介
-│   └── styles/
-│       └── global.css  # グローバルスタイル（Tailwind + カスタム）
-├── astro.config.mjs    # Astro設定
-└── package.json
+```sh
+npm ci
+npm run dev
 ```
 
-## 🧞 コマンド
+リリース前は、次の品質ゲートをすべて実行します。
 
-プロジェクトのルートディレクトリで以下のコマンドを実行してください：
-
-| コマンド | 説明 |
-| :--- | :--- |
-| `npm install` | 依存関係のインストール |
-| `npm run dev` | 開発サーバー起動（`localhost:4321`） |
-| `npm run build` | 本番用ビルド（`./dist/`に出力） |
-| `npm run preview` | ビルド後のプレビュー |
-
-## 📦 Vercelへのデプロイ手順
-
-### 方法1: Vercel CLI（推奨）
-
-1. **Vercel CLIのインストール**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **ログイン**
-   ```bash
-   vercel login
-   ```
-
-3. **デプロイ**
-   ```bash
-   # 初回デプロイ（プロジェクト設定）
-   vercel
-   
-   # 本番環境へデプロイ
-   vercel --prod
-   ```
-
-### 方法2: Vercel Dashboard（GUI）
-
-1. **GitHubにプッシュ**
-   ```bash
-   git add .
-   git commit -m "Initial commit: AI Music Creator Portfolio"
-   git push origin main
-   ```
-
-2. **Vercelダッシュボードでインポート**
-   - [Vercel Dashboard](https://vercel.com/dashboard)にアクセス
-   - "Add New Project"をクリック
-   - GitHubリポジトリを選択
-   - フレームワークプリセット: **Astro**（自動検出）
-   - "Deploy"をクリック
-
-### デプロイ設定
-
-Vercelは自動的にAstroプロジェクトを検出しますが、必要に応じて以下を設定：
-
-- **Framework Preset**: Astro
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Install Command**: `npm install`
-
-## 🎨 カスタマイズ方法
-
-### 1. SNSリンクの更新
-
-`src/pages/index.astro`と`src/pages/about.astro`の以下の部分を編集：
-
-```javascript
-const socialLinks = [
-  { name: 'X (Twitter)', url: 'https://x.com/yourhandle', ... },
-  { name: 'TikTok', url: 'https://tiktok.com/@yourhandle', ... },
-  // ...
-];
+```sh
+npm run check
+npm run test:run
+npm run build
 ```
 
-### 2. Suno楽曲の埋め込み
+`npm run check` は Astro と TypeScript の検査、`npm run test:run` は生成済みページとアクセシビリティを含むテスト、`npm run build` は GitHub Pages に渡す静的ファイルを `dist/` に生成します。ビルド結果を確認する場合は `npm run preview -- --host 127.0.0.1` を使います。
 
-`src/pages/index.astro`と`src/pages/works.astro`のプレースホルダー部分に、
-Sunoの実際のiframeコードを配置：
+## Content
 
-```html
-<!-- プレースホルダーを以下に置き換え -->
-<iframe src="https://suno.com/embed/YOUR_TRACK_ID" 
-        width="100%" 
-        height="400" 
-        frameborder="0">
-</iframe>
-```
+作品は `src/content/works/*.md` に追加します。各ファイルの frontmatter には、次の必須フィールドを設定します。
 
-### 3. カラーテーマの変更
+| Field | Description |
+| --- | --- |
+| `title` | 作品名 |
+| `description` | 一覧と詳細で使う簡潔な説明 |
+| `category` | `music`、`visual`、`video` のいずれか |
+| `publishedAt` | 実在する `YYYY-MM-DD` 形式の公開日 |
+| `featured` | Home の選出対象かどうか |
+| `cover` | `public/` を基準にしたカバー画像のパス |
+| `coverWidth` / `coverHeight` | カバー画像の実寸ピクセル |
+| `coverAlt` | 内容を伝える 12 文字以上の代替テキスト |
 
-`src/styles/global.css`のグラデーション定義を編集：
+Home に表示する作品は `featured: true` とし、重複しない正の整数の `featuredOrder` を必ず指定します。任意フィールドは `externalUrl` と対になる `externalLabel`、`genre`、音楽作品用の UUID 形式の `sunoId` です。`externalUrl` は HTTPS URL で、指定する場合は `externalLabel` も必須です。
 
-```css
-.gradient-accent {
-  background: linear-gradient(135deg, #00f0ff 0%, #0080ff 100%);
-  /* お好みの色に変更 */
-}
-```
+Journal は `src/content/journal/*.md` に追加します。frontmatter は `title`、`summary`、`category`、`publishedAt`（実在する `YYYY-MM-DD` 形式）です。検証済みの記録だけを追加し、空の場合はサイトの正直な空状態を維持します。
 
-### 4. プロフィール情報の更新
+## Publishing
 
-`src/pages/about.astro`の自己紹介文を編集してください。
-
-## 🛠️ 技術スタック
-
-- **Astro** v5.16.6 - 静的サイトジェネレーター
-- **Tailwind CSS** v4 - ユーティリティファーストCSSフレームワーク
-- **TypeScript** - 型安全性
-- **Vercel** - ホスティング（推奨）
-
-## 📝 ライセンス
-
-© 2026 PHStarrion. All rights reserved.
-
-## 🤝 サポート
-
-質問や問題がある場合は、以下からお問い合わせください：
-
-- X (Twitter): [@yourhandle](https://x.com/yourhandle)
-- GitHub Issues: このリポジトリのIssuesセクション
-
----
-
-**Powered by AI & Creativity** ✨
+`main` への push（通常はレビュー済みの変更を main にマージしたとき）で GitHub Actions が `npm ci`、`npm run check`、`npm run test:run`、`npm run build` を順に実行します。すべて成功したビルドだけが GitHub Pages にデプロイされ、公開先は <https://phstarrion.github.io/> です。Actions の `workflow_dispatch` からも、同じ品質ゲートを通して手動実行できます。

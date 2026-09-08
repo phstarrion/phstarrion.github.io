@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import WorkCard from './WorkCard.astro';
+
+interface Props {
+  works: CollectionEntry<'works'>[];
+  variant: 'featured' | 'archive';
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { works, variant, headingLevel } = Astro.props;
+const cardHeadingLevel = headingLevel ?? (variant === 'featured' ? 'h3' : 'h2');
+---
+
+<ol class:list={['work-grid', `work-grid--${variant}`]}>
+  {works.map((work) => (
+    <li
+      data-category={variant === 'archive' ? work.data.category : undefined}
+      data-style={variant === 'archive' ? work.data.style : undefined}
+    >
+      <WorkCard work={work} headingLevel={cardHeadingLevel} />
+    </li>
+  ))}
+</ol>
+
+<style>
+  .work-grid { display: grid; gap: 28px 22px; list-style: none; margin: 0; padding: 0; }
+  .work-grid > li { min-width: 0; }
+  .work-grid--featured { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .work-grid--featured > li:first-child { grid-column: 1 / -1; }
+  .work-grid--featured > li:first-child :global(.work-card__media img) { aspect-ratio: 4 / 3; object-position: center 65%; }
+  @media (min-width: 600px) { .work-grid--archive { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 768px) {
+    .work-grid--featured { grid-template-columns: 1.4fr .9fr 1fr; align-items: start; gap: 28px; }
+    .work-grid--featured > li:first-child { grid-column: auto; }
+    .work-grid--featured > li:first-child :global(.work-card__media img) { aspect-ratio: 4 / 5; }
+    .work-grid--featured > li:nth-child(2) { margin-top: 36px; }
+    .work-grid--featured > li:nth-child(3) { margin-top: 80px; }
+  }
+  @media (min-width: 900px) { .work-grid--archive { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

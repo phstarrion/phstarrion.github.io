@@ -1,0 +1,179 @@
+.prose {
+  counter-reset: prose-section;
+  font-size: var(--type-body-md-size);
+  line-height: var(--type-body-md-line-height);
+  max-width: var(--reading-max-width);
+}
+
+@media (min-width: 768px) {
+  .prose {
+    font-size: var(--type-body-lg-size);
+    line-height: var(--type-body-lg-line-height);
+  }
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* Section headings read as a magazine's 中見出し: a lavender folio, a hairline, then the heading. */
+.prose h2 {
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, var(--type-headline-lg-size));
+  font-weight: var(--type-headline-lg-weight);
+  letter-spacing: var(--type-headline-lg-letter-spacing);
+  line-height: 1.45;
+  margin: var(--space-2xl) 0 var(--space-lg);
+  padding-top: var(--space-lg);
+  position: relative;
+}
+
+.prose h2::before {
+  color: var(--color-coral-hover);
+  content: counter(prose-section, decimal-leading-zero);
+  counter-increment: prose-section;
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  letter-spacing: var(--type-label-letter-spacing);
+  line-height: var(--type-label-line-height);
+  margin-bottom: var(--space-sm);
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, var(--type-headline-md-size));
+  font-weight: var(--type-headline-md-weight);
+  letter-spacing: var(--type-headline-md-letter-spacing);
+  line-height: 1.5;
+  margin: var(--space-xl) 0 var(--space-md);
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote {
+  margin: 0 0 var(--space-md);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+}
+
+.prose li + li {
+  margin-top: var(--space-xs);
+}
+
+.prose a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* Verse quotations sit on a quiet reading surface, the way a magazine boxes a 歌詞引用. */
+.prose blockquote {
+  background: var(--color-surface);
+  border-left: 2px solid var(--color-border);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 2.8vw, var(--type-headline-md-size));
+  font-weight: 400;
+  line-height: 1.9;
+  margin: var(--space-lg) 0;
+  padding: var(--space-md) var(--space-md) var(--space-md) var(--space-lg);
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose blockquote p + p {
+  margin-top: var(--space-md);
+}
+
+/*
+ * Single-line payoff lines are not quotations to be studied but beats to be heard. Strip the box
+ * and let them stand as bare type, the way a magazine sets a 一行の抜き.
+ */
+.prose blockquote.lyric-line {
+  background: none;
+  border-left: 0;
+  font-size: clamp(1.375rem, 3.4vw, 1.875rem);
+  line-height: 1.6;
+  margin: var(--space-xl) 0;
+  padding: 0;
+  text-indent: 0;
+}
+
+/* Hang only the opening 《 so the following lines stay flush with the visible text. */
+.prose blockquote.lyric-line > p:first-child {
+  text-indent: -0.5em;
+}
+
+.prose blockquote.lyric-line p + p {
+  margin-top: var(--space-lg);
+}
+
+/* Pulled quotation: the one line the spread is built around. */
+.prose .pull-quote {
+  border-block: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.6vw, 2rem);
+  font-weight: var(--type-headline-lg-weight);
+  letter-spacing: var(--type-headline-lg-letter-spacing);
+  line-height: 1.5;
+  margin: var(--space-2xl) 0;
+  padding-block: var(--space-lg);
+}
+
+/* Closing mark, in place of a magazine's ■. */
+.prose > p:last-child::after {
+  background: var(--color-coral);
+  content: '';
+  display: inline-block;
+  height: 0.55em;
+  margin-inline-start: 0.5em;
+  vertical-align: baseline;
+  width: 0.55em;
+}
+
+.prose img {
+  height: auto;
+  margin: var(--space-lg) 0;
+}
+
+/* In-article plate: a second photograph, captioned like the opening one. */
+.prose-figure {
+  margin: var(--space-2xl) 0;
+}
+
+/*
+ * Cropped to a horizontal band so the inside plate stays subordinate to the portrait-format
+ * opening photograph, the way a magazine varies 扉 and 中面.
+ */
+.prose-figure img {
+  aspect-ratio: 3 / 2;
+  background: var(--color-surface);
+  display: block;
+  height: auto;
+  margin: 0;
+  object-fit: cover;
+  object-position: center 24%;
+  width: 100%;
+}
+
+.prose-figure figcaption {
+  border-left: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line-height);
+  margin-top: var(--space-md);
+  padding-left: var(--space-sm);
+}

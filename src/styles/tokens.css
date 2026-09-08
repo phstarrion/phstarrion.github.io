@@ -1,0 +1,66 @@
+:root {
+  --color-primary: #705A89;
+  --color-primary-hover: #5F4C78;
+  --color-lavender: #ECE7F3;
+  --color-blue-surface: #E9EFF5;
+  --color-canvas: #FAF8F5;
+  --color-surface: #FFFEFC;
+  --color-ink: #363144;
+  --color-muted: #6E647A;
+  --color-border: #DDD7E3;
+  --color-coral: var(--color-primary);
+  --color-coral-hover: var(--color-primary-hover);
+  --color-kanon-blue: #496A86;
+  --color-kanon-blue-hover: #36546D;
+  --color-focus: #496A86;
+  --color-error: #A23B32;
+
+  --font-display: "Zen Maru Gothic", "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  --font-body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+
+  --type-display-size: 2.875rem;
+  --type-display-weight: 500;
+  --type-display-line-height: 1.45;
+  --type-display-letter-spacing: .015em;
+  --type-headline-lg-size: 1.875rem;
+  --type-headline-lg-weight: 500;
+  --type-headline-lg-line-height: 1.45;
+  --type-headline-lg-letter-spacing: -0.02em;
+  --type-headline-md-size: 1.375rem;
+  --type-headline-md-weight: 500;
+  --type-headline-md-line-height: 1.5;
+  --type-headline-md-letter-spacing: -0.01em;
+  --type-body-lg-size: 1rem;
+  --type-body-lg-weight: 400;
+  --type-body-lg-line-height: 1.8;
+  --type-body-lg-letter-spacing: 0em;
+  --type-body-md-size: 1rem;
+  --type-body-md-weight: 400;
+  --type-body-md-line-height: 1.75;
+  --type-body-md-letter-spacing: 0em;
+  --type-body-sm-size: 0.875rem;
+  --type-body-sm-weight: 400;
+  --type-body-sm-line-height: 1.65;
+  --type-body-sm-letter-spacing: 0.01em;
+  --type-label-size: 0.75rem;
+  --type-label-weight: 600;
+  --type-label-line-height: 1.4;
+  --type-label-letter-spacing: 0.08em;
+
+  --radius-none: 0px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-full: 999px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  --content-max-width: 1200px;
+  --reading-max-width: 720px;
+  --page-padding: 20px;
+}

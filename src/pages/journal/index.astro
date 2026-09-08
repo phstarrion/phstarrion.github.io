@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import JournalRow from '../../components/JournalRow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('journal'))
+  .sort((first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime());
+---
+
+<BaseLayout
+  title="Journal — Kanon Studio"
+  description="Kanon Studioの制作ノートと活動記録。"
+>
+  <section class="journal" aria-labelledby="journal-title">
+    <header class="journal__header">
+      <p>Notes / Archive</p>
+      <h1 id="journal-title">Journal</h1>
+      <p>制作の途中で見つけたことを、短い記録に残します。</p>
+    </header>
+
+    {entries.length > 0 ? (
+      <div class="journal__entries">
+        {entries.map((entry) => (
+          <JournalRow
+            title={entry.data.title}
+            summary={entry.data.summary}
+            category={entry.data.category}
+            publishedAt={entry.data.publishedAt}
+            href={`/journal/${entry.id}/`}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="journal__empty">制作ノートは準備中です。</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .journal {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .journal__header {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-md);
+    padding: 10px 0 24px;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  .journal__header > p:first-child {
+    color: var(--color-coral-hover);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    line-height: var(--type-label-line-height);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.625rem);
+    font-weight: var(--type-display-weight);
+    letter-spacing: var(--type-display-letter-spacing);
+    line-height: var(--type-display-line-height);
+    margin: 0;
+  }
+
+  .journal__header > p:last-child,
+  .journal__empty {
+    color: var(--color-muted);
+    line-height: var(--type-body-md-line-height);
+    margin: 0;
+    max-width: var(--reading-max-width);
+  }
+
+  .journal__entries {
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: transparent;
+    padding-inline: 0;
+    border-radius: 0;
+  }
+
+  .journal__empty {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .journal__header {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+
+    .journal__header > p:first-child,
+    h1 {
+      grid-column: 1;
+    }
+
+    .journal__header > p:last-child {
+      align-self: end;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

@@ -1,0 +1,200 @@
+---
+import ServiceHub from '../components/ServiceHub.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const practices = [
+  ['Music', '声とビートから、感情の輪郭を音にする。'],
+  ['Visual', '光、衣装、人物の気配を一枚の画面へ。'],
+  ['Video', '音と画の時間を重ね、映像とMVをつくる。'],
+  ['Journal', '制作の途中で見つけたことを短く記録する。'],
+] as const;
+---
+
+<BaseLayout
+  title="About — Kanon Studio"
+  description="Kanon Studioの制作領域と、作品づくりへの短い紹介。"
+>
+  <section class="about" aria-labelledby="about-title">
+    <header class="about__header">
+      <p>Profile / Kanon Studio</p>
+      <h1 id="about-title">About</h1>
+    </header>
+
+    <div class="about__profile">
+      <figure>
+        <img
+          src="/images/kanon-avatar.jpg"
+          alt="Kanon Studioを象徴する、青い髪のキャラクターポートレート"
+          width="682"
+          height="1024"
+          decoding="async"
+        />
+      </figure>
+      <div>
+        <p class="about__intro">Kanon Studioは、音楽、ビジュアル、映像を行き来しながら、まだない景色をつくる個人の制作活動です。</p>
+        <p>音と光のあいだにある感情を、作品ごとに静かに編んでいます。</p>
+      </div>
+    </div>
+
+    <section class="about__practices" aria-labelledby="practice-title">
+      <div>
+        <p>Practice</p>
+        <h2 id="practice-title">Four fields</h2>
+      </div>
+      <ol>
+        {practices.map(([label, description], index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h3>{label}</h3>
+            <p>{description}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <ServiceHub
+      headingId="about-service-hub-title"
+      heading="Kanon Studio elsewhere"
+    />
+  </section>
+</BaseLayout>
+
+<style>
+  .about { margin-inline: auto; }
+  .about__profile { padding-block: 12px 28px; border-bottom: 1px solid var(--color-border); }
+  .about__header { border-top: 0; }
+
+  .about {
+    display: grid;
+    gap: var(--space-2xl);
+    max-width: 960px;
+  }
+
+  .about__header,
+  .about__practices {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+  }
+
+  .about__header > p,
+  .about__practices > div > p,
+  .about__practices li > span {
+    color: var(--color-coral-hover);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    line-height: var(--type-label-line-height);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: var(--type-headline-lg-weight);
+    letter-spacing: var(--type-headline-lg-letter-spacing);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 2.625rem);
+    line-height: var(--type-display-line-height);
+    margin: var(--space-sm) 0 0;
+  }
+
+  h2 {
+    font-size: var(--type-headline-lg-size);
+    line-height: var(--type-headline-lg-line-height);
+    margin: var(--space-sm) 0 0;
+  }
+
+  .about__profile {
+    align-items: start;
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  figure {
+    margin: 0;
+    width: min(176px, 50vw);
+  }
+
+  figure img {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
+    width: 100%;
+  }
+
+  .about__profile p {
+    line-height: var(--type-body-lg-line-height);
+    margin: 0;
+    max-width: 560px;
+  }
+
+  .about__profile p + p {
+    color: var(--color-muted);
+    margin-top: var(--space-md);
+  }
+
+  .about__intro {
+    font-size: var(--type-body-lg-size);
+  }
+
+  .about__practices {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  ol {
+    border-bottom: 1px solid var(--color-border);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-sm) var(--space-md);
+    grid-template-columns: auto 1fr;
+    padding-block: var(--space-lg);
+  }
+
+  h3,
+  li p {
+    margin: 0;
+  }
+
+  h3 {
+    font-size: var(--type-headline-md-size);
+    line-height: var(--type-headline-md-line-height);
+  }
+
+  li p {
+    color: var(--color-muted);
+    grid-column: 2;
+    line-height: var(--type-body-md-line-height);
+  }
+
+  @media (min-width: 768px) {
+    .about__profile {
+      grid-template-columns: 176px minmax(0, 1fr);
+    }
+
+    .about__practices {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    li {
+      grid-template-columns: 48px minmax(140px, 1fr) minmax(0, 2fr);
+    }
+
+    li p {
+      grid-column: 3;
+    }
+  }
+</style>

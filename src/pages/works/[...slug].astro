@@ -1,0 +1,336 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import WorkGrid from '../../components/WorkGrid.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { filterWorks, sortWorksNewestFirst } from '../../lib/content';
+import { paths } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const works = sortWorksNewestFirst(
+    (await getCollection('works')).map((work) => ({ ...work.data, work })),
+  );
+
+  return works.map(({ work }) => ({
+    params: { slug: work.id },
+    props: {
+      work,
+      relatedWorks: filterWorks(works, work.data.category)
+        .filter((related) => related.work.id !== work.id)
+        .slice(0, 3)
+        .map((related) => related.work),
+    },
+  }));
+}
+
+interface Props {
+  work: CollectionEntry<'works'>;
+  relatedWorks: CollectionEntry<'works'>[];
+}
+
+const { work, relatedWorks }: Props = Astro.props;
+const { Content } = await render(work);
+const categoryLabels = {
+  music: 'Music',
+  visual: 'Visual',
+  video: 'Video',
+} as const;
+const styleLabels = {
+  kawaii: 'Kawaii',
+  dark: 'Dark',
+  pop: 'Pop',
+} as const;
+const publishedDate = work.data.publishedAt.toISOString().slice(0, 10);
+const displayDate = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+}).format(work.data.publishedAt);
+const { cover, coverAlt, coverWidth, coverHeight } = work.data;
+---
+
+<BaseLayout
+  title={`${work.data.title} — Kanon Studio`}
+  description={work.data.description}
+  image={work.data.cover}
+  imageAlt={work.data.coverAlt}
+  type="article"
+  publishedTime={work.data.publishedAt}
+>
+  <article class="work-detail">
+    <a class="work-detail__back" href={paths.works}>← Works</a>
+
+    <header class="work-detail__header">
+      <p class="work-detail__category">{categoryLabels[work.data.category]}</p>
+      <h1>{work.data.title}</h1>
+      <p class="work-detail__description">{work.data.description}</p>
+    </header>
+
+    {cover && coverAlt && coverWidth && coverHeight ? (
+      <figure class="work-detail__media">
+        <img
+          src={cover}
+          alt={coverAlt}
+          width={coverWidth}
+          height={coverHeight}
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+    ) : (
+      <div
+        class="work-detail__media work-detail__media--editorial"
+        data-work-media="editorial"
+        aria-hidden="true"
+      >
+        <span class="work-detail__media-title">{work.data.title}</span>
+      </div>
+    )}
+
+    <div class="work-detail__body">
+      <dl class="work-detail__metadata">
+        <div>
+          <dt>Date</dt>
+          <dd><time datetime={publishedDate}>{displayDate}</time></dd>
+        </div>
+        {work.data.genre && (
+          <div>
+            <dt>Genre</dt>
+            <dd>{work.data.genre}</dd>
+          </div>
+        )}
+        {work.data.style && (
+          <div>
+            <dt>Style</dt>
+            <dd>
+              <a data-work-style-link href={`/works/?style=${work.data.style}`}>
+                {styleLabels[work.data.style]}
+              </a>
+            </dd>
+          </div>
+        )}
+        <div>
+          <dt>Production</dt>
+          <dd>Kanon Studio</dd>
+        </div>
+      </dl>
+
+      <section class="work-detail__context" aria-labelledby="production-notes-title">
+        <p class="work-detail__section-label">Process</p>
+        <h2 id="production-notes-title">Production notes</h2>
+        <div class="work-detail__prose">
+          <Content />
+        </div>
+        {work.data.externalUrl && work.data.externalLabel && (
+          <a
+            class="work-detail__external"
+            href={work.data.externalUrl}
+            rel="noopener noreferrer"
+            data-work-external
+          >
+            {work.data.externalLabel}
+          </a>
+        )}
+      </section>
+    </div>
+  </article>
+
+  {relatedWorks.length > 0 && (
+    <section class="related-works" aria-labelledby="related-works-title">
+      <header>
+        <p>Explore / Same category</p>
+        <h2 id="related-works-title">Related works</h2>
+      </header>
+      <WorkGrid works={relatedWorks} variant="archive" headingLevel="h3" />
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .work-detail {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .work-detail__back {
+    justify-self: start;
+    min-height: 44px;
+    padding-block: 10px;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .work-detail__header {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+  }
+
+  .work-detail__category,
+  .work-detail__section-label,
+  .related-works header > p {
+    color: var(--color-kanon-blue-hover);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    line-height: var(--type-label-line-height);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.7vw, 2.625rem);
+    font-weight: var(--type-display-weight);
+    letter-spacing: var(--type-display-letter-spacing);
+    line-height: var(--type-display-line-height);
+    margin: 0;
+    max-width: 980px;
+  }
+
+  .work-detail__description {
+    font-size: var(--type-body-lg-size);
+    line-height: var(--type-body-lg-line-height);
+    margin: 0;
+    max-width: 720px;
+  }
+
+  .work-detail__media {
+    background: var(--color-surface);
+    margin: var(--space-md) 0 0;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 6px;
+  }
+
+  .work-detail__media--editorial {
+    align-content: center;
+    aspect-ratio: 16 / 9;
+    border-block: 1px solid var(--color-border);
+    display: grid;
+    padding: clamp(var(--space-lg), 5vw, var(--space-2xl));
+  }
+
+  .work-detail__media-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, var(--type-display-size));
+    font-weight: var(--type-display-weight);
+    letter-spacing: var(--type-display-letter-spacing);
+    line-height: var(--type-display-line-height);
+    max-width: 960px;
+  }
+
+  .work-detail__media img {
+    height: auto;
+    margin-inline: auto;
+    max-height: min(900px, 84vh);
+    object-fit: contain;
+    width: auto;
+  }
+
+  .work-detail__body {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .work-detail__metadata {
+    border-top: 1px solid var(--color-border);
+    margin: 0;
+  }
+
+  .work-detail__metadata > div {
+    border-bottom: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: minmax(88px, 1fr) minmax(0, 2fr);
+    padding-block: var(--space-md);
+  }
+
+  .work-detail__metadata dt {
+    color: var(--color-muted);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    letter-spacing: var(--type-label-letter-spacing);
+    text-transform: uppercase;
+  }
+
+  .work-detail__metadata dd {
+    margin: 0;
+  }
+
+  .work-detail__context {
+    max-width: var(--reading-max-width);
+  }
+
+  .work-detail__context h2,
+  .related-works h2 {
+    font-family: var(--font-display);
+    font-size: var(--type-headline-lg-size);
+    font-weight: var(--type-headline-lg-weight);
+    letter-spacing: var(--type-headline-lg-letter-spacing);
+    line-height: var(--type-headline-lg-line-height);
+    margin: var(--space-sm) 0 var(--space-lg);
+  }
+
+  .work-detail__prose {
+    line-height: var(--type-body-lg-line-height);
+  }
+
+  .work-detail__prose:empty {
+    display: none;
+  }
+
+  .work-detail__external {
+    align-items: center;
+    background: var(--color-coral);
+    border-radius: var(--radius-full);
+    color: var(--color-surface);
+    display: inline-flex;
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    justify-content: center;
+    letter-spacing: var(--type-label-letter-spacing);
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    text-decoration: none;
+    transition: background-color 180ms ease-out;
+  }
+
+  .work-detail__external:hover,
+  .work-detail__external:focus-visible {
+    background: var(--color-coral-hover);
+  }
+
+  .related-works {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-md);
+  }
+
+  .related-works header {
+    margin-bottom: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .work-detail__header {
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    }
+
+    .work-detail__category,
+    .work-detail__header h1 {
+      grid-column: 1;
+    }
+
+    .work-detail__description {
+      align-self: end;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .work-detail__body {
+      grid-template-columns: minmax(240px, 1fr) minmax(0, 2fr);
+    }
+  }
+</style>
