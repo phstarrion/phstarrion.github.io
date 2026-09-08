@@ -8,6 +8,7 @@ const testDirectory = dirname(fileURLToPath(import.meta.url));
 
 const representativePages = [
   ['Home', 'index.html'],
+  ['Games', 'games/index.html'],
   ['Works', 'works/index.html'],
   ['work detail', 'works/sugar-crash-protocol/index.html'],
   ['Journal', 'journal/index.html'],
