@@ -104,7 +104,7 @@ const story = (await getCollection('journal')).find((entry) => entry.id === 'ryu
     .hero img { height: auto; max-height: none; aspect-ratio: 4 / 5; object-position: center; }
     .home-content { padding-bottom: 40px; }
     .home-section { padding-top: 48px; }
-    .selected-works :global(.work-grid--featured > li:first-child .work-card__media img) { aspect-ratio: 4 / 5; object-position: center; }
+    .home-content .selected-works :global(.work-grid--featured > li:first-child .work-card__media img) { aspect-ratio: 4 / 5; object-position: center; }
     .section-heading { gap: 12px; margin-bottom: 20px; }
     h2 { font-size: 23px; }
     .featured-song { grid-template-columns: 1fr; }
