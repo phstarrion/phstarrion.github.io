@@ -12,9 +12,10 @@ interface Props {
   imageAlt?: string;
   type?: 'website' | 'article';
   publishedTime?: Date;
+  theme?: 'default' | 'night';
 }
 
-const { title, description, image, imageAlt, type = 'website', publishedTime } = Astro.props;
+const { title, description, image, imageAlt, type = 'website', publishedTime, theme = 'default' } = Astro.props;
 const site = Astro.site ?? new URL('https://phstarrion.github.io/');
 const canonicalPath = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
@@ -28,7 +29,7 @@ const imageUrl = image ? new URL(image, site) : undefined;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#FAF8F5" />
+    <meta name="theme-color" content={theme === 'night' ? '#090d1b' : '#FAF8F5'} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -58,7 +59,7 @@ const imageUrl = image ? new URL(image, site) : undefined;
     {xHandle && <meta name="twitter:creator" content={xHandle} />}
     <title>{title}</title>
   </head>
-  <body>
+  <body class:list={{ 'theme-night': theme === 'night' }}>
     <a class="skip-link" href="#main-content">本文へ移動</a>
     <SiteHeader />
     <main id="main-content">

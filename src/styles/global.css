@@ -20,6 +20,28 @@ body {
   min-width: 320px;
 }
 
+body.theme-night {
+  --color-primary: #b7a0ff;
+  --color-primary-hover: #cbbaff;
+  --color-lavender: #292440;
+  --color-blue-surface: #172944;
+  --color-canvas: #090d1b;
+  --color-surface: #11182b;
+  --color-ink: #f4f3fc;
+  --color-muted: #b7bbd1;
+  --color-border: #34384f;
+  --color-kanon-blue: #99d5f7;
+  --color-kanon-blue-hover: #bde9ff;
+  --color-focus: #f2b8e8;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+body.theme-night .button { color: #101323; font-weight: 600; }
+body.theme-night .button:hover { color: #101323; }
+body.theme-night .site-header { background: #090d1bea; }
+body.theme-night .site-footer { background: #0d1222; }
+
 [hidden] {
   display: none !important;
 }
