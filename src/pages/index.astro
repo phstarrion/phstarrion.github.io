@@ -12,6 +12,14 @@ const otherSongs = works.filter((work) => work.data.category === 'music' && work
 const visualIds = ['visual-floral-arcade', 'visual-water-mirror', 'visual-etoile-violet'];
 const visualWorks = visualIds.map((id) => works.find((work) => work.id === id)!);
 const story = (await getCollection('journal')).find((entry) => entry.id === 'ryuseimachi');
+const lightMotes = [
+  { x: 59, y: 19, size: 2, duration: 17, delay: -3 },
+  { x: 72, y: 32, size: 3, duration: 21, delay: -12 },
+  { x: 83, y: 20, size: 2, duration: 19, delay: -8 },
+  { x: 65, y: 58, size: 2, duration: 23, delay: -17 },
+  { x: 89, y: 47, size: 3, duration: 20, delay: -5 },
+  { x: 77, y: 70, size: 2, duration: 25, delay: -19 },
+];
 ---
 
 <BaseLayout title="Kanon Studio" description="Kanon Studioの音楽、ビジュアル、ブラウザゲーム。音と、夢の、つづき。" image="/images/atelier-moonlight.png" imageAlt="月明かりの音楽室で創作する、青い髪のKanon" theme="night">
@@ -21,6 +29,10 @@ const story = (await getCollection('journal')).find((entry) => entry.id === 'ryu
       <source media="(max-width: 640px)" srcset="/images/atelier-moonlight-mobile.png" width="1122" height="1402" />
       <img src="/images/atelier-moonlight.png" alt="月明かりが差す音楽室で、青い髪のKanonが創作する水彩イラスト" width="1536" height="1024" fetchpriority="high" decoding="async" />
     </picture>
+    <div class="hero__atmosphere" aria-hidden="true">
+      <div class="hero__moonlight"></div>
+      {lightMotes.map((mote) => <span class="hero__mote" style={`--x:${mote.x}%;--y:${mote.y}%;--size:${mote.size}px;--duration:${mote.duration}s;--delay:${mote.delay}s;`}></span>)}
+    </div>
   </section>
 
   <div class="home-content">
@@ -63,7 +75,13 @@ const story = (await getCollection('journal')).find((entry) => entry.id === 'ryu
 <style>
   :global(body.theme-night main) { max-width: none; padding: 0; }
   .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-  .hero { background: #161b32; }
+  .hero { position: relative; isolation: isolate; overflow: hidden; background: #161b32; }
+  .hero__atmosphere { position: absolute; inset: 0; pointer-events: none; }
+  .hero__moonlight { position: absolute; inset: 0; background: radial-gradient(ellipse at 73% 17%, #fff5d8 0%, #e1e9ff66 26%, transparent 61%); opacity: .09; animation: moonlight-breathe 14s ease-in-out infinite; }
+  .hero__mote { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); border-radius: 50%; background: #fff7df; box-shadow: 0 0 7px 2px #ffefc54d; opacity: 0; animation: mote-drift var(--duration) ease-in-out var(--delay) infinite; }
+  @keyframes moonlight-breathe { 0%, 100% { opacity: .07; } 50% { opacity: .21; } }
+  @keyframes mote-drift { 0%, 100% { opacity: 0; transform: translate3d(-5px, 12px, 0); } 25% { opacity: .45; } 55% { opacity: .65; transform: translate3d(8px, -10px, 0); } 80% { opacity: .2; } }
+  @media (prefers-reduced-motion: reduce) { .hero__moonlight { animation: none; opacity: .07; } .hero__mote { display: none; } }
   .hero picture { display: block; }
   .hero img { display: block; width: 100%; height: min(76vw, 760px); max-height: calc(100svh - 76px); object-fit: cover; object-position: center 52%; }
   .home-content { max-width: 1200px; margin-inline: auto; padding: 0 var(--page-padding) 64px; }
@@ -101,6 +119,7 @@ const story = (await getCollection('journal')).find((entry) => entry.id === 'ryu
   .atelier-about h2 { font-size: 23px; }
   .atelier-about__copy > p:not(.eyebrow) { color: var(--color-muted); font-size: 14px; line-height: 1.85; margin: 12px 0 2px; }
   @media (max-width: 767px) {
+    .hero__mote:nth-last-child(-n+2) { display: none; }
     .hero img { height: auto; max-height: none; aspect-ratio: 4 / 5; object-position: center; }
     .home-content { padding-bottom: 40px; }
     .home-section { padding-top: 48px; }
