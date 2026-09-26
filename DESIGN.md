@@ -1,5 +1,13 @@
 # Kanon Studio — Moonlit Atelier
 
+## September 26, 2026 — Homepage revision (draft PR)
+
+The user's latest direction supersedes the Home composition below: use an image-only, full-width hero and remove Find your mood. The homepage now uses a dark navy palette with lavender accents. Other routes retain their existing theme.
+
+Home order: full-width hero with a dedicated mobile image; Music with the featured 流星待ち and three additional songs selected by publication date; three curated illustrations; the existing BITCOIN BEAT LIVE game; a compact creator introduction and verified social links. Keep the page's H1 available to screen readers without visible hero copy. Place the one existing production journal link alongside its related featured song. The Journal archive remains reachable from navigation.
+
+Mobile illustrations preserve faces with portrait crops. All content is sourced from existing collections. Preview checked at 1440px and 390px, including image loading, overflow and mobile navigation. This remains a draft pending publication approval.
+
 Approved 2026-09-06. A small, sophisticated, welcoming atelier for music, visuals and notes.
 
 ## Color and type
