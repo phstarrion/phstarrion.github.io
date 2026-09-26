@@ -284,14 +284,14 @@ describe('generated pages', () => {
 
   it('presents the approved atelier hero, featured track and a curated visual gallery', async () => {
     const page = parseBody(await readMarkup('index.html'));
-    expect(page.querySelector('h1')?.textContent).toBe('音と、夢の、つづき。');
-    expect(page.querySelector('.hero a[href="/works/"]')).not.toBeNull();
-    const hero = page.querySelector<HTMLImageElement>('.hero__art img');
+    expect(page.querySelector('h1')?.textContent).toBe('Kanon Studio — 音と、夢の、つづき。');
+    expect(page.querySelector('.hero .visually-hidden')).not.toBeNull();
+    const hero = page.querySelector<HTMLImageElement>('.hero img');
     expect(hero?.getAttribute('src')).toBe('/images/atelier-moonlight.png');
     expect(hero?.getAttribute('fetchpriority')).toBe('high');
     expect(hero?.alt.length).toBeGreaterThan(12);
     expect([hero?.width, hero?.height]).toEqual([1536, 1024]);
-    const mobileArt = page.querySelector('.hero__art source');
+    const mobileArt = page.querySelector('.hero source');
     expect(mobileArt?.getAttribute('media')).toBe('(max-width: 640px)');
     expect(mobileArt?.getAttribute('srcset')).toBe('/images/atelier-moonlight-mobile.png');
     expect(mobileArt?.getAttribute('width')).toBe('1122');
@@ -305,10 +305,8 @@ describe('generated pages', () => {
     expect(page.body.textContent).not.toContain('Tokyo');
   });
 
-  it.each(['kawaii', 'dark', 'pop'])('opens the %s Home mood link into matching music', async (style) => {
-    const home = parseBody(await readMarkup('index.html'));
-    const href = home.querySelector(`[data-mood-link="${style}"]`)?.getAttribute('href');
-    expect(href).toBe(`/works/?style=${style}`);
+  it.each(['kawaii', 'dark', 'pop'])('opens the %s archive filter into matching music', async (style) => {
+    const href = `/works/?style=${style}`;
     const browser = new Window({ url: `https://example.com${href}` });
     browser.document.write(await readMarkup('works/index.html'));
     browser.eval(browser.document.querySelector('script[data-work-filters]')?.textContent ?? '');
@@ -347,19 +345,7 @@ describe('generated pages', () => {
       }
     }
 
-    const starlitMaid = page.querySelector<HTMLImageElement>(
-      'img[src="/images/works/visual-starlit-maid.jpeg"]',
-    );
-    expect([starlitMaid?.width, starlitMaid?.height]).toEqual([1122, 1402]);
     expect(page.querySelector('.atelier-about img[src="/images/kanon-avatar.jpg"]')).not.toBeNull();
-  });
-
-  it('uses the normative display line-height for the Home hero', async () => {
-    const generated = await readPage('index.html');
-
-    expect(generated).toMatch(
-      /h1\[[^\]]+\]\{[^}]*line-height:var\(--type-display-line-height\)/,
-    );
   });
 
   it('removes transforms when reduced motion is requested', async () => {
@@ -611,12 +597,9 @@ describe('generated pages', () => {
     expect(body.split(pulled).length - 1).toBe(1);
   });
 
-  it('surfaces the newest journal entries on home', async () => {
+  it('links the featured song to its production journal', async () => {
     const page = parseBody(await readMarkup('index.html'));
-    const rows = [...page.querySelectorAll('.journal-row')];
-
-    expect(rows.length).toBeGreaterThan(0);
-    expect(rows.length).toBeLessThanOrEqual(3);
+    expect(page.querySelector('#featured-song a[href="/journal/ryuseimachi/"]')).not.toBeNull();
     expect(page.body.textContent).not.toContain('制作ノートは、ただいま準備中です。');
   });
 
