@@ -21,15 +21,16 @@ body {
 }
 
 body.theme-night {
-  --color-primary: #b7a0ff;
-  --color-primary-hover: #cbbaff;
+  min-width: 0;
+  --color-primary: #c4b7e6;
+  --color-primary-hover: #ded4f5;
   --color-lavender: #292440;
   --color-blue-surface: #172944;
   --color-canvas: #090d1b;
   --color-surface: #11182b;
   --color-ink: #f4f3fc;
-  --color-muted: #b7bbd1;
-  --color-border: #34384f;
+  --color-muted: #a8aec4;
+  --color-border: #ffffff21;
   --color-kanon-blue: #99d5f7;
   --color-kanon-blue-hover: #bde9ff;
   --color-focus: #f2b8e8;
@@ -39,6 +40,13 @@ body.theme-night {
 
 body.theme-night .button { color: #101323; font-weight: 600; }
 body.theme-night .button:hover { color: #101323; }
+body.theme-night .button { border-radius: 4px; }
+body.theme-night .site-header__brand { letter-spacing: .025em; }
+body.theme-night .site-header__moon { border-color: var(--color-border); }
+body.theme-night .site-header nav a { font-size: 12px; letter-spacing: .04em; }
+body.theme-night .site-footer__inner { padding-block: 40px; }
+body.theme-night .site-footer nav a { font-size: 11px; font-weight: 400; }
+body.theme-night .site-footer__inner > p { font-size: 10px; letter-spacing: .04em; }
 body.theme-night .site-header { background: #090d1bea; }
 body.theme-night .site-footer { background: #0d1222; }
 

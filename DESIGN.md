@@ -1,6 +1,16 @@
 # Kanon Studio — Moonlit Atelier
 
-## September 26, 2026 — Homepage revision (draft PR)
+## October 2, 2026 — Local visual refinement
+
+This revision builds on main after the September 26 redesign and the gentle moonlight/motes update. It is a local review candidate, not a deployed change.
+
+Keep the full-width, image-only hero, hidden H1, existing mobile portrait source and centered 4:5 framing. A short gradient at the bottom joins the illustration to the navy canvas without covering the face. Existing moonlight and six slow light motes remain, with reduced-motion support.
+
+Home uses open editorial layouts in place of enclosing feature/game cards: a larger featured cover beside compact copy, fine section rules, 64–112px desktop section spacing, and 56px mobile spacing. Retain the staggered illustration gallery and compact mobile music arrangement. A small arched creator portrait and understated service links close the page. Lavender is softened to #C4B7E6; muted text is #A8AEC4; fine rules use white at 13% opacity on the navy canvas. Existing Japanese display/body fonts remain; hierarchy comes from size, tracking and spacing.
+
+Scope is homepage styling and night-theme header/footer details. Preserve every work, link and description; no new embeds, hero text, mood selector or features. Other routes retain their existing theme. Validate with the README quality gates and desktop/mobile browser review.
+
+## September 26, 2026 — Homepage revision (merged)
 
 The user's latest direction supersedes the Home composition below: use an image-only, full-width hero and remove Find your mood. The homepage now uses a dark navy palette with lavender accents. Other routes retain their existing theme.
 
