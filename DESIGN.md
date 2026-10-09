@@ -1,5 +1,15 @@
 # Kanon Studio — Moonlit Atelier
 
+## 今後の更新方針 — 2026年10月10日
+
+ユーザーは、今後のホームページ更新でも、スクロール演出やインタラクションの技法を積極的かつ適正に取り入れることを希望している。各更新で、作品の魅力・世界観・情報の伝わり方・操作性を改善する演出を自発的に検討する。今回採用した5種類に限定せず、目的に合う他の技法も候補にする。
+
+- 技法は具体名と目的を結びつけて選ぶ。作品を見せるにはフェードイン・スタッガー、奥行きにはパララックス、長い説明にはスクロールテリング、位置の把握にはスティッキー・スクロールスパイなどを検討する。
+- テキスト中心・画像中心など、ページの内容に応じて強さと頻度を調整する。Kanon Studioの画像中心の構成、月明かりの世界観、既存の作品とリンクを尊重する。
+- スクロールスナップ・ピン留め・横スクロールなども、内容と操作に適していれば採用候補にする。今回見送った技法を今後の恒久的な禁止事項にはしない。
+- スマホでの操作性、表示速度、読みやすさ、キーボード操作、視差効果を減らす設定に対応する。JavaScriptや演出が無効でも作品とリンクを利用できるようにする。
+- 更新後は「採用した技法」「使った場所」「採用理由」を短く説明する。検証できた範囲と未確認の範囲を正確に伝える。
+
 ## October 10, 2026 — Named motion refinement
 
 The user requested a homepage update inspired by the animation vocabulary in https://x.com/showheyohtaki/status/2108065874511077598. Preserve the existing image-only hero, night palette, content and mobile portrait framing. Add a subtle desktop parallax (art travels up to 18px while moonlight travels in the opposite direction), one-time fade/slide reveals and 90ms staggered work cards. The Home header stays visible with a translucent navy background. Keep natural scrolling; do not force scroll snapping or pin artwork over content.
