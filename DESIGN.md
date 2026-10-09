@@ -1,5 +1,11 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 10, 2026 — Named motion refinement
+
+The user requested a homepage update inspired by the animation vocabulary in https://x.com/showheyohtaki/status/2108065874511077598. Preserve the existing image-only hero, night palette, content and mobile portrait framing. Add a subtle desktop parallax (art travels up to 18px while moonlight travels in the opposite direction), one-time fade/slide reveals and 90ms staggered work cards. The Home header stays visible with a translucent navy background. Keep natural scrolling; do not force scroll snapping or pin artwork over content.
+
+Motion is progressive enhancement. With JavaScript disabled or reduced motion enabled, all content is immediately visible. Keyboard focus reveals a pending block immediately. Mobile retains its original hero crop, uses a shorter 12px reveal and disables parallax. Scroll work is coalesced into animation frames and stops when the hero is offscreen. Other routes retain their existing appearance.
+
 ## October 2, 2026 — Local visual refinement
 
 This revision builds on main after the September 26 redesign and the gentle moonlight/motes update. It is a local review candidate, not a deployed change.

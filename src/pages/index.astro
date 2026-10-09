@@ -72,7 +72,29 @@ const lightMotes = [
   </div>
 </BaseLayout>
 
+<script>
+  import { initHomeMotion } from '../lib/home-motion';
+  initHomeMotion();
+</script>
+
 <style>
+  /* Motion is confined to Home; native scrolling and all links stay available. */
+  :global(body.theme-night .site-header) { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(14px); }
+  :global(body.theme-night) { scroll-padding-top: 92px; }
+  :global(body.theme-night :is(h2, h3, section, article)[id]) { scroll-margin-top: 92px; }
+  :global(.home-content .section-heading), .featured-song__cover, .featured-song__copy,
+  :global(.music-grid > li), :global(.selected-works .work-grid > li),
+  :global(.play .game-spotlight), .atelier-about {
+    opacity: 1; transform: none;
+    transition: opacity 700ms ease var(--reveal-delay, 0ms), transform 700ms cubic-bezier(.22, 1, .36, 1) var(--reveal-delay, 0ms);
+  }
+  :global(.home-content .motion-pending) { opacity: 0; transform: translate3d(0, 22px, 0); }
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .hero picture { transform: translate3d(0, var(--art-shift, 0px), 0) scale(1.05); }
+    .hero__atmosphere { transform: translate3d(0, var(--light-shift, 0px), 0); }
+  }
+  @media (max-width: 767px) { :global(.home-content .motion-pending) { transform: translate3d(0, 12px, 0); } }
+  @media (prefers-reduced-motion: reduce) { :global(.home-content .motion-pending) { opacity: 1; } }
   :global(body.theme-night main) { max-width: none; padding: 0; }
   .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
   .hero { position: relative; isolation: isolate; overflow: hidden; background: #161b32; }
