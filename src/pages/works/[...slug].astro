@@ -171,7 +171,7 @@ const preview = isMusic ? getWorkPreview(work) : undefined;
   .work-detail--music h1 { font-size:clamp(28px,4vw,44px); line-height:1.7; overflow-wrap:anywhere; }
   .work-detail--music .work-detail__description { color:var(--color-muted); font-size:14px; line-height:2; margin-top:16px; }
   .work-detail--music .work-detail__media { margin:0; padding:0; width:100%; max-width:440px; justify-self:center; }
-  .work-detail--music .work-detail__media img { width:100%; height:auto; max-height:none; }
+  .work-detail--music .work-detail__media img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; object-position:center; max-height:none; }
   .work-detail--music .work-detail__listening { min-width:0; }
   @media(min-width:768px) {
     .work-detail--music .work-detail__intro { grid-template-columns:minmax(0,340px) minmax(0,1fr); grid-template-areas:"art header" "art listen"; column-gap:40px; row-gap:24px; align-items:start; }

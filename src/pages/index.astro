@@ -109,12 +109,13 @@ const lightMotes = [
   @media (max-width: 767px) {
     .listening-grid { grid-template-columns: 1fr; gap: 36px; }
     .listening__heading h3 { font-size: 23px; }
-    .listening-card { display: grid; grid-template-columns: 80px minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 16px; align-items: start; padding-bottom: 24px; border-bottom: 1px solid var(--color-border); }
-    .listening-card__art img { aspect-ratio: 1; object-position: center; }
+    .listening-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; gap: 16px; align-items: start; padding-bottom: 24px; border-bottom: 1px solid var(--color-border); }
+    .listening-card__art { width: 100%; max-width: 480px; justify-self: center; }
+    .listening-card__art img { display: block; aspect-ratio: 1; object-position: center; }
     .listening-card__preview, .listening-card__actions { grid-column: 1 / -1; }
     .listening-card__copy { padding: 0; }
     .listening-card__headline { font-size: 12px; margin-bottom: 6px; }
-    .listening-card h4 { font-size: 17px; }
+    .listening-card h4 { font-size: 21px; }
   }
   /* Motion is confined to Home; native scrolling and all links stay available. */
   :global(body.theme-night .site-header) { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(14px); }

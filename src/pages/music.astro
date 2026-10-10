@@ -57,7 +57,7 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
   #tracks { scroll-margin-top: 110px; }
   .room-track { scroll-margin-top: 110px; }
   .track-list { list-style: none; padding: 0; margin: 0; }
-  .room-track { display: grid; grid-template-columns: 220px minmax(0, 1fr); grid-template-areas: "art copy" "art player"; column-gap: 40px; row-gap: 0; padding: 40px 0; border-bottom: 1px solid var(--color-border); }
+  .room-track { display: grid; grid-template-columns: 320px minmax(0, 1fr); grid-template-areas: "art copy" "art player"; column-gap: 40px; row-gap: 0; padding: 40px 0; border-bottom: 1px solid var(--color-border); }
   .track-art { grid-area: art; width: 100%; aspect-ratio: 1 / 1; min-width: 0; position: relative; align-self: start; overflow: hidden; border-radius: 6px; }
   .track-copy { grid-area: copy; min-width: 0; }
   .room-track__player { grid-area: player; min-width: 0; }
@@ -72,9 +72,10 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
   .tags li { font-size: 11px; padding: 4px 10px; border: 1px solid var(--color-border); border-radius: 30px; color: var(--color-muted); }
   .room-footer { padding: 48px 0 16px; text-align: center; }
   .room-footer p { font-size: 20px; }
-  @media(max-width: 600px) {
-    .room-track { grid-template-columns: 80px minmax(0, 1fr); grid-template-areas: "art copy" "player player"; column-gap: 16px; row-gap: 20px; padding-block: 30px; }
-    .track-number { left: 4px; bottom: 4px; font-size: 9px; padding: 2px 6px; }
+  @media(max-width: 767px) {
+    .room-track { grid-template-columns: minmax(0, 1fr); grid-template-areas: "art" "copy" "player"; column-gap: 0; row-gap: 20px; padding-block: 30px; }
+    .track-art { max-width: 480px; justify-self: center; }
+    .track-number { left: 12px; bottom: 4px; font-size: 9px; padding: 2px 6px; }
     .track-date { font-size: 10px; margin-bottom: 10px; }
     .track-date span { display: block; }
     .track-headline { font-size: 12px; }
