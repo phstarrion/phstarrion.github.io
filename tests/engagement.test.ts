@@ -5,7 +5,7 @@ it('locks repeated clicks, saves only confirmed likes, and restores the liked st
   const send=vi.fn().mockResolvedValue(Response.json({liked:true}));vi.stubGlobal('fetch',send);
   const {initLikes}=await import('../src/lib/engagement');initLikes();
   const button=document.querySelector<HTMLButtonElement>('button')!;button.click();button.click();
-  await vi.waitFor(()=>expect(button.getAttribute('aria-pressed')).toBe('true'));
+  await vi.waitFor(()=>expect(localStorage.getItem('kanon-liked-v1:hodoke')).toBe('1'));
   expect(send).toHaveBeenCalledTimes(1);expect(button.disabled).toBe(true);expect(localStorage.getItem('kanon-liked-v1:hodoke')).toBe('1');
   expect(document.querySelector('[data-like-status]')?.textContent).toContain('ありがとう');
   expect(JSON.parse(send.mock.calls[0][1].body).workId).toBe('hodoke');
@@ -31,4 +31,20 @@ it('preserves UTM entry attribution across page navigation and sends only a refe
 it('respects Do Not Track for visit collection',async()=> {
   const send=vi.fn();vi.stubGlobal('fetch',send);Object.defineProperty(navigator,'doNotTrack',{value:'1',configurable:true});
   const {recordVisit}=await import('../src/lib/engagement');await recordVisit();expect(send).not.toHaveBeenCalled();
+});
+
+it('reacts before the network resolves, locks matching buttons, and rolls back on failure',async()=> {
+  let finish!: (response: Response)=>void;
+  const send=vi.fn(()=>new Promise<Response>(resolve=>{finish=resolve;}));vi.stubGlobal('fetch',send);
+  document.body.innerHTML+=document.body.innerHTML;
+  const {initLikes}=await import('../src/lib/engagement');initLikes();
+  const buttons=[...document.querySelectorAll<HTMLButtonElement>('button')];
+  buttons[0].click();
+  for(const button of buttons) {expect(button.getAttribute('aria-pressed')).toBe('true');expect(button.disabled).toBe(true);}
+  expect(document.querySelector('[data-like-status]')?.textContent).toContain('保存中');
+  expect(localStorage.getItem('kanon-liked-v1:hodoke')).toBeNull();
+  buttons[1].click();expect(send).toHaveBeenCalledTimes(1);
+  finish(new Response('',{status:503}));
+  await vi.waitFor(()=>expect(buttons[0].disabled).toBe(false));
+  for(const button of buttons) expect(button.getAttribute('aria-pressed')).toBe('false');
 });

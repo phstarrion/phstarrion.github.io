@@ -1,12 +1,14 @@
 import type { ListeningTrack } from '../lib/listening';
 
-// This stem-adjusted MP3 has no creation date or Suno ID in its metadata.
-// Genre is transcribed from the owner's Suno screenshot (IMG_6635.png).
-// Keep the date and full-song link absent until confirmed; upload time is not creation time.
+// The stem-adjusted song's original WAV establishes its creation date and Suno ID.
+// Covers are from each matching Suno song page's og:image; keep undated tracks explicit.
 export const additionalPreviews: ListeningTrack[] = [{
   id: 'ogyogi-warukute',
   title: 'お行儀わるくて、けっこう。',
   edition: 'ステム調整版',
+  cover: '/images/works/music-ogyogi-warukute.jpeg',
+  createdAt: '2026-09-12',
+  sunoUrl: 'https://suno.com/song/d51a5992-1539-4fcd-893a-4dd9603e0685',
   headline: 'お行儀よりも、ビートにまかせて。',
   tags: ['UK Big Beat', 'Breakbeat', 'Rave'],
 }, {
@@ -20,6 +22,7 @@ export const additionalPreviews: ListeningTrack[] = [{
 // WAV imports: creation dates and Suno IDs come from embedded source metadata.
 {
   "id": "aini-ikuyo",
+  "cover": "/images/works/music-aini-ikuyo.jpeg",
   "title": "会いにいくよ",
   "headline": "この曲の世界を、30秒から。",
   "tags": [
@@ -37,11 +40,12 @@ export const additionalPreviews: ListeningTrack[] = [{
   ],
   "createdAt": "2026-09-05",
   "sunoUrl": "https://suno.com/song/6e94a0d4-a0d0-46f9-a360-a29a5b2b47b5",
-  "cover": "/images/works/music-futaribun-no-save-point.jpeg",
+  "cover": "/images/works/music-futaribun-8bit-mix.jpeg",
   "detailUrl": "/works/futaribun-no-save-point/"
 },
 {
   "id": "ushiro-minaide",
+  "cover": "/images/works/music-ushiro-minaide.jpeg",
   "title": "うしろ、みないで",
   "headline": "この曲の世界を、30秒から。",
   "tags": [
@@ -59,11 +63,12 @@ export const additionalPreviews: ListeningTrack[] = [{
   ],
   "createdAt": "2026-09-19",
   "sunoUrl": "https://suno.com/song/05cacef7-1490-4ba6-ae36-64113f83dbc4",
-  "cover": "/images/works/music-silent-ledger.jpeg",
+  "cover": "/images/works/music-silent-ledger-remastered.jpeg",
   "detailUrl": "/works/silent-ledger/"
 },
 {
   "id": "maou-wo-taoshini",
+  "cover": "/images/works/music-maou-wo-taoshini.jpeg",
   "title": "魔王を倒しにいってきます",
   "headline": "この曲の世界を、30秒から。",
   "tags": [

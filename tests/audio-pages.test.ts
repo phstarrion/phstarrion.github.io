@@ -29,8 +29,8 @@ describe('30-second preview pages', () => {
 
 it('lists every available preview with honest date labels', async () => {
   const page = await parse('music/index.html');
-  expect([...page.querySelectorAll('[data-track-id]')].map((el) => el.getAttribute('data-track-id'))).toEqual(['maou-wo-taoshini', 'silent-ledger-remastered', 'aini-ikuyo', 'ushiro-minaide', 'futaribun-8bit-mix', 'hodoke', 'bitcoin-ga-ippai', 'hoshi-ga-terasu-mahou-monogatari', 'ogyogi-warukute']);
+  expect([...page.querySelectorAll('[data-track-id]')].map((el) => el.getAttribute('data-track-id'))).toEqual(['maou-wo-taoshini', 'silent-ledger-remastered', 'aini-ikuyo', 'ushiro-minaide', 'ogyogi-warukute', 'futaribun-8bit-mix', 'hodoke', 'bitcoin-ga-ippai', 'hoshi-ga-terasu-mahou-monogatari']);
   expect(page.querySelectorAll('audio')).toHaveLength(9);
-  expect(page.querySelector('#ogyogi-warukute time')).toBeNull();
-  expect(page.querySelector('#ogyogi-warukute .track-player__suno')).toBeNull();
+  expect(page.querySelector('#hoshi-ga-terasu-mahou-monogatari time')).toBeNull();
+  expect(page.querySelector('#ogyogi-warukute .track-player__suno')?.getAttribute('href')).toContain('d51a5992');
 });

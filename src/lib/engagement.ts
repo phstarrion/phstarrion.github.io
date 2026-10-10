@@ -8,14 +8,14 @@ function visitorId() {
   if (!id || !/^[a-f0-9-]{36}$/i.test(id)) { id=crypto.randomUUID(); localStorage.setItem(VISITOR_KEY,id); }
   return id;
 }
-function markLiked(id: string, fresh = false) {
+function markLiked(id: string, fresh = false, message = '') {
   document.querySelectorAll<HTMLButtonElement>('[data-like-work]').forEach(button => {
     if (button.dataset.likeWork !== id) return;
     button.disabled=true; button.setAttribute('aria-pressed','true');
     button.setAttribute('aria-label',`${button.dataset.likeTitle}にいいね済み`);
     button.querySelector('[data-like-label]')!.textContent='いいね済み';
     const container=button.closest<HTMLElement>('[data-like-container]')!;
-    container.querySelector('[data-like-status]')!.textContent=fresh ? 'ありがとう、届きました。' : '';
+    container.querySelector('[data-like-status]')!.textContent=message || (fresh ? 'ありがとう、届きました。' : '');
     if (!fresh || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     for(let n=0;n<8;n++) {
       const spark=document.createElement('span'); spark.className='like-sparkle';
@@ -38,12 +38,23 @@ export function initLikes() {
     button.disabled=false;
     button.addEventListener('click',async()=> {
       if(pending.has(id) || button.getAttribute('aria-pressed')==='true') return;
-      pending.add(id); button.disabled=true; status.textContent='届けています…';
+      pending.add(id); markLiked(id,true,'ありがとう、保存中…');
       try {
         const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',body:JSON.stringify({type:'like',workId:id,visitorId:visitorId()})});
         if(!response.ok || !(await response.json()).liked) throw new Error('not saved');
-        localStorage.setItem(likedKey(id),'1'); markLiked(id,true);
-      } catch { button.disabled=false; status.textContent='届きませんでした。もう一度お試しください。'; }
+        try { localStorage.setItem(likedKey(id),'1'); } catch { /* Server confirmation remains valid without local storage. */ }
+        markLiked(id,false,'ありがとう、届きました。');
+      } catch {
+        document.querySelectorAll<HTMLButtonElement>('[data-like-work]').forEach(other => {
+          if(other.dataset.likeWork !== id) return;
+          other.disabled=false; other.setAttribute('aria-pressed','false');
+          other.setAttribute('aria-label',`${other.dataset.likeTitle}にいいね`);
+          other.querySelector('[data-like-label]')!.textContent='いいね';
+          const container=other.closest('[data-like-container]')!;
+          container.querySelector('[data-like-status]')!.textContent='届きませんでした。もう一度お試しください。';
+          container.querySelectorAll('.like-sparkle').forEach(spark=>spark.remove());
+        });
+      }
       finally { pending.delete(id); }
     });
   });
