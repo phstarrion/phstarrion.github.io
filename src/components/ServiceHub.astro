@@ -4,9 +4,10 @@ import { activeServices, type ServiceId } from '../lib/services';
 interface Props {
   headingId?: string;
   heading?: string;
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { headingId = 'service-hub-title', heading = 'Services' } = Astro.props;
+const { headingId = 'service-hub-title', heading = 'Services', headingLevel: Heading = 'h2' } = Astro.props;
 
 /*
  * Marks are drawn in currentColor so they inherit the link colour and never introduce a palette
@@ -24,7 +25,7 @@ const icons: Record<ServiceId, string> = {
 ---
 
 <section class="service-hub" aria-labelledby={headingId}>
-  <h2 id={headingId}>{heading}</h2>
+  <Heading id={headingId}>{heading}</Heading>
   <ul>
     {activeServices.map(({ id, label, url }) => (
       <li>
@@ -43,7 +44,7 @@ const icons: Record<ServiceId, string> = {
     gap: var(--space-sm);
   }
 
-  h2 {
+  h2, h3 {
     color: var(--color-muted);
     font-size: var(--type-label-size);
     font-weight: var(--type-label-weight);

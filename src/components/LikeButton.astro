@@ -11,7 +11,7 @@ const {workId,title} = Astro.props;
 </div>
 <style>
   .work-like { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; position:relative; margin-block:16px; }
-  .work-like__button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; padding:10px 18px; border:1px solid var(--color-border); border-radius:999px; color:var(--color-primary); background:var(--color-surface); font:inherit; font-size:13px; cursor:pointer; transition:background 180ms,color 180ms; }
+  .work-like__button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; padding:10px 18px; border:1px solid var(--color-control-border); border-radius:999px; color:var(--color-primary); background:var(--color-surface); font:inherit; font-size:13px; cursor:pointer; transition:background 180ms,color 180ms; }
   .work-like__button svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.6; }
   .work-like__button[aria-pressed="true"] { color:var(--color-ink); background:var(--color-lavender); cursor:default; }
   .work-like__button[aria-pressed="true"] svg { fill:var(--color-primary); stroke:var(--color-primary); }

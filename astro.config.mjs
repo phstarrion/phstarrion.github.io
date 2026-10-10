@@ -13,7 +13,7 @@ const asciiHeadingIds = () => (tree) => {
   const visit = (node) => {
     if (headingTags.has(node.tagName)) {
       index += 1;
-      node.properties = { ...node.properties, id: `section-${index}` };
+      node.properties = { ...node.properties, id: `section-${index}`, tabIndex: -1 };
     }
 
     for (const child of node.children ?? []) {

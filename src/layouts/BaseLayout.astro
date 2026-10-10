@@ -62,7 +62,7 @@ const imageUrl = image ? new URL(image, site) : undefined;
   <body class:list={{ 'theme-night': theme === 'night' }}>
     <a class="skip-link" href="#main-content">本文へ移動</a>
     <SiteHeader />
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />

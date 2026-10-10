@@ -34,6 +34,7 @@ body.theme-night {
   --color-ink: #f4f3fc;
   --color-muted: #a8aec4;
   --color-border: #ffffff21;
+  --color-control-border: #837b9b;
   --color-kanon-blue: #99d5f7;
   --color-kanon-blue-hover: #bde9ff;
   --color-focus: #f2b8e8;
@@ -89,12 +90,20 @@ a {
   padding: var(--space-sm) var(--space-md);
   position: fixed;
   top: var(--space-md);
-  transform: translateY(-200%);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
   z-index: 10;
 }
 
 .skip-link:focus {
-  transform: translateY(0);
+  clip-path: none;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  white-space: normal;
 }
 
 main {
@@ -136,3 +145,8 @@ main {
 .button:hover { background: var(--color-primary-hover); }
 .text-link { display: inline-flex; align-items: center; justify-content: center; gap: 13px; min-height: 44px; font-size: 12px; color: var(--color-primary); text-decoration: none; }
 .text-link:hover { text-decoration: underline; text-underline-offset: 5px; }
+
+/* Keep long names and enlarged text within their reading column. */
+main, .site-header, .site-footer { overflow-wrap: anywhere; }
+main > *, .site-header__inner > * { min-width: 0; }
+[id] { scroll-margin-block-start: 24px; }

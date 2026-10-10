@@ -129,21 +129,11 @@ describe('generated pages', () => {
     expect(html).toContain('href="#main-content"');
   });
 
-  it('starts the mobile menu closed and keeps desktop navigation independent of open state', async () => {
-    const html = await readMarkup('index.html');
-    const page = parseBody(html);
-    const menu = page.querySelector('details.site-header__menu');
-    const generated = await readPage('index.html');
-
-    expect(menu?.hasAttribute('open')).toBe(false);
-    expect(generated).toMatch(
-      /@media\(min-width:768px\)[\s\S]*\.site-header__menu(?:\[data-astro-cid-[^\]]+\])?:not\(\[open\]\)>nav(?:\[data-astro-cid-[^\]]+\])?\{display:block\}/,
-    );
-    // Without this the closed <details> keeps content-visibility on its content, collapsing the
-    // desktop navigation to zero width and pushing every link off the right edge of the viewport.
-    expect(generated).toMatch(
-      /@media\(min-width:768px\)[\s\S]*\.site-header__menu(?:\[data-astro-cid-[^\]]+\])?::details-content\{content-visibility:visible;display:contents\}/,
-    );
+  it('keeps navigation reachable without JavaScript and avoids closed-details CSS overrides', async () => {
+    const page = parseBody(await readMarkup('index.html'));
+    expect(page.querySelector('details.site-header__menu')?.hasAttribute('open')).toBe(true);
+    expect(page.querySelector('main')?.getAttribute('tabindex')).toBe('-1');
+    expect(await readPage('index.html')).not.toContain('::details-content');
   });
 
   it.each([

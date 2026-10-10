@@ -79,7 +79,7 @@ const lightMotes = [
     <section class="atelier-about" aria-labelledby="atelier-about-title">
       <img class="atelier-about__portrait" src="/images/kanon-avatar.jpg" alt="Kanon Studioの青い髪のキャラクターポートレート" width="682" height="1024" loading="lazy" decoding="async" />
       <div class="atelier-about__copy"><p class="eyebrow">04 / ABOUT KANON</p><h2 id="atelier-about-title" tabindex="-1">活動について</h2><p>音楽、ビジュアル、映像。<br />心に浮かんだ景色を、作品にしています。</p><a class="text-link" href="/about/">Kanon Studioについて <span aria-hidden="true">→</span></a></div>
-      <ServiceHub headingId="home-service-hub-title" heading="Follow Kanon" />
+      <ServiceHub headingId="home-service-hub-title" heading="Follow Kanon" headingLevel="h3" />
     </section>
   </div>
 </BaseLayout>
@@ -118,7 +118,7 @@ const lightMotes = [
     .listening-card h4 { font-size: 21px; }
   }
   /* Motion is confined to Home; native scrolling and all links stay available. */
-  :global(body.theme-night .site-header) { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(14px); }
+  :global(body.theme-night .site-header) { position: relative; }
   :global(body.theme-night) { scroll-padding-top: 92px; }
   :global(body.theme-night :is(h2, h3, section, article)[id]) { scroll-margin-top: 92px; }
   :global(.home-content .section-heading), :global(.listening-grid > li),
@@ -138,8 +138,8 @@ const lightMotes = [
   .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
   .hero { position: relative; isolation: isolate; overflow: hidden; background: #161b32; }
   .hero__atmosphere { position: absolute; inset: 0; pointer-events: none; }
-  .hero__moonlight { position: absolute; inset: 0; background: radial-gradient(ellipse at 73% 17%, #fff5d8 0%, #e1e9ff66 26%, transparent 61%); opacity: .09; animation: moonlight-breathe 14s ease-in-out infinite; }
-  .hero__mote { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); border-radius: 50%; background: #fff7df; box-shadow: 0 0 7px 2px #ffefc54d; opacity: 0; animation: mote-drift var(--duration) ease-in-out var(--delay) infinite; }
+  .hero__moonlight { position: absolute; inset: 0; background: radial-gradient(ellipse at 73% 17%, #fff5d8 0%, #e1e9ff66 26%, transparent 61%); opacity: .09; animation: moonlight-breathe 4s ease-in-out 1; }
+  .hero__mote { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); border-radius: 50%; background: #fff7df; box-shadow: 0 0 7px 2px #ffefc54d; opacity: 0; animation: mote-drift 4s ease-in-out 1; }
   @keyframes moonlight-breathe { 0%, 100% { opacity: .07; } 50% { opacity: .21; } }
   @keyframes mote-drift { 0%, 100% { opacity: 0; transform: translate3d(-5px, 12px, 0); } 25% { opacity: .45; } 55% { opacity: .65; transform: translate3d(8px, -10px, 0); } 80% { opacity: .2; } }
   @media (prefers-reduced-motion: reduce) { .hero__moonlight { animation: none; opacity: .07; } .hero__mote { display: none; } }

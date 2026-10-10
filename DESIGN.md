@@ -98,3 +98,6 @@ All music work pages use the night palette and shared MusicPreview block. Availa
 ジャケットは音楽カード・試聴一覧・曲紹介で1:1の正方形に揃える。スマホのトップ・試聴一覧では80pxサムネイルを廃止し、曲名と再生欄の上に横幅いっぱい（最大480px）で表示する。試聴一覧のPC画像は320px。object-fit:coverで中央を基準に見せ、イラスト作品の比率は維持する。
 
 再生は56px高の主ボタン、Sunoのフル再生は44px以上の枠線付き副ボタン、紹介リンクは文字リンクに分ける。操作はnative button/anchorを使い、再生・一時停止・読み込み状態と曲名をラベルで伝える。動的な操作ラベルのためaria-pressedは併用しない。標準の音声コントロールはシーク・音量・JSなしの代替操作のため保持する。フォーカス表示とreduced-motion設定を維持する。W3C APG Button Pattern、WCAG 2.2 Focus Visible/Target Sizeを参照。
+
+### W3C review baseline (2026-10-10)
+WCAG 2.2 A/AAを改善の基準にする。共通メニューはnative detailsの実際のopen状態と表示を一致させ、JSなしでも全リンクを使える状態にする。本文・目次の移動先はフォーカス可能にする。装飾アニメーションは5秒以内で終えるか停止手段を設ける。操作枠線は装飾用borderと分け、選択状態は色だけで表さない。新規音声には実際の試聴区間に対応する歌詞・音の説明を用意する。今回の検査範囲、修正、未検証項目は `docs/accessibility-review.md` に記録。DOM検査だけで完全準拠と表現しない。
