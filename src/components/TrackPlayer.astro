@@ -7,11 +7,16 @@ interface Props {
 const { trackId, title, sunoUrl } = Astro.props;
 const src = `/audio/${trackId}-preview.mp3`;
 const label = '30秒試聴';
+const audioId = `audio-${trackId}`;
 ---
 
 <div class="track-player" data-track-player>
   <p class="track-player__label"><span aria-hidden="true">▷</span> {label}</p>
-  <audio controls controlslist="nodownload" preload="none" aria-label={`${title} — ${label}`} data-track-audio>
+  <button class="track-player__toggle" type="button" hidden data-audio-toggle data-audio-title={title} data-play-state="paused" aria-controls={audioId} aria-label={`${title}を30秒試聴する`}>
+    <span class="track-player__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></span>
+    <span data-audio-action>30秒試聴</span>
+  </button>
+  <audio id={audioId} controls controlslist="nodownload" preload="none" aria-label={`${title} — ${label}`} data-track-audio>
     <source src={src} type="audio/mpeg" />
     {sunoUrl ? 'お使いのブラウザでは音声を再生できません。Sunoでお聴きください。' : 'お使いのブラウザでは音声を再生できません。別のブラウザでお試しください。'}
   </audio>
@@ -28,9 +33,21 @@ const label = '30秒試聴';
   .track-player { min-width: 0; }
   .track-player__label { font-size: 12px; letter-spacing: .04em; color: var(--color-primary); margin: 0 0 12px; }
   .track-player__label span { margin-right: 6px; }
+  .track-player__label[hidden], .track-player__toggle[hidden] { display: none; }
+  .track-player__toggle { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 560px; min-height: 56px; margin: 0 0 14px; padding: 10px 18px; border: 1px solid var(--color-primary); border-radius: 8px; background: var(--color-primary); color: var(--color-surface); font-size: 15px; font-weight: 700; cursor: pointer; transition: background 160ms ease, transform 160ms ease; }
+  :global(body.theme-night) .track-player__toggle { color: #101323; }
+  .track-player__toggle:not([aria-disabled="true"]):hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+  .track-player__toggle:not([aria-disabled="true"]):active { transform: translateY(1px); }
+  .track-player__toggle[aria-disabled="true"] { cursor: wait; }
+  .track-player__icon { display: grid; place-items: center; width: 30px; height: 30px; }
+  svg { width: 24px; height: 24px; fill: currentColor; }
+  .pause-icon { display: none; }
+  [data-play-state="playing"] .play-icon { display: none; }
+  [data-play-state="playing"] .pause-icon { display: block; }
   audio { display: block; width: 100%; height: 44px; max-width: 560px; }
   :global(body.theme-night) audio { color-scheme: dark; }
   .track-player__status { color: var(--color-muted); font-size: 12px; line-height: 1.8; margin: 10px 0 0; }
   .track-player__status:empty { display: none; }
-  .track-player__suno { display: inline-flex; align-items: center; min-height: 44px; font-size: 11px; gap: 8px; color: var(--color-muted); text-underline-offset: 4px; }
+  .track-player__suno { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; margin-top: 14px; border: 1px solid var(--color-border); border-radius: 6px; font-size: 12px; gap: 8px; color: var(--color-primary); text-decoration: none; text-underline-offset: 4px; }
+  .track-player__suno:hover { border-color: var(--color-primary); background: var(--color-lavender); text-decoration: underline; }
 </style>

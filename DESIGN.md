@@ -96,3 +96,5 @@ All music work pages use the night palette and shared MusicPreview block. Availa
 トップから重複した「ほかの曲も見る」枠と音源準備中のおすすめを除去する。トップは試聴可能な新しい3曲を全曲カタログから選び、全曲一覧へ誘導する。Music一覧・Works音楽カード・関連作品は音源のある曲を優先し、準備中の曲は後ろに置く。各グループ内の日付順を維持し、歌詞の物語リンクは該当曲の紹介ページに残す。
 
 ジャケットは音楽カード・試聴一覧・曲紹介で1:1の正方形に揃える。スマホのトップ・試聴一覧では80pxサムネイルを廃止し、曲名と再生欄の上に横幅いっぱい（最大480px）で表示する。試聴一覧のPC画像は320px。object-fit:coverで中央を基準に見せ、イラスト作品の比率は維持する。
+
+再生は56px高の主ボタン、Sunoのフル再生は44px以上の枠線付き副ボタン、紹介リンクは文字リンクに分ける。操作はnative button/anchorを使い、再生・一時停止・読み込み状態と曲名をラベルで伝える。動的な操作ラベルのためaria-pressedは併用しない。標準の音声コントロールはシーク・音量・JSなしの代替操作のため保持する。フォーカス表示とreduced-motion設定を維持する。W3C APG Button Pattern、WCAG 2.2 Focus Visible/Target Sizeを参照。
