@@ -10,6 +10,7 @@ import { filterWorks, sortWorksNewestFirst } from '../../lib/content';
 import { paths } from '../../lib/paths';
 
 export async function getStaticPaths() {
+  const journalIds = new Set((await getCollection('journal')).map(entry => entry.id));
   const works = sortWorksNewestFirst(
     (await getCollection('works')).map((work) => ({ ...work.data, work })),
   );
@@ -18,8 +19,10 @@ export async function getStaticPaths() {
     params: { slug: work.id },
     props: {
       work,
+      journalUrl: journalIds.has(work.id) ? `/journal/${work.id}/` : undefined,
       relatedWorks: filterWorks(works, work.data.category)
         .filter((related) => related.work.id !== work.id)
+        .sort((a, b) => Number(a.work.data.category === 'music' && !getWorkPreview(a.work)) - Number(b.work.data.category === 'music' && !getWorkPreview(b.work)))
         .slice(0, 3)
         .map((related) => related.work),
     },
@@ -28,10 +31,11 @@ export async function getStaticPaths() {
 
 interface Props {
   work: CollectionEntry<'works'>;
+  journalUrl?: string;
   relatedWorks: CollectionEntry<'works'>[];
 }
 
-const { work, relatedWorks }: Props = Astro.props;
+const { work, relatedWorks, journalUrl }: Props = Astro.props;
 const { Content } = await render(work);
 const categoryLabels = {
   music: 'Music',
@@ -97,6 +101,7 @@ const preview = isMusic ? getWorkPreview(work) : undefined;
 
     {isMusic && <div class="work-detail__listening"><MusicPreview track={preview} title={work.data.title} sunoUrl={work.data.externalUrl} /></div>}
     </div>
+    {journalUrl && <a class="text-link" href={journalUrl}>「{work.data.title}」の歌詞の物語を読む <span aria-hidden="true">→</span></a>}
     <div class="work-detail__body">
       <dl class="work-detail__metadata">
         <div>

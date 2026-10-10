@@ -23,10 +23,26 @@ const verifiedCreationDates: Record<string, string> = {
 
 export function sortListeningTracks(tracks: readonly ListeningTrack[]): ListeningTrack[] {
   return [...tracks].sort((a, b) => {
+    const availability = Number(a.previewAvailable === false) - Number(b.previewAvailable === false);
+    if (availability) return availability;
     const aDate = a.createdAt ?? a.publishedAt ?? '';
     const bDate = b.createdAt ?? b.publishedAt ?? '';
     return bDate.localeCompare(aDate) || a.id.localeCompare(b.id);
   });
+}
+
+/** Available previews first; newest verified dates within each availability group. */
+export function getListeningCatalog(works: CollectionEntry<'works'>[]): ListeningTrack[] {
+  return sortListeningTracks([
+    ...works.filter(work => work.data.audio).map(workToListeningTrack),
+    ...additionalPreviews,
+    ...works.filter(work => work.data.category === 'music' && !getWorkPreview(work)).map(work => ({
+      id: work.id, title: work.data.title, headline: work.data.description, tags: [],
+      publishedAt: work.data.publishedAt.toISOString().slice(0, 10),
+      cover: work.data.cover, coverAlt: work.data.coverAlt, detailUrl: `/works/${work.id}/`,
+      sunoUrl: work.data.externalUrl, previewAvailable: false,
+    })),
+  ]);
 }
 
 export function workToListeningTrack(work: CollectionEntry<'works'>): ListeningTrack {

@@ -5,18 +5,13 @@ import GameSpotlight from '../components/GameSpotlight.astro';
 import WorkGrid from '../components/WorkGrid.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicPreview from '../components/MusicPreview.astro';
-import { getWorkPreview } from '../lib/listening';
+import { getListeningCatalog } from '../lib/listening';
 import LikeButton from '../components/LikeButton.astro';
 
 const works = await getCollection('works');
-const listeningWorks = ['bitcoin-ga-ippai', 'hodoke'].map((id) => works.find((work) => work.id === id)!);
-const song = works.find((work) => work.id === 'ryuseimachi')!;
-const recommendedWorks = [...listeningWorks, song];
-const otherSongs = works.filter((work) => work.data.category === 'music' && !recommendedWorks.some(item => item.id === work.id))
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()).slice(0, 3);
+const recommendedTracks = getListeningCatalog(works).filter(track => track.previewAvailable !== false).slice(0, 3);
 const visualIds = ['visual-floral-arcade', 'visual-water-mirror', 'visual-etoile-violet'];
 const visualWorks = visualIds.map((id) => works.find((work) => work.id === id)!);
-const story = (await getCollection('journal')).find((entry) => entry.id === 'ryuseimachi');
 const lightMotes = [
   { x: 59, y: 19, size: 2, duration: 17, delay: -3 },
   { x: 72, y: 32, size: 3, duration: 21, delay: -12 },
@@ -51,31 +46,24 @@ const lightMotes = [
       </ul>
     </nav>
     <section class="music home-section" aria-labelledby="music-title">
-      <header class="section-heading"><div><p class="eyebrow">01 / MUSIC</p><h2 id="music-title" tabindex="-1">音楽を聴く</h2><p class="section-description">30秒の試聴から、曲の紹介や歌詞の物語へ。</p></div><a class="text-link" href="/music/#tracks">全曲の30秒試聴・準備状況を見る <span aria-hidden="true">→</span></a></header>
+      <header class="section-heading"><div><p class="eyebrow">01 / MUSIC</p><h2 id="music-title" tabindex="-1">音楽を聴く</h2><p class="section-description">30秒の試聴から、曲の紹介や歌詞の物語へ。</p></div><a class="text-link" href="/music/#tracks">30秒試聴できる曲をもっと聴く <span aria-hidden="true">→</span></a></header>
       <section class="listening" aria-labelledby="listening-title">
-        <header class="listening__heading"><h3 id="listening-title">おすすめの3曲</h3><p>気になる曲を、ここで30秒試聴。<br />曲の紹介や歌詞の物語も、同じカードから。</p></header>
+        <header class="listening__heading"><h3 id="listening-title">新しく聴ける3曲</h3><p>気になる曲を、ここで30秒試聴。<br />音源のある曲から、新しい順に。</p></header>
         <ul class="listening-grid">
-          {recommendedWorks.map((work) => {
-            const preview = getWorkPreview(work);
-            const isFeatured = work.id === song.id;
-            return <li class="listening-card" id={isFeatured ? 'featured-song' : undefined}>
-              <a class="listening-card__art" href={`/works/${work.id}/`} aria-label={`${work.data.title}の紹介を見る`}><img src={work.data.cover} alt={work.data.coverAlt} width={work.data.coverWidth} height={work.data.coverHeight} loading="lazy" decoding="async" /></a>
-              <div class="listening-card__copy"><h4 id={isFeatured ? 'featured-song-title' : undefined}>{work.data.title}</h4><p class="listening-card__headline">{preview?.headline ?? work.data.description}</p><p class="genre">{work.data.genre}</p></div>
-              <div class="listening-card__preview"><MusicPreview track={preview} title={work.data.title} sunoUrl={work.data.externalUrl} showHeadline={false} /></div>
-              <div class="listening-card__actions">
-                <LikeButton workId={work.id} title={work.data.title} />
-                <a class="text-link" href={`/music/#${work.id}`} aria-label={preview ? `${work.data.title}を試聴ページで聴く` : `${work.data.title}の試聴の準備状況を見る`}>{preview ? "試聴ページで聴く" : "試聴の準備状況を見る"} <span aria-hidden="true">→</span></a>
-                <a class="text-link" href={`/works/${work.id}/`} aria-label={`${work.data.title}の紹介を見る`}>曲の紹介を見る <span aria-hidden="true">→</span></a>
-                {isFeatured && story && <a class="text-link" href={`/journal/${story.id}/`}>「流星待ち」の歌詞の物語を読む <span aria-hidden="true">→</span></a>}
-              </div>
-            </li>;
-          })}
+          {recommendedTracks.map((track) => <li class="listening-card" data-home-track-id={track.id}>
+            <a class="listening-card__art" href={track.detailUrl ?? `/music/#${track.id}`} aria-label={`${track.title}の${track.detailUrl ? '紹介を見る' : '試聴ページを開く'}`}>
+              {track.cover ? <img src={track.cover} alt={track.coverAlt ?? `${track.title}のジャケット`} width="320" height="320" loading="lazy" decoding="async" /> : <svg viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="90" fill="#11182b" /><circle cx="110" cy="110" r="42" fill="#c4b7e6" /></svg>}
+            </a>
+            <div class="listening-card__copy"><h4>{track.title}</h4><p class="listening-card__headline">{track.headline}</p>{track.createdAt && <p class="genre">制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></p>}</div>
+            <div class="listening-card__preview"><MusicPreview track={track} title={track.title} showHeadline={false} /></div>
+            <div class="listening-card__actions">
+              <LikeButton workId={track.detailUrl ? track.detailUrl.split('/')[2] : track.id} title={track.title} />
+              <a class="text-link" href={`/music/#${track.id}`} aria-label={`${track.title}を試聴ページで聴く`}>試聴ページで聴く <span aria-hidden="true">→</span></a>
+              {track.detailUrl && <a class="text-link" href={track.detailUrl} aria-label={`${track.title}の紹介を見る`}>曲の紹介を見る <span aria-hidden="true">→</span></a>}
+            </div>
+          </li>)}
         </ul>
       </section>
-      <h3 class="more-music-title">ほかの曲も見る</h3>
-      <ul class="music-grid">
-        {otherSongs.map((work) => <li><a class="music-card" href={`/works/${work.id}/`}><div class="music-card__art"><img src={work.data.cover} alt={work.data.coverAlt} width={work.data.coverWidth} height={work.data.coverHeight} loading="lazy" decoding="async" /><span class="music-card__arrow" aria-hidden="true">↗</span></div><h4>{work.data.title}</h4><p>{work.data.genre}</p><p>{getWorkPreview(work) ? "30秒試聴できます" : "音源は準備中"}</p></a><LikeButton workId={work.id} title={work.data.title} /></li>)}
-      </ul>
     </section>
 
     <section class="home-section selected-works" aria-labelledby="selected-works-title">
@@ -102,7 +90,7 @@ const lightMotes = [
 </script>
 
 <style>
-  .listening { margin-bottom: clamp(48px, 6vw, 80px); }
+  .listening { margin-bottom: 0; }
   .listening__heading { margin-bottom: 28px; }
   .listening__heading h3 { font-size: 26px; letter-spacing: .06em; }
   .listening__heading > p:last-child { color: var(--color-muted); font-size: 13px; line-height: 1.9; margin: 12px 0 0; }
@@ -111,8 +99,8 @@ const lightMotes = [
   .listening-card__preview, .listening-card__actions { min-width: 0; }
   .listening-card__actions { display: flex; flex-direction: column; align-items: start; }
   .listening-card__actions :global(.work-like) { margin-block: 0 8px; }
-  .more-music-title { font-size: 21px; }
   .listening-card__art { display: block; overflow: hidden; border-radius: 4px; }
+  .listening-card__art svg { display: block; width: 100%; height: auto; aspect-ratio: 1; }
   .listening-card__art img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: center; transition: transform 400ms ease; }
   .listening-card__art:hover img { transform: scale(1.025); }
   .listening-card__copy { padding: 0; }
@@ -133,7 +121,7 @@ const lightMotes = [
   :global(body.theme-night) { scroll-padding-top: 92px; }
   :global(body.theme-night :is(h2, h3, section, article)[id]) { scroll-margin-top: 92px; }
   :global(.home-content .section-heading), :global(.listening-grid > li),
-  :global(.music-grid > li), :global(.selected-works .work-grid > li),
+  :global(.selected-works .work-grid > li),
   :global(.play .game-spotlight), .atelier-about {
     opacity: 1; transform: none;
     transition: opacity 700ms ease var(--reveal-delay, 0ms), transform 700ms cubic-bezier(.22, 1, .36, 1) var(--reveal-delay, 0ms);
@@ -175,15 +163,6 @@ const lightMotes = [
   h2, h3 { font-family: var(--font-display); font-weight: 500; margin: 0; }
   h2 { font-size: 28px; line-height: 1.5; letter-spacing: .08em; }
   .genre { font-size: 10px; letter-spacing: .04em; color: var(--color-muted); }
-  .music-grid { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
-  .music-grid li { min-width: 0; }
-  .music-card { display: block; color: var(--color-ink); text-decoration: none; }
-  .music-card__art { position: relative; overflow: hidden; border-radius: 4px; }
-  .music-card img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; transition: transform 400ms ease; }
-  .music-card:hover img { transform: scale(1.025); }
-  .music-card__arrow { position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #ffffff45; border-radius: 50%; background: #090d1bc9; color: white; font-size: 14px; }
-  .music-card h4 { font-family: var(--font-display); font-weight: 500; font-size: 16px; line-height: 1.8; margin-top: 16px; }
-  .music-card p { color: var(--color-muted); font-size: 10px; letter-spacing: .03em; line-height: 1.8; margin: 6px 0 0; }
   .selected-works :global(.work-grid--featured) { gap: 32px; }
   .selected-works :global(.work-card__caption) { padding-top: 18px; gap: 8px; }
   .selected-works :global(.work-card__category) { font-size: 9px; font-weight: 400; letter-spacing: .16em; color: var(--color-primary); }
@@ -217,14 +196,6 @@ const lightMotes = [
     .section-nav a { width: 100%; justify-content: space-between; padding: 10px 12px; font-size: 12px; }
     .section-heading > .text-link { font-size: 10px; gap: 8px; }
     h2 { font-size: 23px; }
-    .music-grid { gap: 24px 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 36px; }
-    .music-grid li:last-child { grid-column: 1 / -1; }
-    .music-grid li:last-child .music-card { display: grid; grid-template-columns: 90px 1fr; column-gap: 18px; align-content: center; border-block: 1px solid var(--color-border); padding-block: 18px; }
-    .music-grid li:last-child .music-card__art { grid-row: 1 / 3; }
-    .music-grid li:last-child h4 { margin-top: 3px; }
-    .music-grid li:last-child .music-card__arrow { display: none; }
-    .music-card h4 { font-family: var(--font-display); font-weight: 500; font-size: 14px; margin-top: 12px; }
-    .music-card__arrow { right: 10px; bottom: 10px; width: 28px; height: 28px; }
     .selected-works :global(.work-grid--featured) { gap: 28px 16px; }
     .selected-works :global(.work-card__caption) { gap: 6px; padding-top: 12px; }
     .selected-works :global(.work-card__caption h3) { font-size: 14px; }

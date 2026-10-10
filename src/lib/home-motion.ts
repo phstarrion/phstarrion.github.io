@@ -7,7 +7,7 @@ export function initHomeMotion() {
   const desktop = window.matchMedia('(min-width: 768px)');
   const targets = Array.from(document.querySelectorAll<HTMLElement>(
     '.home-content .section-heading, .listening-grid > li, ' +
-    '.music-grid > li, .selected-works .work-grid > li, .play .game-spotlight, .atelier-about',
+    '.selected-works .work-grid > li, .play .game-spotlight, .atelier-about',
   ));
   let observer: IntersectionObserver | undefined;
   let frame = 0;
@@ -51,7 +51,7 @@ export function initHomeMotion() {
       // Leave the current viewport, restored scroll positions and focused links visible.
       if (element.getBoundingClientRect().top < window.innerHeight || element.contains(document.activeElement)) return;
       const siblings = element.parentElement?.children;
-      const isCard = element.matches('.listening-grid > li, .music-grid > li, .work-grid > li');
+      const isCard = element.matches('.listening-grid > li, .work-grid > li');
       const order = siblings && isCard ? Array.from(siblings).indexOf(element) : 0;
       element.style.setProperty('--reveal-delay', `${Math.min(order, 2) * 90}ms`);
       element.classList.add('motion-pending');

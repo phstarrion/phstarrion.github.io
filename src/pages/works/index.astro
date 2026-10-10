@@ -3,11 +3,14 @@ import { getCollection } from 'astro:content';
 import WorkFilters from '../../components/WorkFilters.astro';
 import WorkGrid from '../../components/WorkGrid.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWorkPreview } from '../../lib/listening';
 import { sortWorksNewestFirst } from '../../lib/content';
 
 const works = sortWorksNewestFirst(
   (await getCollection('works')).map((work) => ({ ...work.data, work })),
-).map(({ work }) => work);
+).map(({ work }) => work).sort((a, b) =>
+  Number(a.data.category === 'music' && !getWorkPreview(a)) - Number(b.data.category === 'music' && !getWorkPreview(b))
+);
 ---
 
 <BaseLayout

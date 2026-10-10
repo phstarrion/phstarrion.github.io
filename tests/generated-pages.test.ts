@@ -296,8 +296,8 @@ describe('generated pages', () => {
     expect(mobileArt?.getAttribute('srcset')).toBe('/images/atelier-moonlight-mobile.png');
     expect(mobileArt?.getAttribute('width')).toBe('1122');
     expect(mobileArt?.getAttribute('height')).toBe('1402');
-    expect(page.querySelector('#featured-song [data-work-external]')?.getAttribute('href')).toBe(
-      'https://suno.com/song/4ff1776f-a22d-4682-9edf-fd054197aeee',
+    expect(page.querySelector('.listening .track-player__suno')?.getAttribute('href')).toBe(
+      'https://suno.com/song/34781c64-8d02-451d-bd30-216b61306fe0',
     );
     expect(page.querySelectorAll('.selected-works [data-work-card]')).toHaveLength(3);
     expect(page.querySelectorAll('.selected-works .work-card--visual')).toHaveLength(3);
@@ -598,18 +598,18 @@ describe('generated pages', () => {
     expect(body.split(pulled).length - 1).toBe(1);
   });
 
-  it('links the recommended song to its production journal', async () => {
-    const page = parseBody(await readMarkup('index.html'));
-    expect(page.querySelector('#featured-song a[href="/journal/ryuseimachi/"]')).not.toBeNull();
+  it('keeps production notes accessible from the song detail', async () => {
+    const page = parseBody(await readMarkup('works/ryuseimachi/index.html'));
+    expect(page.querySelector('a[href="/journal/ryuseimachi/"]')).not.toBeNull();
     expect(page.body.textContent).not.toContain('制作ノートは、ただいま準備中です。');
   });
 
   it('uses one recommendation layout and separates listening from reading', async () => {
     const home = parseBody(await readMarkup('index.html'));
-    expect(home.querySelector('#listening-title')?.textContent).toBe('おすすめの3曲');
+    expect(home.querySelector('#listening-title')?.textContent).toBe('新しく聴ける3曲');
     expect(home.querySelectorAll('.listening-grid > .listening-card')).toHaveLength(3);
-    expect(home.querySelectorAll('.listening-card [data-preview-state="ready"]')).toHaveLength(2);
-    expect(home.querySelectorAll('.listening-card [data-preview-state="pending"]')).toHaveLength(1);
+    expect(home.querySelectorAll('.listening-card [data-preview-state="ready"]')).toHaveLength(3);
+    expect(home.querySelectorAll('.listening-card [data-preview-state="pending"]')).toHaveLength(0);
     expect(home.querySelector('.featured-song')).toBeNull();
     expect(home.body.textContent).not.toContain('FEATURED / 今夜の一曲');
     expect(home.body.textContent).not.toContain('PRESS PLAY / この場所で聴く');

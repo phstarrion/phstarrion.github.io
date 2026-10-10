@@ -11,14 +11,14 @@ describe('30-second preview pages', () => {
     expect(files.filter((path) => path.endsWith('.wav'))).toEqual([]);
     const page = await parse('index.html');
     expect(page.querySelectorAll('.listening-card')).toHaveLength(3);
-    expect(page.querySelectorAll('.listening audio')).toHaveLength(2);
+    expect(page.querySelectorAll('.listening audio')).toHaveLength(3);
     expect(page.querySelectorAll('a[href$=".mp3"]')).toHaveLength(0);
     for (const audio of page.querySelectorAll('audio')) {
       expect(audio.hasAttribute('autoplay')).toBe(false);
       expect(audio.getAttribute('preload')).toBe('none');
       expect(audio.getAttribute('controlslist')).toBe('nodownload');
     }
-    expect(page.querySelectorAll('.listening .track-player__suno')).toHaveLength(2);
+    expect(page.querySelectorAll('.listening .track-player__suno')).toHaveLength(3);
   });
   it.each(['bitcoin-ga-ippai', 'hodoke'])('keeps a full-track Suno fallback for %s', async (slug) => {
     const page = await parse(`works/${slug}/index.html`);
@@ -49,4 +49,21 @@ it('unifies legacy music pages and uses named alternate previews without broken 
   expect(silent.querySelector('audio source')?.getAttribute('src')).toBe('/audio/silent-ledger-remastered-preview.mp3');
   const catalog=await parse('music/index.html');
   expect(catalog.querySelector('[data-track-id="sugar-crash-protocol"]')?.textContent).toContain('音源は準備中');
+});
+
+it('keeps pending audio behind every playable track and off the homepage', async () => {
+  const music = await parse('music/index.html');
+  const tracks = [...music.querySelectorAll('[data-preview-available]')];
+  expect(tracks.slice(0, 9).every(track => track.getAttribute('data-preview-available') === 'true')).toBe(true);
+  expect(tracks.slice(9).every(track => track.getAttribute('data-preview-available') === 'false')).toBe(true);
+  const home = await parse('index.html');
+  expect([...home.querySelectorAll('[data-home-track-id]')].map(track => track.getAttribute('data-home-track-id'))).toEqual(tracks.slice(0, 3).map(track => track.id));
+  expect(home.querySelector('.music-grid')).toBeNull();
+  expect(home.querySelector('[data-preview-state="pending"]')).toBeNull();
+  expect(home.body.textContent).not.toContain('ほかの曲も見る');
+  const archive = await parse('works/index.html');
+  const musicCards = [...archive.querySelectorAll('[data-category="music"]')];
+  const firstPending = musicCards.findIndex(card => card.textContent?.includes('音源は準備中'));
+  expect(firstPending).toBeGreaterThan(0);
+  expect(musicCards.slice(firstPending).every(card => card.textContent?.includes('音源は準備中'))).toBe(true);
 });
