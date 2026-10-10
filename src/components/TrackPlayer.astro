@@ -16,7 +16,7 @@ const label = '30秒試聴';
     {sunoUrl ? 'お使いのブラウザでは音声を再生できません。Sunoでお聴きください。' : 'お使いのブラウザでは音声を再生できません。別のブラウザでお試しください。'}
   </audio>
   <p class="track-player__status" role="status" data-audio-status></p>
-  {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer">続きはSunoでフル再生 <span aria-hidden="true">↗</span></a>}
+  {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer" aria-label={`${title}の続きはSunoでフル再生`}>続きはSunoでフル再生 <span aria-hidden="true">↗</span></a>}
 </div>
 
 <script>

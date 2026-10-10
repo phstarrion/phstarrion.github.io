@@ -81,3 +81,8 @@ LikeButton と src/lib/engagement.ts が匿名リアクションを保存する�
 
 X固定投稿の返信用: https://phstarrion.github.io/?utm_source=x&utm_campaign=pinned_reply
 ほかのSNSはutm_sourceをinstagram/threads/youtube/tiktok/noteに変更。流入元が取得できない訪問は直接・不明。集計は導入後からで、履歴の復元はしない。
+
+
+All music work pages use the night palette and shared MusicPreview block. Available derivatives play for 30 seconds; missing derivatives show 音源は準備中 with no broken audio element. Named alternate editions may match an existing work through detailUrl and must disclose the edition. The music catalog includes pending works, preserving their existing detail URLs and notes.
+
+ホームから Music へは全曲一覧と曲ごとのアンカーで接続し、戻り先はトップの音楽見出し。アンカー先は tabindex=-1 で自然な Tab 順序を維持しつつ移動時のフォーカスを受けられる構成にする。繰り返し表示する曲紹介・Sunoリンクは曲名を読み上げ用の名前に含める。音声は自動再生せず、ネイティブ操作・フォーカス表示・本文スキップ・動きを減らす設定を維持する。

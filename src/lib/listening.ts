@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { additionalPreviews } from '../data/additional-previews';
 
 export interface ListeningTrack {
   id: string;
@@ -12,6 +13,7 @@ export interface ListeningTrack {
   sunoUrl?: string;
   detailUrl?: string;
   edition?: string;
+  previewAvailable?: boolean;
 }
 
 // Source dates are explicit: never infer composition dates from MP3 upload timestamps.
@@ -41,4 +43,10 @@ export function workToListeningTrack(work: CollectionEntry<'works'>): ListeningT
     sunoUrl: work.data.sunoId ? `https://suno.com/song/${work.data.sunoId}` : undefined,
     detailUrl: `/works/${work.id}/`,
   };
+}
+
+/** Match existing work pages to exact previews or explicitly named alternate editions. */
+export function getWorkPreview(work: CollectionEntry<'works'>): ListeningTrack | undefined {
+  if (work.data.audio) return workToListeningTrack(work);
+  return additionalPreviews.find(track => track.detailUrl === `/works/${work.id}/`);
 }

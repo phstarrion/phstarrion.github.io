@@ -442,7 +442,8 @@ describe('generated pages', () => {
     expect(page.body.textContent).toContain('Music');
     expect(page.querySelector('time')?.getAttribute('datetime')).toBe('2025-12-30');
     expect(externalLinks).toHaveLength(1);
-    expect(externalLinks[0]?.textContent?.trim()).toBe('Sunoで聴く');
+    expect(externalLinks[0]?.textContent?.trim()).toContain('Sunoでフル再生');
+    expect(page.querySelector('[data-preview-state="pending"]')?.textContent).toContain('音源は準備中');
     expect(externalLinks[0]?.href).toBe(
       'https://suno.com/song/2a8bafd4-651e-4c13-bf40-181e197d9c7b',
     );

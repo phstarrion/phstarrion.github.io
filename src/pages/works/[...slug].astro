@@ -2,7 +2,8 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import WorkGrid from '../../components/WorkGrid.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TrackPlayer from '../../components/TrackPlayer.astro';
+import MusicPreview from '../../components/MusicPreview.astro';
+import { getWorkPreview } from '../../lib/listening';
 import XActions from '../../components/XActions.astro';
 import LikeButton from '../../components/LikeButton.astro';
 import { filterWorks, sortWorksNewestFirst } from '../../lib/content';
@@ -50,6 +51,8 @@ const displayDate = new Intl.DateTimeFormat('ja-JP', {
   timeZone: 'UTC',
 }).format(work.data.publishedAt);
 const { cover, coverAlt, coverWidth, coverHeight } = work.data;
+const isMusic = work.data.category === 'music';
+const preview = isMusic ? getWorkPreview(work) : undefined;
 ---
 
 <BaseLayout
@@ -59,20 +62,17 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
   imageAlt={work.data.coverAlt}
   type="article"
   publishedTime={work.data.publishedAt}
+  theme={isMusic ? 'night' : 'default'}
 >
-  <article class="work-detail">
-    <a class="work-detail__back" href={paths.works}>← Works</a>
+  <article class:list={["work-detail", {"work-detail--music": isMusic}]}>
+    <a class="work-detail__back" href={isMusic ? "/music/" : paths.works}>{isMusic ? "← Music / 曲を聴く" : "← Works"}</a>
+    <div class="work-detail__intro">
 
     <header class="work-detail__header">
       <p class="work-detail__category">{categoryLabels[work.data.category]}</p>
       <h1>{work.data.title}</h1>
       <p class="work-detail__description">{work.data.description}</p>
     </header>
-
-    {work.data.audio && <section class="work-detail__listening" aria-label={`${work.data.title}を聴く`}>
-      <p>{work.data.audio.headline}</p>
-      <TrackPlayer trackId={work.data.audio.trackId} title={work.data.title} sunoUrl={work.data.externalUrl} />
-    </section>}
 
     {cover && coverAlt && coverWidth && coverHeight ? (
       <figure class="work-detail__media">
@@ -95,6 +95,8 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
       </div>
     )}
 
+    {isMusic && <div class="work-detail__listening"><MusicPreview track={preview} title={work.data.title} sunoUrl={work.data.externalUrl} /></div>}
+    </div>
     <div class="work-detail__body">
       <dl class="work-detail__metadata">
         <div>
@@ -129,7 +131,7 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
         <div class="work-detail__prose">
           <Content />
         </div>
-        {work.data.externalUrl && work.data.externalLabel && (
+        {!isMusic && work.data.externalUrl && work.data.externalLabel && (
           <a
             class="work-detail__external"
             href={work.data.externalUrl}
@@ -157,9 +159,21 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
 </BaseLayout>
 
 <style>
-  .work-detail__listening { padding: 24px; background: var(--color-lavender); border-radius: 6px; }
-  .work-detail__listening > p { margin: 0 0 20px; font-size: 15px; line-height: 1.9; }
-  @media (max-width: 767px) { .work-detail__listening { padding: 20px 16px; } }
+  .work-detail__intro { display: contents; }
+  .work-detail--music .work-detail__intro { display:grid; gap:28px; min-width:0; }
+  .work-detail--music .work-detail__header { display:block; border:0; padding:0; }
+  .work-detail--music .work-detail__category { color:var(--color-primary); margin-bottom:16px; }
+  .work-detail--music h1 { font-size:clamp(28px,4vw,44px); line-height:1.7; overflow-wrap:anywhere; }
+  .work-detail--music .work-detail__description { color:var(--color-muted); font-size:14px; line-height:2; margin-top:16px; }
+  .work-detail--music .work-detail__media { margin:0; padding:0; width:100%; max-width:440px; justify-self:center; }
+  .work-detail--music .work-detail__media img { width:100%; height:auto; max-height:none; }
+  .work-detail--music .work-detail__listening { min-width:0; }
+  @media(min-width:768px) {
+    .work-detail--music .work-detail__intro { grid-template-columns:minmax(0,340px) minmax(0,1fr); grid-template-areas:"art header" "art listen"; column-gap:40px; row-gap:24px; align-items:start; }
+    .work-detail--music .work-detail__header { grid-area:header; }
+    .work-detail--music .work-detail__media { grid-area:art; }
+    .work-detail--music .work-detail__listening { grid-area:listen; }
+  }
   .work-detail {
     display: grid;
     gap: var(--space-xl);

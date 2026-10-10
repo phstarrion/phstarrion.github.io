@@ -1,0 +1,26 @@
+---
+import type { ListeningTrack } from '../lib/listening';
+import TrackPlayer from './TrackPlayer.astro';
+interface Props { track?: ListeningTrack; title: string; sunoUrl?: string; }
+const { track, title, sunoUrl } = Astro.props;
+---
+<section class="music-preview" aria-label={`${title}を聴く`} data-preview-state={track ? 'ready' : 'pending'}>
+  {track ? <>
+    <p class="music-preview__headline">{track.headline}</p>
+    {track.title !== title && <p class="music-preview__edition">試聴音源：{track.title}</p>}
+    <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />
+  </> : <>
+    <p class="music-preview__label">30秒試聴</p>
+    <p class="music-preview__pending">音源は準備中</p>
+    <p class="music-preview__note">準備ができたら、この場所で聴けるようになります。</p>
+    {sunoUrl && <a class="text-link" href={sunoUrl} rel="noopener noreferrer" aria-label={`${title}をSunoでフル再生`} data-work-external>Sunoでフル再生 <span aria-hidden="true">↗</span></a>}
+  </>}
+</section>
+<style>
+  .music-preview { min-width:0; padding:24px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:8px; }
+  .music-preview__headline { color:var(--color-primary); font-size:14px; line-height:1.9; margin:0 0 20px; }
+  .music-preview__edition, .music-preview__note { color:var(--color-muted); font-size:12px; line-height:1.9; }
+  .music-preview__label { color:var(--color-primary); font-size:12px; margin:0 0 12px; }
+  .music-preview__pending { font-size:20px; margin:0 0 10px; }
+  @media(max-width:600px) { .music-preview { padding:20px 16px; } }
+</style>

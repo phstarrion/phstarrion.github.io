@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getWorkPreview } from '../lib/listening';
 import { paths } from '../lib/paths';
 import LikeButton from './LikeButton.astro';
 
@@ -15,6 +16,7 @@ const categoryLabels = {
   visual: 'Visual',
   video: 'Video',
 } as const;
+const preview = work.data.category === 'music' ? getWorkPreview(work) : undefined;
 const year = work.data.publishedAt.getUTCFullYear();
 const { cover, coverAlt, coverWidth, coverHeight } = work.data;
 ---
@@ -44,7 +46,7 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
     <div class="work-card__caption">
       <p class="work-card__category">{categoryLabels[work.data.category]}</p>
       <Heading>{work.data.title}</Heading>
-      {work.data.audio && <p class="work-card__listen"><span aria-hidden="true">▷</span> 30秒試聴できます</p>}
+      {work.data.category === 'music' && <p class="work-card__listen">{preview ? "▷ 30秒試聴できます" : "音源は準備中"}</p>}
       <p class="work-card__year">{year}</p>
     </div>
   </a>

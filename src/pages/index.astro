@@ -40,7 +40,7 @@ const lightMotes = [
 
   <div class="home-content">
     <section class="music home-section" aria-labelledby="music-title">
-      <header class="section-heading"><div><p class="eyebrow">01 / MUSIC</p><h2 id="music-title">音楽</h2></div><a class="text-link" href="/music/">聴ける曲をすべて見る <span aria-hidden="true">↗</span></a></header>
+      <header class="section-heading"><div><p class="eyebrow">01 / MUSIC</p><h2 id="music-title" tabindex="-1">音楽</h2></div><a class="text-link" href="/music/#tracks">全曲の30秒試聴・準備状況を見る <span aria-hidden="true">→</span></a></header>
       <section class="listening" aria-labelledby="listening-title">
         <header class="listening__heading"><p class="eyebrow">PRESS PLAY / この場所で聴く</p><h3 id="listening-title">まず、この2曲。</h3><p>きらめくポップと、暗いブレイクビーツ。<br class="listening__mobile-break" />気になる音を、30秒だけ。</p></header>
         <ul class="listening-grid">
@@ -49,7 +49,8 @@ const lightMotes = [
             <div class="listening-card__copy"><p class="listening-card__headline">{work.data.audio.headline}</p><h4>{work.data.title}</h4><ul class="listening-card__tags" aria-label="音の特徴">{work.data.audio.tags.map((tag) => <li>{tag}</li>)}</ul>
               <TrackPlayer trackId={work.data.audio.trackId} title={work.data.title} sunoUrl={work.data.externalUrl} />
               <LikeButton workId={work.id} title={work.data.title} />
-              <a class="text-link" href={`/works/${work.id}/`}>曲の紹介を見る <span aria-hidden="true">→</span></a>
+              <a class="text-link" href={`/music/#${work.id}`} aria-label={`${work.data.title}を試聴ページで聴く`}>試聴ページで聴く <span aria-hidden="true">→</span></a>
+              <a class="text-link" href={`/works/${work.id}/`} aria-label={`${work.data.title}の紹介を見る`}>曲の紹介を見る <span aria-hidden="true">→</span></a>
             </div>
           </li>)}
         </ul>
@@ -61,7 +62,8 @@ const lightMotes = [
           <h3 id="featured-song-title">{song.data.title}</h3>
           <p class="song-description">{song.data.description}</p>
           <p class="genre">{song.data.genre}</p>
-          <div class="song-actions"><a class="button" href={song.data.externalUrl} rel="noopener noreferrer" data-featured-listen><span aria-hidden="true">▷</span> Sunoで聴く <span aria-hidden="true">↗</span></a><a class="text-link" href="/works/ryuseimachi/">作品について <span aria-hidden="true">→</span></a></div>
+          <p class="genre">30秒試聴：音源は準備中</p>
+          <div class="song-actions"><a class="button" href={song.data.externalUrl} rel="noopener noreferrer" aria-label="流星待ちをSunoでフル再生" data-featured-listen><span aria-hidden="true">▷</span> Sunoでフル再生 <span aria-hidden="true">↗</span></a><a class="text-link" href="/works/ryuseimachi/" aria-label="流星待ちの紹介を見る">作品について <span aria-hidden="true">→</span></a></div>
           <LikeButton workId={song.id} title={song.data.title} />
           {story && <a class="story-link" href={`/journal/${story.id}/`}><span class="eyebrow">制作ノート</span><span>「流星待ち」の歌詞の物語を読む <span aria-hidden="true">↗</span></span></a>}
         </div>

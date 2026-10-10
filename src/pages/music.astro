@@ -2,26 +2,35 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrackPlayer from '../components/TrackPlayer.astro';
+import MusicPreview from '../components/MusicPreview.astro';
 import XActions from '../components/XActions.astro';
 import LikeButton from '../components/LikeButton.astro';
 import { additionalPreviews } from '../data/additional-previews';
-import { sortListeningTracks, workToListeningTrack } from '../lib/listening';
+import { sortListeningTracks, workToListeningTrack, getWorkPreview } from '../lib/listening';
+const works = await getCollection('works');
 const tracks = sortListeningTracks([
-  ...(await getCollection('works')).filter((work) => work.data.audio).map(workToListeningTrack),
+  ...works.filter((work) => work.data.audio).map(workToListeningTrack),
   ...additionalPreviews,
+  ...works.filter(work => work.data.category === 'music' && !getWorkPreview(work)).map(work => ({
+    id: work.id, title: work.data.title, headline: work.data.description, tags: [],
+    publishedAt: work.data.publishedAt.toISOString().slice(0,10),
+    cover: work.data.cover, detailUrl: `/works/${work.id}/`,
+    sunoUrl: work.data.externalUrl, previewAvailable: false,
+  })),
 ]);
 ---
 <BaseLayout title="Music — Kanon Studio" description="気になる音を、30秒から。Kanon Studioの楽曲をその場で試聴できるリスニングルーム。" image="/images/atelier-moonlight.png" imageAlt="月明かりの音楽室で創作する、青い髪のKanon" theme="night">
   <section class="music-room" aria-labelledby="music-title">
     <header class="room-intro">
+      <a class="text-link" href="/#music-title">トップページの音楽へ戻る <span aria-hidden="true">←</span></a>
       <p class="eyebrow">THE LISTENING ROOM / {tracks.length} TRACKS</p>
       <h1 id="music-title">気になる音を、<br />30秒から。</h1>
       <p class="intro-copy">タイトルで選んでも、気分で選んでも。<br />ひとつ再生して、次の好きな音へ。</p>
       <a class="text-link" href="#tracks">曲を聴く <span aria-hidden="true">↓</span></a>
     </header>
-    <div class="collection-heading"><h2 id="tracks">聴ける曲</h2><p>新しい日付から / 制作日・未確認の場合は公開日</p></div>
+    <div class="collection-heading"><h2 id="tracks" tabindex="-1">楽曲</h2><p>新しい日付から / 制作日・未確認の場合は公開日</p></div>
     <ol class="track-list">
-      {tracks.map((track, index) => <li class="room-track" id={track.id} data-track-id={track.id}>
+      {tracks.map((track, index) => <li class="room-track" id={track.id} tabindex="-1" aria-labelledby={`${track.id}-title`} data-track-id={track.id} data-preview-available={track.previewAvailable === false ? "false" : "true"}>
         <div class="track-art" aria-hidden="true">
           {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <svg class="record-art" viewBox="0 0 220 220" width="220" height="220" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="92" fill="#11182b" /><g fill="none" stroke="#373c54" stroke-width="2"><circle cx="110" cy="110" r="82" /><circle cx="110" cy="110" r="72" /><circle cx="110" cy="110" r="62" /></g><circle cx="110" cy="110" r="42" fill="#c4b7e6" /><circle cx="110" cy="110" r="9" fill="#11182b" /></svg>}
           <span class="track-number">{String(index + 1).padStart(2, '0')}</span>
@@ -29,19 +38,19 @@ const tracks = sortListeningTracks([
         <div class="track-copy">
           <p class="track-date">{track.createdAt ? <>制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></> : track.publishedAt ? <>公開日 <time datetime={track.publishedAt}>{track.publishedAt.replaceAll('-', '.')}</time><span> · 制作日未確認</span></> : '制作日未確認'}</p>
           <p class="track-headline">{track.headline}</p>
-          <h3>{track.title}</h3>
+          <h3 id={`${track.id}-title`}>{track.title}</h3>
           {track.edition && <p class="edition">{track.edition}</p>}
           <ul class="tags" aria-label="音の特徴">{track.tags.map((tag) => <li>{tag}</li>)}</ul>
         </div>
         <div class="room-track__player">
-          <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />
-          {track.detailUrl && <a class="text-link" href={track.detailUrl}>曲の紹介を見る <span aria-hidden="true">↗</span></a>}
+          {track.previewAvailable === false ? <MusicPreview title={track.title} sunoUrl={track.sunoUrl} /> : <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />}
+          {track.detailUrl && <a class="text-link" href={track.detailUrl} aria-label={`${track.title}の紹介を見る`}>曲の紹介を見る <span aria-hidden="true">↗</span></a>}
           <XActions title={track.title} path={track.detailUrl ?? `/music/#${track.id}`} compact />
           <LikeButton workId={track.detailUrl ? track.detailUrl.split('/')[2] : track.id} title={track.title} />
         </div>
       </li>)}
     </ol>
-    <footer class="room-footer"><p>もう少し、音の世界へ。</p><a class="text-link" href="/works/?category=music">Sunoで聴ける作品も見る <span aria-hidden="true">↗</span></a></footer>
+    <footer class="room-footer"><p>もう少し、音の世界へ。</p><a class="text-link" href="/works/?category=music">すべての作品を見る <span aria-hidden="true">↗</span></a></footer>
     <XActions title="Kanon Studioの音楽" />
   </section>
 </BaseLayout>
@@ -55,6 +64,7 @@ const tracks = sortListeningTracks([
   .collection-heading h2 { font-size: 21px; }
   .collection-heading p, .track-date { font-size: 11px; color: var(--color-muted); }
   #tracks { scroll-margin-top: 110px; }
+  .room-track { scroll-margin-top: 110px; }
   .track-list { list-style: none; padding: 0; margin: 0; }
   .room-track { display: grid; grid-template-columns: 220px minmax(0, 1fr); grid-template-areas: "art copy" "art player"; column-gap: 40px; row-gap: 0; padding: 40px 0; border-bottom: 1px solid var(--color-border); }
   .track-art { grid-area: art; width: 100%; aspect-ratio: 1 / 1; min-width: 0; position: relative; align-self: start; overflow: hidden; border-radius: 6px; }

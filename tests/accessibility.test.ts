@@ -41,3 +41,27 @@ describe('representative page accessibility', () => {
     expect(results.violations).toEqual([]);
   });
 });
+
+
+describe('home and listening navigation', () => {
+  it('connects named song links to focusable, labelled preview destinations and back', async () => {
+    const home = new DOMParser().parseFromString(await readFile(join(testDirectory, '..', 'dist/index.html'), 'utf8'), 'text/html');
+    const music = new DOMParser().parseFromString(await readFile(join(testDirectory, '..', 'dist/music/index.html'), 'utf8'), 'text/html');
+    expect(home.querySelector('a[href="/music/#tracks"]')?.textContent).toContain('30秒試聴');
+    expect(music.getElementById('tracks')?.getAttribute('tabindex')).toBe('-1');
+    for (const link of home.querySelectorAll('a[href^="/music/#"]')) {
+      const id = link.getAttribute('href')!.split('#')[1];
+      const destination = music.getElementById(id)!;
+      expect(destination).not.toBeNull();
+      expect(destination.getAttribute('tabindex')).toBe('-1');
+      if (id !== 'tracks') {
+        const title = music.getElementById(destination.getAttribute('aria-labelledby')!)!.textContent!;
+        expect(link.getAttribute('aria-label')).toContain(title);
+        expect(destination.querySelector('audio')?.getAttribute('aria-label')).toContain(title);
+      }
+    }
+    expect(music.querySelector('a[href="/#music-title"]')?.textContent).toContain('トップページ');
+    expect(home.getElementById('music-title')?.getAttribute('tabindex')).toBe('-1');
+    expect(music.querySelector('audio[autoplay]')).toBeNull();
+  });
+});
