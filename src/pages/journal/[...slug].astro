@@ -4,18 +4,20 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('journal');
+  const works = await getCollection('works');
 
   return entries.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry },
+    props: { entry, relatedWorkUrl: works.some(work => work.id === entry.id && work.data.category === 'music') ? `/works/${entry.id}/` : undefined },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<'journal'>;
+  relatedWorkUrl?: string;
 }
 
-const { entry }: Props = Astro.props;
+const { entry, relatedWorkUrl }: Props = Astro.props;
 const { Content, headings } = await render(entry);
 
 // `asciiHeadingIds` in astro.config.mjs renumbers every h2–h6 in document order, so the same
@@ -27,6 +29,7 @@ const sections = headings
 
 <ArticleLayout
   title={entry.data.title}
+  relatedWorkUrl={relatedWorkUrl}
   description={entry.data.summary}
   category={entry.data.category}
   publishedAt={entry.data.publishedAt}

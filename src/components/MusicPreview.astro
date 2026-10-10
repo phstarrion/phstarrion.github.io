@@ -1,12 +1,12 @@
 ---
 import type { ListeningTrack } from '../lib/listening';
 import TrackPlayer from './TrackPlayer.astro';
-interface Props { track?: ListeningTrack; title: string; sunoUrl?: string; }
-const { track, title, sunoUrl } = Astro.props;
+interface Props { track?: ListeningTrack; title: string; sunoUrl?: string; showHeadline?: boolean; }
+const { track, title, sunoUrl, showHeadline = true } = Astro.props;
 ---
 <section class="music-preview" aria-label={`${title}を聴く`} data-preview-state={track ? 'ready' : 'pending'}>
   {track ? <>
-    <p class="music-preview__headline">{track.headline}</p>
+    {showHeadline && <p class="music-preview__headline">{track.headline}</p>}
     {track.title !== title && <p class="music-preview__edition">試聴音源：{track.title}</p>}
     <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />
   </> : <>

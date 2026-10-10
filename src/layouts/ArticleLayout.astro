@@ -4,6 +4,7 @@ import '../styles/prose.css';
 
 interface Props {
   title: string;
+  relatedWorkUrl?: string;
   description: string;
   category: string;
   publishedAt: Date;
@@ -20,6 +21,7 @@ interface Props {
 
 const {
   title,
+  relatedWorkUrl,
   description,
   category,
   publishedAt,
@@ -51,9 +53,10 @@ const hasCover = Boolean(cover && coverAlt && coverWidth && coverHeight);
   imageAlt={coverAlt}
   type="article"
   publishedTime={publishedAt}
+  theme="night"
 >
   <article class="article">
-    <a class="article__back" href="/journal/">← Journal</a>
+    <a class="article__back" href="/journal/">← 制作ノート一覧</a>
 
     <header class="article__masthead">
       <p class="article__kicker">{kicker ? `${category} / ${kicker}` : category}</p>
@@ -101,6 +104,8 @@ const hasCover = Boolean(cover && coverAlt && coverWidth && coverHeight);
         </div>
       </div>
     </header>
+
+    {relatedWorkUrl && <a class="text-link" href={relatedWorkUrl}>この曲の紹介・試聴へ <span aria-hidden="true">→</span></a>}
 
     <div class="article__prose prose">
       <slot />

@@ -51,7 +51,9 @@ describe('home and listening navigation', () => {
       if (id !== 'tracks') {
         const title = music.getElementById(destination.getAttribute('aria-labelledby')!)!.textContent!;
         expect(link.getAttribute('aria-label')).toContain(title);
-        expect(destination.querySelector('audio')?.getAttribute('aria-label')).toContain(title);
+        const audio = destination.querySelector('audio');
+        if (audio) expect(audio.getAttribute('aria-label')).toContain(title);
+        else expect(destination.textContent).toContain('音源は準備中');
       }
     }
     expect(music.querySelector('a[href="/#music-title"]')?.textContent).toContain('トップページ');

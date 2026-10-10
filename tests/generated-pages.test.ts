@@ -296,7 +296,7 @@ describe('generated pages', () => {
     expect(mobileArt?.getAttribute('srcset')).toBe('/images/atelier-moonlight-mobile.png');
     expect(mobileArt?.getAttribute('width')).toBe('1122');
     expect(mobileArt?.getAttribute('height')).toBe('1402');
-    expect(page.querySelector('[data-featured-listen]')?.getAttribute('href')).toBe(
+    expect(page.querySelector('#featured-song [data-work-external]')?.getAttribute('href')).toBe(
       'https://suno.com/song/4ff1776f-a22d-4682-9edf-fd054197aeee',
     );
     expect(page.querySelectorAll('.selected-works [data-work-card]')).toHaveLength(3);
@@ -598,10 +598,27 @@ describe('generated pages', () => {
     expect(body.split(pulled).length - 1).toBe(1);
   });
 
-  it('links the featured song to its production journal', async () => {
+  it('links the recommended song to its production journal', async () => {
     const page = parseBody(await readMarkup('index.html'));
     expect(page.querySelector('#featured-song a[href="/journal/ryuseimachi/"]')).not.toBeNull();
     expect(page.body.textContent).not.toContain('制作ノートは、ただいま準備中です。');
+  });
+
+  it('uses one recommendation layout and separates listening from reading', async () => {
+    const home = parseBody(await readMarkup('index.html'));
+    expect(home.querySelector('#listening-title')?.textContent).toBe('おすすめの3曲');
+    expect(home.querySelectorAll('.listening-grid > .listening-card')).toHaveLength(3);
+    expect(home.querySelectorAll('.listening-card [data-preview-state="ready"]')).toHaveLength(2);
+    expect(home.querySelectorAll('.listening-card [data-preview-state="pending"]')).toHaveLength(1);
+    expect(home.querySelector('.featured-song')).toBeNull();
+    expect(home.body.textContent).not.toContain('FEATURED / 今夜の一曲');
+    expect(home.body.textContent).not.toContain('PRESS PLAY / この場所で聴く');
+    const journal = parseBody(await readMarkup('journal/index.html'));
+    expect(await readMarkup('journal/index.html')).toContain('class="theme-night"');
+    expect(journal.querySelector('h1')?.textContent).toBe('制作ノート');
+    const article = parseBody(await readMarkup('journal/ryuseimachi/index.html'));
+    expect(await readMarkup('journal/ryuseimachi/index.html')).toContain('class="theme-night"');
+    expect(article.querySelector('a[href="/works/ryuseimachi/"]')?.textContent).toContain('紹介・試聴');
   });
 
   it('builds a concise profile with its approved portrait and verified services', async () => {

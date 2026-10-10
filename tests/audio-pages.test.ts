@@ -10,7 +10,7 @@ describe('30-second preview pages', () => {
     expect(files.filter((path) => path.endsWith('.mp3')).sort()).toEqual(['audio/aini-ikuyo-preview.mp3', 'audio/bitcoin-ga-ippai-preview.mp3', 'audio/futaribun-8bit-mix-preview.mp3', 'audio/hodoke-preview.mp3', 'audio/hoshi-ga-terasu-mahou-monogatari-preview.mp3', 'audio/maou-wo-taoshini-preview.mp3', 'audio/ogyogi-warukute-preview.mp3', 'audio/silent-ledger-remastered-preview.mp3', 'audio/ushiro-minaide-preview.mp3']);
     expect(files.filter((path) => path.endsWith('.wav'))).toEqual([]);
     const page = await parse('index.html');
-    expect(page.querySelectorAll('.listening-card')).toHaveLength(2);
+    expect(page.querySelectorAll('.listening-card')).toHaveLength(3);
     expect(page.querySelectorAll('.listening audio')).toHaveLength(2);
     expect(page.querySelectorAll('a[href$=".mp3"]')).toHaveLength(0);
     for (const audio of page.querySelectorAll('audio')) {

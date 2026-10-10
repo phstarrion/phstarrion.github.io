@@ -8,14 +8,15 @@ const entries = (await getCollection('journal'))
 ---
 
 <BaseLayout
-  title="Journal — Kanon Studio"
+  title="制作ノート — Kanon Studio"
+  theme="night"
   description="Kanon Studioの制作ノートと活動記録。"
 >
   <section class="journal" aria-labelledby="journal-title">
     <header class="journal__header">
       <p>Notes / Archive</p>
-      <h1 id="journal-title">Journal</h1>
-      <p>制作の途中で見つけたことを、短い記録に残します。</p>
+      <h1 id="journal-title">制作ノート</h1>
+      <p>曲を聴いたあとに、歌詞の物語や作品の背景を読むページです。</p>
     </header>
 
     {entries.length > 0 ? (
