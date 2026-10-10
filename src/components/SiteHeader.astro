@@ -6,7 +6,7 @@ const navigation = [
   { href: '/games/', label: 'Games' },
   { href: '/journal/', label: 'Journal' },
   { href: '/about/', label: 'About' },
-];
+] as const;
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isCurrentRoute = (href: string) => {
@@ -22,7 +22,7 @@ const isCurrentRoute = (href: string) => {
     <a
       class="site-header__brand"
       href="/"
-      aria-label="Home — Kanon Studio"
+      aria-label="Kanon Studioのトップページ"
       aria-current={isCurrentRoute('/') ? 'page' : undefined}
     ><span class="site-header__moon" aria-hidden="true">☾</span><span>Kanon Studio<span class="site-header__tagline">Music & little wonders</span></span></a>
     <details class="site-header__menu">
@@ -31,7 +31,7 @@ const isCurrentRoute = (href: string) => {
         <ul>
           {navigation.map(({ href, label }) => (
             <li>
-              <a href={href} aria-current={isCurrentRoute(href) ? 'page' : undefined}>
+              <a href={href} aria-label={`${label} / ${{Music:'曲を聴く',Works:'作品一覧',Games:'ゲーム',Journal:'制作ノート',About:'活動について'}[label]}`} aria-current={isCurrentRoute(href) ? 'page' : undefined}>
                 {label}
               </a>
             </li>

@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,18 +7,11 @@ import { describe, expect, it } from 'vitest';
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
 
-const representativePages = [
-  ['Home', 'index.html'],
-  ['Music', 'music/index.html'],
-  ['Games', 'games/index.html'],
-  ['Works', 'works/index.html'],
-  ['work detail', 'works/sugar-crash-protocol/index.html'],
-  ['Journal', 'journal/index.html'],
-  ['journal article', 'journal/ryuseimachi/index.html'],
-  ['About', 'about/index.html'],
-] as const;
+const representativePages = readdirSync(join(testDirectory, '..', 'dist'), { recursive: true })
+  .filter((path): path is string => typeof path === 'string' && path.endsWith('.html'))
+  .map(path => [path, path] as const);
 
-describe('representative page accessibility', () => {
+describe('all generated page accessibility', () => {
   it.each(representativePages)('has no axe violations on %s', async (_, path) => {
     const html = await readFile(join(testDirectory, '..', 'dist', path), 'utf8');
     const parsedPage = new DOMParser().parseFromString(
@@ -45,8 +39,8 @@ describe('representative page accessibility', () => {
 
 describe('home and listening navigation', () => {
   it('connects named song links to focusable, labelled preview destinations and back', async () => {
-    const home = new DOMParser().parseFromString(await readFile(join(testDirectory, '..', 'dist/index.html'), 'utf8'), 'text/html');
-    const music = new DOMParser().parseFromString(await readFile(join(testDirectory, '..', 'dist/music/index.html'), 'utf8'), 'text/html');
+    const home = new DOMParser().parseFromString((await readFile(join(testDirectory, '..', 'dist/index.html'), 'utf8')).replace(/<link\b[^>]*>/gi, ''), 'text/html');
+    const music = new DOMParser().parseFromString((await readFile(join(testDirectory, '..', 'dist/music/index.html'), 'utf8')).replace(/<link\b[^>]*>/gi, ''), 'text/html');
     expect(home.querySelector('a[href="/music/#tracks"]')?.textContent).toContain('30秒試聴');
     expect(music.getElementById('tracks')?.getAttribute('tabindex')).toBe('-1');
     for (const link of home.querySelectorAll('a[href^="/music/#"]')) {

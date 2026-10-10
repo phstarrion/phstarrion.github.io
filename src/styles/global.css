@@ -24,6 +24,9 @@ body.theme-night {
   min-width: 0;
   --color-primary: #c4b7e6;
   --color-primary-hover: #ded4f5;
+  --color-coral: #c4b7e6;
+  --color-coral-hover: #ded4f5;
+  --color-error: #ffb4ab;
   --color-lavender: #292440;
   --color-blue-surface: #172944;
   --color-canvas: #090d1b;

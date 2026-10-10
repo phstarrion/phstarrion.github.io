@@ -86,3 +86,5 @@ X固定投稿の返信用: https://phstarrion.github.io/?utm_source=x&utm_campai
 All music work pages use the night palette and shared MusicPreview block. Available derivatives play for 30 seconds; missing derivatives show 音源は準備中 with no broken audio element. Named alternate editions may match an existing work through detailUrl and must disclose the edition. The music catalog includes pending works, preserving their existing detail URLs and notes.
 
 ホームから Music へは全曲一覧と曲ごとのアンカーで接続し、戻り先はトップの音楽見出し。アンカー先は tabindex=-1 で自然な Tab 順序を維持しつつ移動時のフォーカスを受けられる構成にする。繰り返し表示する曲紹介・Sunoリンクは曲名を読み上げ用の名前に含める。音声は自動再生せず、ネイティブ操作・フォーカス表示・本文スキップ・動きを減らす設定を維持する。
+
+全ページ点検では内部リンク・アンカー・画像属性・単一のh1・重複ID・全ページのDOMアクセシビリティを確認する。フッターにもMusicを置き、作品の絞り込みは件数だけをライブ通知する（一覧全体を読み上げ直さない）。該当0件はAllへの案内を表示。暗色テーマでは旧coral別名も明示的に明るいlavenderへ設定する。公開日は制作日と区別して明記する。

@@ -63,6 +63,7 @@ const styles = [
   const buttons = controls?.querySelectorAll('[data-work-filter]') ?? [];
   const styleButtons = styleControls?.querySelectorAll('[data-work-style]') ?? [];
   const cards = document.querySelectorAll('[data-category]');
+  const status = document.querySelector('[data-work-filter-status]');
 
   let category = 'all';
   let style = 'all';
@@ -83,6 +84,10 @@ const styles = [
       const matchesStyle = style === 'all' || card.dataset.style === style;
       card.hidden = !(matchesCategory && matchesStyle);
     });
+    const count = [...cards].filter(card => !card.hidden).length;
+    if (status) status.textContent = count > 0
+      ? `${count}件の作品を表示しています。`
+      : 'この条件の作品はまだありません。「All」でほかの作品をご覧ください。';
   };
 
   const syncUrl = () => {
