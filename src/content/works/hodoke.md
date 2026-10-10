@@ -13,5 +13,10 @@ style: dark
 sunoId: 293d9865-2106-4340-bccc-ee053e4df7bc
 externalUrl: https://suno.com/song/293d9865-2106-4340-bccc-ee053e4df7bc
 externalLabel: Sunoで聴く
+audio:
+  trackId: hodoke
+  durationSeconds: 243
+  headline: 暗い未来都市に、ブレイクビーツが響く。
+  tags: [ダーク, 疾走, サイバーパンク]
 ---
 170 BPM 前後のブレイクビーツに、余白を残した歪んだサブベースを合わせています。グリッチしたパーカッションと繊細なテクスチャを同居させました。

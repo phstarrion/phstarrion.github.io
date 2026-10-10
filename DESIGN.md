@@ -1,5 +1,13 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 10, 2026 — Two-song listening pilot
+
+The user requested that existing MP3s be found and integrated into the website player. Start with ビットコインがいっぱい⭐︎ and ほどけ, using the matching original recordings. Home introduces their contrasting sounds with a short Japanese headline, three plain-language tags and a native 30-second player. Each clip is an excerpt from 0:45–1:15 with short fades; do not label it a chorus, since that has not been verified. The corresponding work detail provides full playback above the cover image, and the archive marks those works as playable on-site. Retain Suno links, the featured 流星待ち, all existing works and the image-only hero.
+
+The user prioritizes deterring casual downloads while retaining full playback. Do not publish MP3s to GitHub or static assets. Private R2 storage and a Worker issue 10-minute, IP-bound signed URLs on an explicit play action, with origin/referer checks and session rate limiting. Native controls hide download actions where supported; audio-specific context menus are suppressed. These measures are deterrence, not DRM: clients receive audio and advanced extraction/recording remains possible. Referrer/privacy restrictions or network changes may require Suno fallback.
+
+Players are user-initiated, preload none and keyboard accessible. JavaScript is required for protected playback, but Suno links remain available without it. Pause other tracks when one starts. This pilot does not continue playback across page navigation. MP3s use 160 kbps stereo encoding and stay in private storage. If the API endpoint is absent, show Suno links instead of nonfunctional players.
+
 ## 今後の更新方針 — 2026年10月10日
 
 ユーザーは、今後のホームページ更新でも、スクロール演出やインタラクションの技法を積極的かつ適正に取り入れることを希望している。各更新で、作品の魅力・世界観・情報の伝わり方・操作性を改善する演出を自発的に検討する。今回採用した5種類に限定せず、目的に合う他の技法も候補にする。

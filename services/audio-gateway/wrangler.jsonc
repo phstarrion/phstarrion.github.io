@@ -1,0 +1,8 @@
+{
+  "name": "kanon-audio",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-09",
+  "vars": { "ALLOWED_ORIGIN": "https://phstarrion.github.io" },
+  "r2_buckets": [{ "binding": "AUDIO", "bucket_name": "kanon-audio-private" }],
+  "ratelimits": [{ "name": "SESSION_LIMITER", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } }]
+}

@@ -1,0 +1,45 @@
+---
+interface Props {
+  trackId: string;
+  title: string;
+  mode: 'preview' | 'full';
+  sunoUrl?: string;
+  durationSeconds?: number;
+}
+const { trackId, title, mode, sunoUrl, durationSeconds } = Astro.props;
+const duration = durationSeconds ? `${Math.floor(durationSeconds / 60)}:${String(Math.floor(durationSeconds % 60)).padStart(2, '0')}` : '';
+const endpoint = import.meta.env.PUBLIC_AUDIO_API_URL?.replace(/\/$/, '');
+if (endpoint && !endpoint.startsWith('https://')) throw new Error('Audio API requires HTTPS');
+const label = mode === 'preview' ? '30秒試聴' : `フルで聴く${duration ? ` / ${duration}` : ''}`;
+---
+
+<div class="track-player" data-track-player>
+  <p class="track-player__label"><span aria-hidden="true">▷</span> {label}</p>
+  {endpoint && <>
+    <button type="button" class="track-player__start" data-audio-start data-endpoint={endpoint} data-track-id={trackId} data-mode={mode}>▷ {mode === 'preview' ? '30秒、聴いてみる' : 'この曲を聴く'}</button>
+    <audio hidden controls controlslist="nodownload" preload="none" aria-label={`${title} — ${label}`} data-track-audio>
+      お使いのブラウザでは音声を再生できません。Sunoでお聴きください。
+    </audio>
+  </>}
+  <p class="track-player__status" role="status" data-audio-status></p>
+  {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer">Sunoで聴く <span aria-hidden="true">↗</span></a>}
+</div>
+
+<script>
+  import { initTrackPlayback } from '../lib/track-playback';
+  initTrackPlayback();
+</script>
+
+<style>
+  .track-player { min-width: 0; }
+  .track-player__label { font-size: 12px; letter-spacing: .04em; color: var(--color-primary); margin: 0 0 12px; }
+  .track-player__label span { margin-right: 6px; }
+  .track-player__start { min-height: 44px; padding: 10px 20px; background: var(--color-primary); color: var(--color-bg, #fff); border: 0; border-radius: 6px; cursor: pointer; font: inherit; }
+  .track-player__start:disabled { opacity: .6; cursor: wait; }
+  audio[hidden], .track-player__start[hidden] { display: none; }
+  audio { display: block; width: 100%; height: 44px; max-width: 560px; }
+  :global(body.theme-night) audio { color-scheme: dark; }
+  .track-player__status { color: var(--color-muted); font-size: 12px; line-height: 1.8; margin: 10px 0 0; }
+  .track-player__status:empty { display: none; }
+  .track-player__suno { display: inline-flex; align-items: center; min-height: 44px; font-size: 11px; gap: 8px; color: var(--color-muted); text-underline-offset: 4px; }
+</style>

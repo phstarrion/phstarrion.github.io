@@ -13,5 +13,10 @@ style: pop
 sunoId: 421a4725-9321-4ea7-b049-1402f186bdb7
 externalUrl: https://suno.com/song/421a4725-9321-4ea7-b049-1402f186bdb7
 externalLabel: Sunoで聴く
+audio:
+  trackId: bitcoin-ga-ippai
+  durationSeconds: 196
+  headline: 夢とBitcoinが降ってくる、きらめくポップ。
+  tags: [キラキラ, J-POP, 明るい]
 ---
 Pop / J-Pop / Animeの楽曲です。きらめくJ-POPの質感と、夢やBitcoinが空から降ってくるイメージを組み合わせています。

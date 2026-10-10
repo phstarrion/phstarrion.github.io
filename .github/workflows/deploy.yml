@@ -16,6 +16,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PUBLIC_AUDIO_API_URL: ${{ vars.PUBLIC_AUDIO_API_URL }}
 
     steps:
       - name: Check out repository

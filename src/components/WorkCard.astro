@@ -43,12 +43,14 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
     <div class="work-card__caption">
       <p class="work-card__category">{categoryLabels[work.data.category]}</p>
       <Heading>{work.data.title}</Heading>
+      {work.data.audio && <p class="work-card__listen"><span aria-hidden="true">▷</span> サイト内で聴く</p>}
       <p class="work-card__year">{year}</p>
     </div>
   </a>
 </article>
 
 <style>
+  .work-card__listen { grid-column: 1 / -1; color: var(--color-primary); font-size: 11px; margin: 4px 0 0; }
   .work-card {
     min-width: 0;
   }

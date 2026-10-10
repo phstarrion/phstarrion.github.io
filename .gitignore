@@ -4,3 +4,8 @@
 node_modules/
 dist/
 .DS_Store
+
+# Audio belongs in private storage, never the public repository.
+/public/audio/
+.dev.vars
+.wrangler/

@@ -22,8 +22,17 @@ const workSchema = z
     genre: z.string().min(1).optional(),
     style: z.enum(['kawaii', 'dark', 'pop']).optional(),
     sunoId: z.string().uuid().optional(),
+    audio: z.object({
+      trackId: z.string().regex(/^[a-z0-9-]+$/),
+      durationSeconds: z.number().positive(),
+      headline: z.string().min(1),
+      tags: z.array(z.string().min(1)).min(1).max(3),
+    }).optional(),
   })
   .superRefine((work, context) => {
+    if (work.audio && work.category !== 'music') {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ['audio'], message: 'Only music works may include audio.' });
+    }
     if (!validateWorkCoverMetadata(work)) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
