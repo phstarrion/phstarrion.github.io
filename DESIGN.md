@@ -1,5 +1,9 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 10, 2026 — X connection
+
+Connect the existing @phstarrion X account with the portfolio. Keep the image-led hero and native mobile navigation. Add a named X link to the global menu, clarify the existing service-hub X label, and place share/follow actions after work details and the listening archive. Each listening track shares its work URL or its own archive anchor. Share links open an X composer with the title, canonical HTTPS page URL and author handle; nothing is posted automatically. The listening archive uses the existing atelier artwork for its social preview. Do not add social feed embeds, tracking scripts or automatic posting.
+
 ## October 10, 2026 — Two-song listening pilot
 
 The user chose on-site 30-second previews plus full playback on Suno after Cloudflare login proved inconvenient. Feature ビットコインがいっぱい⭐︎ and ほどけ with contrasting sound descriptions and three tags. The clips are excerpts from 0:45–1:15 with fades; do not call them choruses without listening verification. Both home and work details use the preview, with a clear full-track Suno link. Preserve the image-led hero and existing featured work.

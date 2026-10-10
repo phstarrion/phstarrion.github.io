@@ -30,7 +30,7 @@ const icons: Record<ServiceId, string> = {
       <li>
         <a href={url} rel="me noopener noreferrer" target="_blank" data-service={id}>
           <svg class="service-hub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons[id]} />
-          <span class="service-hub__name">{label}</span>
+          <span class="service-hub__name">{id === 'x' ? 'Xで新作をチェック' : label}</span>
         </a>
       </li>
     ))}

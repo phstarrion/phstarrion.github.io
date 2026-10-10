@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import WorkGrid from '../../components/WorkGrid.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TrackPlayer from '../../components/TrackPlayer.astro';
+import XActions from '../../components/XActions.astro';
 import { filterWorks, sortWorksNewestFirst } from '../../lib/content';
 import { paths } from '../../lib/paths';
 
@@ -139,6 +140,7 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
         )}
       </section>
     </div>
+    <XActions title={work.data.title} />
   </article>
 
   {relatedWorks.length > 0 && (

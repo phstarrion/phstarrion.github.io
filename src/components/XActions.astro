@@ -1,0 +1,33 @@
+---
+import { serviceUrls, xHandle } from '../lib/services';
+
+interface Props {
+  title: string;
+  path?: string;
+  compact?: boolean;
+}
+
+const { title, path = Astro.url.pathname, compact = false } = Astro.props;
+const url = new URL(path, Astro.site ?? 'https://phstarrion.github.io/');
+const share = new URL('https://x.com/intent/post');
+share.searchParams.set('text', `${title} — Kanon Studio`);
+share.searchParams.set('url', url.href);
+if (xHandle) share.searchParams.set('via', xHandle.slice(1));
+---
+
+<div class:list={['x-actions', { 'x-actions--compact': compact }]}>
+  {!compact && <p>新作と制作の途中は、Xで。</p>}
+  <div class="x-actions__links">
+    <a href={share.href} target="_blank" rel="noopener noreferrer" data-x-share aria-label={`${title}をXで共有する`}>Xで共有する <span aria-hidden="true">↗</span></a>
+    {!compact && serviceUrls.x && <a href={serviceUrls.x} target="_blank" rel="me noopener noreferrer">{xHandle}をフォロー <span aria-hidden="true">↗</span></a>}
+  </div>
+</div>
+
+<style>
+  .x-actions { border-top: 1px solid var(--color-border); padding-top: 24px; }
+  .x-actions > p { color: var(--color-muted); font-size: 13px; line-height: 1.8; margin: 0 0 12px; }
+  .x-actions__links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--color-primary); font-size: 13px; text-underline-offset: 4px; }
+  a:hover { color: var(--color-primary-hover); }
+  .x-actions--compact { border: 0; padding-top: 8px; }
+</style>

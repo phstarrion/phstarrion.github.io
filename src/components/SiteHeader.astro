@@ -1,4 +1,5 @@
 ---
+import { serviceUrls } from '../lib/services';
 const navigation = [
   { href: '/music/', label: 'Music' },
   { href: '/works/', label: 'Works' },
@@ -35,6 +36,7 @@ const isCurrentRoute = (href: string) => {
               </a>
             </li>
           ))}
+          {serviceUrls.x && <li><a href={serviceUrls.x} target="_blank" rel="me noopener noreferrer" class="site-header__x">Xで新作を見る <span aria-hidden="true">↗</span></a></li>}
         </ul>
       </nav>
     </details>
@@ -134,6 +136,8 @@ const isCurrentRoute = (href: string) => {
     color: var(--color-kanon-blue-hover);
   }
 
+  .site-header__x { color: var(--color-primary); gap: 6px; }
+
   .site-header a[aria-current='page'] {
     position: relative;
   }
@@ -185,7 +189,7 @@ const isCurrentRoute = (href: string) => {
 
     nav ul {
       display: flex;
-      gap: var(--space-lg);
+      gap: clamp(12px, 2vw, 24px);
     }
   }
 </style>
