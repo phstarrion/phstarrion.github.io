@@ -10,7 +10,9 @@ export function initTrackPlayback(root: Document = document) {
       if (status) status.textContent = '';
     });
     player.addEventListener('error', () => {
-      if (status) status.textContent = '音源を再生できませんでした。下のSunoリンクからお聴きください。';
+      if (status) status.textContent = container?.querySelector('.track-player__suno')
+        ? '音源を再生できませんでした。下のSunoリンクからお聴きください。'
+        : '音源を再生できませんでした。ページを再読み込みしてお試しください。';
     });
   });
 }

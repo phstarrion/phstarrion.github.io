@@ -13,7 +13,7 @@ const label = '30秒試聴';
   <p class="track-player__label"><span aria-hidden="true">▷</span> {label}</p>
   <audio controls controlslist="nodownload" preload="none" aria-label={`${title} — ${label}`} data-track-audio>
     <source src={src} type="audio/mpeg" />
-    お使いのブラウザでは音声を再生できません。Sunoでお聴きください。
+    {sunoUrl ? 'お使いのブラウザでは音声を再生できません。Sunoでお聴きください。' : 'お使いのブラウザでは音声を再生できません。別のブラウザでお試しください。'}
   </audio>
   <p class="track-player__status" role="status" data-audio-status></p>
   {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer">続きはSunoでフル再生 <span aria-hidden="true">↗</span></a>}

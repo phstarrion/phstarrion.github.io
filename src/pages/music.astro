@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TrackPlayer from '../components/TrackPlayer.astro';
+import { additionalPreviews } from '../data/additional-previews';
+import { sortListeningTracks, workToListeningTrack } from '../lib/listening';
+const tracks = sortListeningTracks([
+  ...(await getCollection('works')).filter((work) => work.data.audio).map(workToListeningTrack),
+  ...additionalPreviews,
+]);
+---
+<BaseLayout title="Music — Kanon Studio" description="気になる音を、30秒から。Kanon Studioの楽曲をその場で試聴できるリスニングルーム。" theme="night">
+  <section class="music-room" aria-labelledby="music-title">
+    <header class="room-intro">
+      <p class="eyebrow">THE LISTENING ROOM / {tracks.length} TRACKS</p>
+      <h1 id="music-title">気になる音を、<br />30秒から。</h1>
+      <p class="intro-copy">タイトルで選んでも、気分で選んでも。<br />ひとつ再生して、次の好きな音へ。</p>
+      <a class="text-link" href="#tracks">曲を聴く <span aria-hidden="true">↓</span></a>
+    </header>
+    <div class="collection-heading"><h2 id="tracks">聴ける曲</h2><p>新しい日付から / 制作日・未確認の場合は公開日</p></div>
+    <ol class="track-list">
+      {tracks.map((track, index) => <li class="room-track" id={track.id} data-track-id={track.id}>
+        <div class="track-art" aria-hidden="true">
+          {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <div class="record-art"><span>UK<br />BIG BEAT</span></div>}
+          <span class="track-number">{String(index + 1).padStart(2, '0')}</span>
+        </div>
+        <div class="track-copy">
+          <p class="track-date">{track.createdAt ? <>制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></> : track.publishedAt ? <>公開日 <time datetime={track.publishedAt}>{track.publishedAt.replaceAll('-', '.')}</time><span> · 制作日未確認</span></> : '制作日未確認'}</p>
+          <p class="track-headline">{track.headline}</p>
+          <h3>{track.title}</h3>
+          {track.edition && <p class="edition">{track.edition}</p>}
+          <ul class="tags" aria-label="音の特徴">{track.tags.map((tag) => <li>{tag}</li>)}</ul>
+          <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />
+          {track.detailUrl && <a class="text-link" href={track.detailUrl}>曲の紹介を見る <span aria-hidden="true">↗</span></a>}
+        </div>
+      </li>)}
+    </ol>
+    <footer class="room-footer"><p>もう少し、音の世界へ。</p><a class="text-link" href="/works/?category=music">Sunoで聴ける作品も見る <span aria-hidden="true">↗</span></a></footer>
+  </section>
+</BaseLayout>
+<style>
+  .music-room { max-width: 960px; margin-inline: auto; }
+  .room-intro { padding: clamp(28px, 6vw, 80px) 0 64px; }
+  .eyebrow { color: var(--color-primary); letter-spacing: .16em; font-size: 11px; }
+  h1 { margin: 28px 0; font-size: clamp(32px, 6vw, 62px); font-weight: 500; line-height: 1.6; letter-spacing: .06em; }
+  .intro-copy { color: var(--color-muted); font-size: 14px; line-height: 2.2; }
+  .collection-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--color-border); padding-bottom: 20px; }
+  .collection-heading h2 { font-size: 21px; }
+  .collection-heading p, .track-date { font-size: 11px; color: var(--color-muted); }
+  #tracks { scroll-margin-top: 110px; }
+  .track-list { list-style: none; padding: 0; margin: 0; }
+  .room-track { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; padding: 40px 0; border-bottom: 1px solid var(--color-border); }
+  .track-art { position: relative; align-self: start; }
+  .track-art img, .record-art { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+  .record-art { display: grid; place-items: center; background: repeating-radial-gradient(circle, #1e2136 0 3px, #292440 4px 6px); }
+  .record-art span { display: grid; place-content: center; border-radius: 50%; width: 60%; aspect-ratio: 1; background: #c4b7e6; color: #151323; text-align: center; font-size: 20px; font-weight: 600; letter-spacing: .1em; }
+  .track-number { position: absolute; left: 12px; bottom: 12px; background: #090d1be6; padding: 4px 9px; color: #f4f3fc; font-size: 11px; }
+  .track-date { margin: 0 0 16px; }
+  .track-headline { color: var(--color-primary); font-size: 13px; line-height: 1.9; margin: 0 0 8px; }
+  h3 { font-size: clamp(20px, 3vw, 27px); line-height: 1.7; margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+  .edition { margin: 6px 0 0; font-size: 12px; color: var(--color-muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 16px 0 24px; }
+  .tags li { font-size: 11px; padding: 4px 10px; border: 1px solid var(--color-border); border-radius: 30px; color: var(--color-muted); }
+  .room-footer { padding: 48px 0 16px; text-align: center; }
+  .room-footer p { font-size: 20px; }
+  @media(max-width: 600px) {
+    .room-track { grid-template-columns: 80px minmax(0, 1fr); gap: 16px; padding-block: 30px; }
+    .track-number { left: 4px; bottom: 4px; font-size: 9px; padding: 2px 6px; }
+    .record-art span { font-size: 9px; }
+    .track-date { font-size: 10px; margin-bottom: 10px; }
+    .track-date span { display: block; }
+    .track-headline { font-size: 12px; }
+    .track-copy :global(.track-player) { margin-left: -96px; }
+    .room-intro { padding-bottom: 40px; }
+  }
+</style>

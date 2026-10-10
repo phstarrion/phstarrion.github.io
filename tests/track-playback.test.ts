@@ -18,7 +18,7 @@ describe('site audio playback', () => {
 
   it('offers a fallback after an audio error and clears it after playback resumes', () => {
     const page = document.implementation.createHTMLDocument();
-    page.body.innerHTML = '<div data-track-player><audio data-track-audio></audio><p role="status" data-audio-status></p></div>';
+    page.body.innerHTML = '<div data-track-player><a class="track-player__suno" href="https://suno.com/">Suno</a><audio data-track-audio></audio><p role="status" data-audio-status></p></div>';
     initTrackPlayback(page);
     const player = page.querySelector('audio')!;
     player.dispatchEvent(new Event('error'));
