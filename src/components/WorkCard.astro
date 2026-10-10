@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { paths } from '../lib/paths';
+import LikeButton from './LikeButton.astro';
 
 interface Props {
   work: CollectionEntry<'works'>;
@@ -47,6 +48,7 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
       <p class="work-card__year">{year}</p>
     </div>
   </a>
+  <LikeButton workId={work.id} title={work.data.title} />
 </article>
 
 <style>

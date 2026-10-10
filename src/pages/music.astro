@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrackPlayer from '../components/TrackPlayer.astro';
 import XActions from '../components/XActions.astro';
+import LikeButton from '../components/LikeButton.astro';
 import { additionalPreviews } from '../data/additional-previews';
 import { sortListeningTracks, workToListeningTrack } from '../lib/listening';
 const tracks = sortListeningTracks([
@@ -36,6 +37,7 @@ const tracks = sortListeningTracks([
           <TrackPlayer trackId={track.id} title={track.title} sunoUrl={track.sunoUrl} />
           {track.detailUrl && <a class="text-link" href={track.detailUrl}>曲の紹介を見る <span aria-hidden="true">↗</span></a>}
           <XActions title={track.title} path={track.detailUrl ?? `/music/#${track.id}`} compact />
+          <LikeButton workId={track.detailUrl ? track.detailUrl.split('/')[2] : track.id} title={track.title} />
         </div>
       </li>)}
     </ol>

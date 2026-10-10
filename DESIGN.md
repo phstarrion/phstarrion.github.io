@@ -72,3 +72,12 @@ This refinement supersedes the earlier large arched frame and uniform card compo
 ## Listening archive
 
 `/music/` automatically lists audio-enabled works plus `src/data/additional-previews.ts`. Sort by verified creation date, falling back to clearly labeled work publication date; entirely undated songs go last. Never use file upload timestamps as creation dates. Only 30-second derivatives belong in public/audio; original full MP3s stay private. The current additional stem-adjusted song has neither a verified creation date nor a verified Suno URL. The abstract record cover is decorative and is not presented as original artwork.
+
+## 作品のいいねと流入計測
+
+LikeButton と src/lib/engagement.ts が匿名リアクションを保存する。作品IDを共有し、カード・詳細・Musicで同じ作品を重複加算しない。ブラウザのIDをサーバー側でHMAC変換し、複合主キーで連打を防ぐ。数は公開APIに含めない。
+
+管理画面: https://kanon-engagement.kanon-kurose.chatgpt.site/admin/ （所有者のChatGPT認証のみ）。新しい作品を追加するときは保存側 app/lib/catalog.ts の許可作品IDも更新する。
+
+X固定投稿の返信用: https://phstarrion.github.io/?utm_source=x&utm_campaign=pinned_reply
+ほかのSNSはutm_sourceをinstagram/threads/youtube/tiktok/noteに変更。流入元が取得できない訪問は直接・不明。集計は導入後からで、履歴の復元はしない。

@@ -1,0 +1,24 @@
+---
+interface Props { workId: string; title: string; }
+const {workId,title} = Astro.props;
+---
+<div class="work-like" data-like-container>
+  <button class="work-like__button" type="button" data-like-work={workId} data-like-title={title} aria-label={`${title}にいいね`} aria-pressed="false" disabled>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+    <span data-like-label>いいね</span>
+  </button>
+  <span class="work-like__status" data-like-status role="status" aria-live="polite"></span>
+</div>
+<style>
+  .work-like { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; position:relative; margin-block:16px; }
+  .work-like__button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; padding:10px 18px; border:1px solid var(--color-border); border-radius:999px; color:var(--color-primary); background:var(--color-surface); font:inherit; font-size:13px; cursor:pointer; transition:background 180ms,color 180ms; }
+  .work-like__button svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.6; }
+  .work-like__button[aria-pressed="true"] { color:var(--color-ink); background:var(--color-lavender); cursor:default; }
+  .work-like__button[aria-pressed="true"] svg { fill:var(--color-primary); stroke:var(--color-primary); }
+  .work-like__button:enabled:hover { background:var(--color-lavender); }
+  .work-like__button:focus-visible { outline:2px solid var(--color-focus); outline-offset:4px; }
+  .work-like__status { font-size:12px; color:var(--color-muted); line-height:1.7; }
+  .work-like :global(.like-sparkle) { position:absolute; pointer-events:none; left:35px; top:18px; color:var(--color-primary); font-size:17px; animation:like-sparkle 900ms ease-out forwards; }
+  @keyframes like-sparkle { from { opacity:1; transform:translate(0,0) scale(.6); } to { opacity:0; transform:translate(var(--spark-x),var(--spark-y)) scale(1.1) rotate(var(--spark-rotation)); } }
+  @media(prefers-reduced-motion:reduce) { .work-like__button { transition:none; } .work-like :global(.like-sparkle) { display:none; } }
+</style>

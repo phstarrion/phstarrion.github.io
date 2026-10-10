@@ -68,3 +68,9 @@ const imageUrl = image ? new URL(image, site) : undefined;
     <SiteFooter />
   </body>
 </html>
+
+<script>
+  import { initLikes, recordVisit } from '../lib/engagement';
+  initLikes();
+  void recordVisit();
+</script>

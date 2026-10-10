@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Privacy — Kanon Studio" description="いいねとアクセス計測について。">
+  <article class="privacy"><h1>いいねとアクセス計測について</h1>
+    <h2>作品へのいいね</h2><p>ログインなしで、作品にいいねできます。重複を防ぐためランダムなIDと押した作品をブラウザに保存し、保存先ではIDを暗号学的に変換した値を使います。いいね数は公開しません。ブラウザの保存情報を削除した場合や別端末では、同じ人のいいねを区別できないことがあります。</p>
+    <h2>訪問の記録</h2><p>作品をより楽しんでいただくため、閲覧ページ、日付、流入元のサイト名、リンクに付けた分類ラベルを記録します。参照元の完全なURLや、生のIPアドレスは保存しません。流入元を取得できない場合は「直接・不明」として扱います。短時間の連続送信を防ぐため、日ごとに変わる通信元のハッシュを使い、次の送信時に24時間より古い制限記録を削除します。</p>
+    <p>訪問は30分以上間隔が空くと別の訪問として扱います。同じ訪問中の同じページは1回として記録します。次回の計測時に90日より古い個別の匿名訪問記録を削除し、日別の集計を残します。ブラウザのDo Not TrackまたはGlobal Privacy Controlが有効な場合、アクセス計測は行いません。</p>
+    <p>記録はサイト運営者が確認し、一般公開しません。広告配信や個人を特定するための追跡には使用しません。</p>
+    <a href="/">ホームページに戻る</a>
+  </article>
+</BaseLayout>
+<style>.privacy{max-width:720px;margin-inline:auto}.privacy h1{font-size:clamp(26px,4vw,36px);line-height:1.6}.privacy h2{font-size:20px;margin-top:36px}.privacy p{font-size:14px;line-height:2;color:var(--color-muted)}.privacy a{display:inline-flex;align-items:center;min-height:44px;margin-top:24px}</style>
