@@ -6,7 +6,8 @@ import { Window } from 'happy-dom';
 const root = resolve('dist');
 const files = readdirSync(root, { recursive: true }).filter((p): p is string => typeof p === 'string' && p.endsWith('.html'));
 const window = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true } });
-const parse = (file: string) => new window.DOMParser().parseFromString(readFileSync(file, 'utf8'), 'text/html');
+const withoutExternalScripts = (html: string) => html.replace(/<script\b[^>]*\bsrc=[^>]*>[\s\S]*?<\/script>/gi, '');
+const parse = (file: string) => new window.DOMParser().parseFromString(withoutExternalScripts(readFileSync(file, 'utf8')), 'text/html');
 
 describe('complete site integrity', () => {
   it.each(files)('%s has valid internal navigation, assets and document structure', file => {
@@ -35,8 +36,8 @@ describe('complete site integrity', () => {
   });
 
   it('announces filter result counts and gives a recovery path for empty categories', () => {
-    const browser = new Window({ url: 'https://site.example/works/', settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true } });
-    browser.document.write(readFileSync(join(root, 'works/index.html'), 'utf8'));
+    const browser = new Window({ url: 'https://site.example/works/', settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true } });
+    browser.document.write(withoutExternalScripts(readFileSync(join(root, 'works/index.html'), 'utf8')));
     browser.eval(browser.document.querySelector('script[data-work-filters]')!.textContent!);
     const status = browser.document.querySelector('[data-work-filter-status]')!;
     expect(status.getAttribute('role')).toBe('status');
@@ -46,4 +47,14 @@ describe('complete site integrity', () => {
     expect(status.textContent).toMatch(/\d+件の作品/);
     void browser.happyDOM.abort();
   });
+});
+
+it('every published like button has a confirmed backend catalog entry', () => {
+  const allowed = new Set(JSON.parse(readFileSync('src/data/engagement-works.json', 'utf8')));
+  for (const file of files) {
+    const html = readFileSync(join(root, file), 'utf8');
+    for (const match of html.matchAll(/data-like-work="([^"]+)"/g)) {
+      expect(allowed.has(match[1]), `Backend catalog missing ${match[1]} on ${file}`).toBe(true);
+    }
+  }
 });

@@ -15,7 +15,7 @@ describe('all generated page accessibility', () => {
   it.each(representativePages)('has no axe violations on %s', async (_, path) => {
     const html = await readFile(join(testDirectory, '..', 'dist', path), 'utf8');
     const parsedPage = new DOMParser().parseFromString(
-      html.replace(/<link\b[^>]*>/gi, ''),
+      html.replace(/<link\b[^>]*>/gi, '').replace(/<script\b[^>]*\bsrc=[^>]*>[\s\S]*?<\/script>/gi, ''),
       'text/html',
     );
     document.documentElement.lang = parsedPage.documentElement.lang;

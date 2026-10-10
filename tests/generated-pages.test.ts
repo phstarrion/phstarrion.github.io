@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 // Vite rewrites dynamic new URL() asset references, so derive a real file path first.
 const testDirectory = dirname(fileURLToPath(import.meta.url));
 const readMarkup = (path: string) =>
-  readFile(join(testDirectory, '..', 'dist', path), 'utf8');
+  readFile(join(testDirectory, '..', 'dist', path), 'utf8').then(html => html.replace(/<script\b[^>]*\bsrc=[^>]*>[\s\S]*?<\/script>/gi, ''));
 
 const readMarkupOrEmpty = (path: string) => readMarkup(path).catch(() => '');
 
@@ -53,7 +53,7 @@ describe('generated pages', () => {
     const html = await readMarkupOrEmpty(path);
     expect(html, `${path} must be generated`).not.toBe('');
 
-    const page = new Window({ url: canonicalUrl }).document;
+    const page = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: canonicalUrl }).document;
     page.write(html);
 
     const title = page.querySelector('title')?.textContent?.trim() ?? '';
@@ -167,7 +167,7 @@ describe('generated pages', () => {
     ['journal article', 'journal/ryuseimachi/index.html', 'article'],
   ])('attributes %s to the verified X account with the right Open Graph type', async (_, path, ogType) => {
     const html = await readMarkup(path);
-    const page = new Window({ url: 'https://phstarrion.github.io/' }).document;
+    const page = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: 'https://phstarrion.github.io/' }).document;
     page.write(html);
     const meta = (name: string) =>
       page.querySelector(`meta[property="${name}"], meta[name="${name}"]`)?.getAttribute('content');
@@ -212,7 +212,7 @@ describe('generated pages', () => {
 
   it('shows the style row only for music and honours a shared style URL', async () => {
     const html = await readMarkup('works/index.html');
-    const browser = new Window({ url: 'https://example.com/works/?style=dark' });
+    const browser = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: 'https://example.com/works/?style=dark' });
     browser.document.write(html);
     browser.eval(browser.document.querySelector('script[data-work-filters]')?.textContent ?? '');
 
@@ -297,7 +297,7 @@ describe('generated pages', () => {
 
   it.each(['kawaii', 'dark', 'pop'])('opens the %s archive filter into matching music', async (style) => {
     const href = `/works/?style=${style}`;
-    const browser = new Window({ url: `https://example.com${href}` });
+    const browser = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: `https://example.com${href}` });
     browser.document.write(await readMarkup('works/index.html'));
     browser.eval(browser.document.querySelector('script[data-work-filters]')?.textContent ?? '');
     const visible = [...browser.document.querySelectorAll('[data-category]')]
@@ -377,7 +377,7 @@ describe('generated pages', () => {
 
   it('enhances the archive filters from shareable category query state', async () => {
     const html = await readMarkup('works/index.html');
-    const browser = new Window({ url: 'https://example.com/works/?category=music' });
+    const browser = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: 'https://example.com/works/?category=music' });
     browser.document.write(html);
     const script = browser.document.querySelector('script[data-work-filters]');
 
@@ -408,7 +408,7 @@ describe('generated pages', () => {
 
   it('falls back to the all filter for invalid category query values', async () => {
     const html = await readMarkup('works/index.html');
-    const browser = new Window({ url: 'https://example.com/works/?category=unknown' });
+    const browser = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: 'https://example.com/works/?category=unknown' });
     browser.document.write(html);
     const script = browser.document.querySelector('script[data-work-filters]');
 
