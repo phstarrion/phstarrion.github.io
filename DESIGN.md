@@ -1,5 +1,11 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 10, 2026 — Two-song listening pilot
+
+The user chose on-site 30-second previews plus full playback on Suno after Cloudflare login proved inconvenient. Feature ビットコインがいっぱい⭐︎ and ほどけ with contrasting sound descriptions and three tags. The clips are excerpts from 0:45–1:15 with fades; do not call them choruses without listening verification. Both home and work details use the preview, with a clear full-track Suno link. Preserve the image-led hero and existing featured work.
+
+Publish only the two 160 kbps stereo preview MP3s. Never publish full recordings to the repository or static build. Native controls use preload none and no autoplay, and work without JavaScript. JavaScript pauses other players and reports errors with a Suno fallback. Hide download buttons where supported and suppress audio context menus; this deters casual saving but does not prevent preview extraction. No cross-page playback persistence. The deferred private-audio approach is saved on feat/protected-audio; no Cloudflare setup is needed for this release.
+
 ## 今後の更新方針 — 2026年10月10日
 
 ユーザーは、今後のホームページ更新でも、スクロール演出やインタラクションの技法を積極的かつ適正に取り入れることを希望している。各更新で、作品の魅力・世界観・情報の伝わり方・操作性を改善する演出を自発的に検討する。今回採用した5種類に限定せず、目的に合う他の技法も候補にする。

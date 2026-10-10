@@ -1,0 +1,36 @@
+---
+interface Props {
+  trackId: string;
+  title: string;
+  sunoUrl?: string;
+}
+const { trackId, title, sunoUrl } = Astro.props;
+const src = `/audio/${trackId}-preview.mp3`;
+const label = '30秒試聴';
+---
+
+<div class="track-player" data-track-player>
+  <p class="track-player__label"><span aria-hidden="true">▷</span> {label}</p>
+  <audio controls controlslist="nodownload" preload="none" aria-label={`${title} — ${label}`} data-track-audio>
+    <source src={src} type="audio/mpeg" />
+    お使いのブラウザでは音声を再生できません。Sunoでお聴きください。
+  </audio>
+  <p class="track-player__status" role="status" data-audio-status></p>
+  {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer">続きはSunoでフル再生 <span aria-hidden="true">↗</span></a>}
+</div>
+
+<script>
+  import { initTrackPlayback } from '../lib/track-playback';
+  initTrackPlayback();
+</script>
+
+<style>
+  .track-player { min-width: 0; }
+  .track-player__label { font-size: 12px; letter-spacing: .04em; color: var(--color-primary); margin: 0 0 12px; }
+  .track-player__label span { margin-right: 6px; }
+  audio { display: block; width: 100%; height: 44px; max-width: 560px; }
+  :global(body.theme-night) audio { color-scheme: dark; }
+  .track-player__status { color: var(--color-muted); font-size: 12px; line-height: 1.8; margin: 10px 0 0; }
+  .track-player__status:empty { display: none; }
+  .track-player__suno { display: inline-flex; align-items: center; min-height: 44px; font-size: 11px; gap: 8px; color: var(--color-muted); text-underline-offset: 4px; }
+</style>

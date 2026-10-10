@@ -4,3 +4,6 @@
 node_modules/
 dist/
 .DS_Store
+
+# Full recordings must not enter the public build.
+/public/audio/*-full.mp3

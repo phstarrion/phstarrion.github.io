@@ -42,4 +42,10 @@ Journal は `src/content/journal/*.md` に追加します。frontmatter は `tit
 
 ## Publishing
 
+### Site audio
+
+サイト内は30秒試聴、フル再生はSunoです。`public/audio/{trackId}-preview.mp3` に試聴ファイルだけを配置します。フル音源は公開リポジトリやビルドに入れません。作品の `audio` frontmatter は `trackId`、`headline`、`tags` を指定します。今回の試聴区間は0:45〜1:15です。Cloudflareや追加の環境変数は不要です。
+
+自動再生・事前取得はせず、同時に再生できるのは1曲です。ページ移動すると再生は止まります。保存ボタンを対応ブラウザで隠しますが、試聴音源の取得を完全には防げません。非公開配信案は `feat/protected-audio` ブランチに保管しています。
+
 `main` への push（通常はレビュー済みの変更を main にマージしたとき）で GitHub Actions が `npm ci`、`npm run check`、`npm run test:run`、`npm run build` を順に実行します。すべて成功したビルドだけが GitHub Pages にデプロイされ、公開先は <https://phstarrion.github.io/> です。Actions の `workflow_dispatch` からも、同じ品質ゲートを通して手動実行できます。

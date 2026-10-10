@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import WorkGrid from '../../components/WorkGrid.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TrackPlayer from '../../components/TrackPlayer.astro';
 import { filterWorks, sortWorksNewestFirst } from '../../lib/content';
 import { paths } from '../../lib/paths';
 
@@ -65,6 +66,11 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
       <h1>{work.data.title}</h1>
       <p class="work-detail__description">{work.data.description}</p>
     </header>
+
+    {work.data.audio && <section class="work-detail__listening" aria-label={`${work.data.title}を聴く`}>
+      <p>{work.data.audio.headline}</p>
+      <TrackPlayer trackId={work.data.audio.trackId} title={work.data.title} sunoUrl={work.data.externalUrl} />
+    </section>}
 
     {cover && coverAlt && coverWidth && coverHeight ? (
       <figure class="work-detail__media">
@@ -147,6 +153,9 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
 </BaseLayout>
 
 <style>
+  .work-detail__listening { padding: 24px; background: var(--color-lavender); border-radius: 6px; }
+  .work-detail__listening > p { margin: 0 0 20px; font-size: 15px; line-height: 1.9; }
+  @media (max-width: 767px) { .work-detail__listening { padding: 20px 16px; } }
   .work-detail {
     display: grid;
     gap: var(--space-xl);
