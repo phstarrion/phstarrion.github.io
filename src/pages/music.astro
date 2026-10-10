@@ -21,7 +21,7 @@ const tracks = sortListeningTracks([
     <ol class="track-list">
       {tracks.map((track, index) => <li class="room-track" id={track.id} data-track-id={track.id}>
         <div class="track-art" aria-hidden="true">
-          {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <div class="record-art"><span>UK<br />BIG BEAT</span></div>}
+          {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <div class="record-art"><span>{track.id === 'ogyogi-warukute' ? <>UK<br />BIG BEAT</> : <>KANON<br />MUSIC</>}</span></div>}
           <span class="track-number">{String(index + 1).padStart(2, '0')}</span>
         </div>
         <div class="track-copy">

@@ -7,7 +7,7 @@ const parse = async (path: string) => new DOMParser().parseFromString((await rea
 describe('30-second preview pages', () => {
   it('packages only preview files and exposes user-initiated controls', async () => {
     const files = await readdir(join(root, 'dist'), { recursive: true });
-    expect(files.filter((path) => path.endsWith('.mp3')).sort()).toEqual(['audio/bitcoin-ga-ippai-preview.mp3', 'audio/hodoke-preview.mp3', 'audio/ogyogi-warukute-preview.mp3']);
+    expect(files.filter((path) => path.endsWith('.mp3')).sort()).toEqual(['audio/bitcoin-ga-ippai-preview.mp3', 'audio/hodoke-preview.mp3', 'audio/hoshi-ga-terasu-mahou-monogatari-preview.mp3', 'audio/ogyogi-warukute-preview.mp3']);
     const page = await parse('index.html');
     expect(page.querySelectorAll('.listening-card')).toHaveLength(2);
     expect(page.querySelectorAll('.listening audio')).toHaveLength(2);
@@ -28,8 +28,8 @@ describe('30-second preview pages', () => {
 
 it('lists every available preview with honest date labels', async () => {
   const page = await parse('music/index.html');
-  expect([...page.querySelectorAll('[data-track-id]')].map((el) => el.getAttribute('data-track-id'))).toEqual(['hodoke', 'bitcoin-ga-ippai', 'ogyogi-warukute']);
-  expect(page.querySelectorAll('audio')).toHaveLength(3);
+  expect([...page.querySelectorAll('[data-track-id]')].map((el) => el.getAttribute('data-track-id'))).toEqual(['hodoke', 'bitcoin-ga-ippai', 'hoshi-ga-terasu-mahou-monogatari', 'ogyogi-warukute']);
+  expect(page.querySelectorAll('audio')).toHaveLength(4);
   expect(page.querySelector('#ogyogi-warukute time')).toBeNull();
   expect(page.querySelector('#ogyogi-warukute .track-player__suno')).toBeNull();
 });

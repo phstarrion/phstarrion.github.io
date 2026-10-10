@@ -9,4 +9,11 @@ export const additionalPreviews: ListeningTrack[] = [{
   edition: 'ステム調整版',
   headline: 'お行儀よりも、ビートにまかせて。',
   tags: ['UK Big Beat', 'Breakbeat', 'Rave'],
+}, {
+  id: 'hoshi-ga-terasu-mahou-monogatari',
+  title: '星が照らす魔法物語',
+  headline: '星の物語を、音でたどって。',
+  tags: ['オリジナル楽曲'],
+  // Google Drive / SUNO楽曲. MP3 contains no creation date or Suno song ID.
+  // Do not substitute its upload timestamp for the unknown creation/publication date.
 }];
