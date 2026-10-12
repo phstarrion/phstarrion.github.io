@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow, noarchive"><meta name="referrer" content="no-referrer"><title>資料ダウンロード</title>
+<style>body{margin:0;background:#f6f5f2;color:#253339;font-family:system-ui,sans-serif;line-height:1.8}main{max-width:620px;margin:10vh auto;padding:28px}h1{font-size:1.7rem}p{color:#5c686d}article{padding:24px 0;border-top:1px solid #d7dcd9}h2{font-size:1.05rem;overflow-wrap:anywhere}button{background:#275e58;color:white;border:0;border-radius:8px;padding:13px 24px;font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #ad633a;outline-offset:4px}button:disabled{opacity:.5;cursor:default}.type{font-size:.85rem;color:#697571}#status{min-height:2em}</style></head>
+<body><main id="main-content"><p>一時共有資料</p><h1>資料ダウンロード</h1><p>必要なファイルを選んでダウンロードしてください。</p>
+<article><span class="type">PowerPoint · 約504 KB</span><h2>2026年度動力関係6K 審議会資料（自動更新）</h2><button data-index="0" disabled>PowerPointをダウンロード</button></article>
+<article><span class="type">Excel · 約1.01 MB</span><h2>動力費集約 2026</h2><button data-index="1" disabled>Excelをダウンロード</button></article>
+<p id="status" role="status" aria-live="polite">ダウンロードを準備しています…</p><footer><a href="/music/" style="color:#275e58">Kanon Studio の音楽作品</a></footer></main>
+<script type="module">
+const names=["2026年度動力関係6K_審議会資料_自動更新.pptx","動力費集約_2026.xlsx"];
+const buttons=[...document.querySelectorAll('button')];
+const status=document.querySelector('#status');
+let key;
+try {
+ const raw=location.hash.slice(1);
+ if (!/^[A-Za-z0-9_-]{43}$/.test(raw)) throw Error('Missing key');
+ const bytes=Uint8Array.from(atob(raw.replace(/-/g,'+').replace(/_/g,'/')+'='),c=>c.charCodeAt(0));
+ key=await crypto.subtle.importKey('raw',bytes,'AES-GCM',false,['decrypt']);
+ status.textContent=''; buttons.forEach(b=>b.disabled=false);
+} catch { status.textContent='共有されたURLを、省略せずに開いてください。'; }
+for (const button of buttons) button.addEventListener('click',async()=>{
+ button.disabled=true; status.textContent='ファイルを準備しています…';
+ try {
+  const i=Number(button.dataset.index);
+  const response=await fetch('./'+i+'.bin',{cache:'no-store'});
+  if (!response.ok) throw Error('Download failed');
+  const data=new Uint8Array(await response.arrayBuffer());
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:data.slice(0,12)},key,data.slice(12));
+  const mime=i===0?'application/vnd.openxmlformats-officedocument.presentationml.presentation':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  const url=URL.createObjectURL(new Blob([plain],{type:mime}));
+  const a=document.createElement('a');a.href=url;a.download=names[i];document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  status.textContent='ダウンロードを開始しました。';
+ } catch { status.textContent='ダウンロードできませんでした。共有URLを開き直してお試しください。'; }
+ finally {button.disabled=false;}
+});
+</script></body></html>
