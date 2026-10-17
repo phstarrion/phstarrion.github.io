@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import mascot from '../assets/brand/mascot-reference.jpeg';
+import { serviceUrls, xHandle } from '../lib/services';
 const navigation = [
   { label: '曲を聴く', href: '/music/' },
   { label: '作品一覧', href: '/works/' },
@@ -11,7 +14,13 @@ const navigation = [
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <div class="site-footer__brand"><span aria-hidden="true">☾</span> Kanon Studio<p>音と、夢の、つづき。</p></div>
+    <div class="site-footer__brand">
+      <a class="site-footer__identity" href="/about/" aria-label="Kanon Studioの活動について">
+        <Image src={mascot} alt="" width={160} loading="lazy" decoding="async" class="site-footer__portrait" />
+        <span class="site-footer__name">Kanon Studio <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2 2 9.3l6.9-1Z" fill="currentColor" /></svg></span>
+      </a>
+      {serviceUrls.x && xHandle && <a class="site-footer__creator" href={serviceUrls.x} target="_blank" rel="me noopener noreferrer" aria-label={`${xHandle}のXプロフィール（新しいタブ）`}>{xHandle}<span aria-hidden="true">↗</span></a>}
+    </div>
     <nav aria-label="フッターナビゲーション">
       <ul>
         {navigation.map(({ label, href }) => (
@@ -19,19 +28,25 @@ const navigation = [
         ))}
       </ul>
     </nav>
-    <p>© {new Date().getFullYear()} Kanon Studio</p>
+    <p class="site-footer__copyright">© {new Date().getFullYear()} Kanon Studio</p>
   </div>
 </footer>
 
 <style>
-  .site-footer { background: var(--color-surface); }
-  .site-footer__brand { font-family: var(--font-display); font-size: 20px; }
-  .site-footer__brand > span { color: var(--color-primary); margin-right: 6px; }
-  .site-footer__brand p { margin-top: 7px; font-family: var(--font-body); font-size: 10px; }
-
   .site-footer {
-    border-top: 1px solid var(--color-border);
+    --color-focus: #f2b8e8;
+    background: #10101d;
+    color: #f5f1fa;
+    border-top: 1px solid #c9b9e833;
   }
+
+  .site-footer__brand { min-width: 0; }
+  .site-footer__identity { display: flex; align-items: center; gap: 16px; color: inherit; text-decoration: none; width: fit-content; max-width: 100%; border-radius: 8px; }
+  .site-footer__portrait { flex: 0 0 72px; width: 72px; height: 72px; object-fit: cover; object-position: center top; border: 1px solid #c9b9e8; border-radius: 50%; }
+  .site-footer__name { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 20px; line-height: 1.5; }
+  .site-footer__name svg { flex-shrink: 0; color: #e5be70; }
+  .site-footer__creator { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-left: 88px; color: #c9b9e8; font-size: 12px; text-decoration: none; }
+  .site-footer__identity:hover .site-footer__name, .site-footer__creator:hover { text-decoration: underline; text-underline-offset: 4px; }
 
   .site-footer__inner {
     display: grid;
@@ -42,7 +57,7 @@ const navigation = [
   }
 
   p {
-    color: var(--color-muted);
+    color: #b5aec6;
     font-size: var(--type-body-sm-size);
     line-height: var(--type-body-sm-line-height);
     margin: 0;
@@ -59,7 +74,7 @@ const navigation = [
 
   ul a {
     align-items: center;
-    color: var(--color-ink);
+    color: #f5f1fa;
     display: inline-flex;
     font-size: var(--type-label-size);
     font-weight: var(--type-label-weight);
@@ -70,14 +85,15 @@ const navigation = [
 
   ul a:hover,
   ul a:focus-visible {
-    color: var(--color-kanon-blue-hover);
+    color: #c9b9e8;
   }
 
   @media (min-width: 768px) {
     .site-footer__inner {
-      align-items: end;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      align-items: center;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 24px;
     }
+    .site-footer__copyright { grid-column: 1 / -1; padding-top: 20px; border-top: 1px solid #c9b9e833; }
   }
 </style>

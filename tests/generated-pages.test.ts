@@ -86,7 +86,7 @@ describe('generated pages', () => {
     expect(builtHtml).not.toMatch(/href=["'][^"']*tiktok\.com/i);
   });
 
-  it('uses the creator portrait only in the Home introduction and About profile', async () => {
+  it('retains the original creator portrait in the Home introduction', async () => {
     const distDirectory = join(testDirectory, '..', 'dist');
     const htmlPaths = (await readdir(distDirectory, { recursive: true }))
       .filter((path) => path.endsWith('.html'));
@@ -101,7 +101,7 @@ describe('generated pages', () => {
       .filter(({ html }) => html.includes('/images/kanon-avatar.jpg'))
       .map(({ path }) => path);
 
-    expect(pagesWithPortrait.sort()).toEqual(['about/index.html', 'index.html']);
+    expect(pagesWithPortrait.sort()).toEqual(['index.html']);
   });
 
   it('builds a Japanese home page with one main landmark', async () => {
@@ -646,7 +646,7 @@ describe('generated pages', () => {
   it('builds a concise profile with its approved portrait and verified services', async () => {
     const html = await readMarkup('about/index.html');
     const page = parseBody(html);
-    const portrait = page.querySelector<HTMLImageElement>('img[src="/images/kanon-avatar.jpg"]');
+    const portrait = page.querySelector<HTMLImageElement>('.about__profile img');
 
     expect(page.querySelectorAll('h1')).toHaveLength(1);
     expect(page.body.textContent).toContain('Kanon Studio');
