@@ -1,11 +1,11 @@
 ---
 const navigation = [
-  { label: 'Music / 曲を聴く', href: '/music/' },
-  { label: 'Works', href: '/works/' },
-  { href: '/games/', label: 'Games' },
-  { label: 'Journal', href: '/journal/' },
-  { label: 'About', href: '/about/' },
-  { label: 'Privacy', href: '/privacy/' },
+  { label: '曲を聴く', href: '/music/' },
+  { label: '作品一覧', href: '/works/' },
+  { href: '/games/', label: 'ゲーム' },
+  { label: '制作ノート', href: '/journal/' },
+  { label: '活動について', href: '/about/' },
+  { label: 'プライバシー', href: '/privacy/' },
 ];
 ---
 
@@ -76,8 +76,8 @@ const navigation = [
   @media (min-width: 768px) {
     .site-footer__inner {
       align-items: end;
-      grid-template-columns: 1fr auto auto;
-      gap: 48px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      gap: 24px;
     }
   }
 </style>
