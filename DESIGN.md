@@ -2,6 +2,8 @@
 
 ## October 17, 2026 — Character-led branding
 
+The working brand strategy, touchpoint audit, fixed/flexible asset rules and measurement plan are in `docs/brand-strategy.md`. Positioning and audience statements there are hypotheses, not audience research findings. Use the same mascot master for the Home introduction, About and shared footer. The original hero remains scene artwork, independent of the identity portrait. Do not substitute latest-work selection with an unverified “signature work”, or add slogans, audio stings or tracking automatically.
+
 The user selected the silver-lavender-haired, purple-eyed cat-eared character with pink round glasses, a gold star and black ribbon as the studio mascot, and approved the visual identity concept. Keep the current Home hero artwork. Communicate the brand through art, music and consistent presentation; do not add explanatory hero copy or slogans.
 
 Kanon Studio names the creative space; @phstarrion identifies the creator. Use the supplied original illustration, not a regenerated likeness, for the shared footer identity and About portrait. The master is `src/assets/brand/mascot-reference.jpeg`; Astro generates lightweight WebP variants. Preserve the character's face, colours, cat ears, glasses and star. Her name and fictional biography are not decided; do not invent them.
