@@ -33,22 +33,22 @@ const readPage = async (path: string) => {
 describe('generated pages', () => {
   it.each([
     ['Home', 'index.html', 'https://phstarrion.github.io/', 'summary_large_image'],
-    ['Works', 'works/index.html', 'https://phstarrion.github.io/works/', 'summary'],
+    ['Works', 'works/index.html', 'https://phstarrion.github.io/works/', 'summary_large_image'],
     [
       'work detail',
       'works/sugar-crash-protocol/index.html',
       'https://phstarrion.github.io/works/sugar-crash-protocol/',
       'summary_large_image',
     ],
-    ['Journal', 'journal/index.html', 'https://phstarrion.github.io/journal/', 'summary'],
+    ['Journal', 'journal/index.html', 'https://phstarrion.github.io/journal/', 'summary_large_image'],
     [
       'journal article',
       'journal/ryuseimachi/index.html',
       'https://phstarrion.github.io/journal/ryuseimachi/',
       'summary_large_image',
     ],
-    ['About', 'about/index.html', 'https://phstarrion.github.io/about/', 'summary'],
-    ['404', '404.html', 'https://phstarrion.github.io/404/', 'summary'],
+    ['About', 'about/index.html', 'https://phstarrion.github.io/about/', 'summary_large_image'],
+    ['404', '404.html', 'https://phstarrion.github.io/404/', 'summary_large_image'],
   ])('publishes complete metadata and one page heading for %s', async (_, path, canonicalUrl, twitterCard) => {
     const html = await readMarkupOrEmpty(path);
     expect(html, `${path} must be generated`).not.toBe('');
@@ -160,6 +160,7 @@ describe('generated pages', () => {
 
   it.each([
     ['Home', 'index.html', 'website'],
+    ['Music', 'music/index.html', 'website'],
     ['Works', 'works/index.html', 'website'],
     ['Journal', 'journal/index.html', 'website'],
     ['About', 'about/index.html', 'website'],
@@ -185,6 +186,25 @@ describe('generated pages', () => {
     } else {
       expect(meta('article:published_time')).toBeUndefined();
     }
+  });
+
+  it('provides a described brand card for pages without a dedicated social image', async () => {
+    for (const path of ['index.html', 'music/index.html', 'works/index.html', 'about/index.html']) {
+      const html = await readMarkup(path);
+      const page = new DOMParser().parseFromString(html.replace(/<link\b[^>]*>/gi, ''), 'text/html');
+      const meta = (name: string) => page.querySelector(`meta[property="${name}"], meta[name="${name}"]`)?.getAttribute('content');
+      const image = meta('og:image');
+      expect(image).toBe('https://phstarrion.github.io/images/social/kanon-studio-v1.jpg');
+      expect(meta('twitter:image')).toBe(image);
+      expect(meta('twitter:card')).toBe('summary_large_image');
+      expect(meta('og:image:alt')).toContain('看板キャラクター');
+      expect(meta('twitter:image:alt')).toBe(meta('og:image:alt'));
+      expect(meta('og:image:width')).toBe('1200');
+      expect(meta('og:image:height')).toBe('630');
+    }
+    const bytes = await readFile(join(testDirectory, '..', 'dist/images/social/kanon-studio-v1.jpg'));
+    expect(bytes.subarray(0, 3).toString('hex')).toBe('ffd8ff');
+    expect(bytes.length).toBeLessThan(300_000);
   });
 
   it('classifies every song into one of the three listening modes', async () => {
