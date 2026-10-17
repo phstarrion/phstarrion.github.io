@@ -9,7 +9,7 @@ import { getListeningCatalog } from '../lib/listening';
 const tracks = getListeningCatalog(await getCollection('works'));
 const playableCount = tracks.filter(track => track.previewAvailable !== false).length;
 ---
-<BaseLayout title="Music — Kanon Studio" description="気になる音を、30秒から。Kanon Studioの楽曲をその場で試聴できるリスニングルーム。" image="/images/atelier-moonlight.png" imageAlt="月明かりの音楽室で創作する、青い髪のKanon" theme="night">
+<BaseLayout title="Music — Kanon Studio" description="気になる音を、30秒から。Kanon Studioの楽曲をその場で試聴できるリスニングルーム。" theme="night">
   <section class="music-room" aria-labelledby="music-title">
     <header class="room-intro">
       <a class="text-link" href="/#music-title">トップページの音楽へ戻る <span aria-hidden="true">←</span></a>

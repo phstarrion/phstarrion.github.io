@@ -1,5 +1,9 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 17, 2026 — Shared link identity
+
+Use `public/images/social/kanon-studio-v1.jpg` as the default link-preview image. It combines the existing atelier scene, the approved mascot and the studio/creator names at 1200×630. Home and Music use this default; pages with an explicit artwork image retain it. The page hero is independent. Provide image descriptions for Open Graph and X metadata; declare dimensions and JPEG type for the default card. The file name is versioned so a future asset replacement need not reuse the same image URL. Platform cropping and cache refresh are controlled by the sharing platform and are not verified by local HTML tests. Do not post to SNS as part of an asset update.
+
 ## October 17, 2026 — Character-led branding
 
 The working brand strategy, touchpoint audit, fixed/flexible asset rules and measurement plan are in `docs/brand-strategy.md`. Positioning and audience statements there are hypotheses, not audience research findings. Use the same mascot master for the Home introduction, About and shared footer. The original hero remains scene artwork, independent of the identity portrait. Do not substitute latest-work selection with an unverified “signature work”, or add slogans, audio stings or tracking automatically.
