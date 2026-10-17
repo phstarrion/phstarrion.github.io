@@ -57,6 +57,9 @@ const displayDate = new Intl.DateTimeFormat('ja-JP', {
 const { cover, coverAlt, coverWidth, coverHeight } = work.data;
 const isMusic = work.data.category === 'music';
 const preview = isMusic ? getWorkPreview(work) : undefined;
+const nextPreview = isMusic
+  ? relatedWorks.map((related) => getWorkPreview(related)).find((track) => track && track.id !== preview?.id)
+  : undefined;
 ---
 
 <BaseLayout
@@ -99,7 +102,13 @@ const preview = isMusic ? getWorkPreview(work) : undefined;
       </div>
     )}
 
-    {isMusic && <div class="work-detail__listening"><MusicPreview track={preview} title={work.data.title} sunoUrl={work.data.externalUrl} /></div>}
+    {isMusic && <div class="work-detail__listening">
+      <MusicPreview track={preview} title={work.data.title} sunoUrl={work.data.externalUrl} />
+      {nextPreview && <a class="work-detail__next" data-next-preview href={`/music/#${nextPreview.id}`}>
+        <span>次に聴く · 30秒試聴</span>
+        <strong>{nextPreview.title} <span aria-hidden="true">→</span></strong>
+      </a>}
+    </div>}
     </div>
     {journalUrl && <a class="text-link" href={journalUrl}>「{work.data.title}」の歌詞の物語を読む <span aria-hidden="true">→</span></a>}
     <div class="work-detail__body">
@@ -173,6 +182,10 @@ const preview = isMusic ? getWorkPreview(work) : undefined;
   .work-detail--music .work-detail__media { margin:0; padding:0; width:100%; max-width:440px; justify-self:center; }
   .work-detail--music .work-detail__media img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; object-position:center; max-height:none; }
   .work-detail--music .work-detail__listening { min-width:0; }
+  .work-detail__next { display: grid; gap: 6px; margin-top: 16px; padding: 14px 16px; min-height: 44px; border: 1px solid var(--color-control-border); border-radius: 6px; color: var(--color-primary); overflow-wrap: anywhere; text-decoration: none; }
+  .work-detail__next > span { font-size: 12px; color: var(--color-muted); }
+  .work-detail__next strong { font-size: 14px; line-height: 1.8; font-weight: 500; }
+  .work-detail__next:hover strong { text-decoration: underline; text-underline-offset: 4px; }
   @media(min-width:768px) {
     .work-detail--music .work-detail__intro { grid-template-columns:minmax(0,340px) minmax(0,1fr); grid-template-areas:"art header" "art listen"; column-gap:40px; row-gap:24px; align-items:start; }
     .work-detail--music .work-detail__header { grid-area:header; }
