@@ -1,5 +1,13 @@
 # Kanon Studio — Moonlit Atelier
 
+## October 17, 2026 — Character-led branding
+
+The user selected the silver-lavender-haired, purple-eyed cat-eared character with pink round glasses, a gold star and black ribbon as the studio mascot, and approved the visual identity concept. Keep the current Home hero artwork. Communicate the brand through art, music and consistent presentation; do not add explanatory hero copy or slogans.
+
+Kanon Studio names the creative space; @phstarrion identifies the creator. Use the supplied original illustration, not a regenerated likeness, for the shared footer identity and About portrait. The master is `src/assets/brand/mascot-reference.jpeg`; Astro generates lightweight WebP variants. Preserve the character's face, colours, cat ears, glasses and star. Her name and fictional biography are not decided; do not invent them.
+
+The footer uses midnight navy #10101D, soft white #F5F1FA, lavender #C9B9E8, and a small gold star #E5BE70. Keep Zen Maru Gothic for friendly display text and Noto Sans JP for controls. The mascot links to About, and the creator handle links to the existing X profile. Keep the full footer navigation, clear keyboard focus and 44px link targets. On narrow screens stack the identity, navigation and copyright naturally. Existing page themes and Home artwork remain independent of the shared footer identity.
+
 ## October 10, 2026 — X connection
 
 Connect the existing @phstarrion X account with the portfolio. Keep the image-led hero and native mobile navigation. Add a named X link to the global menu, clarify the existing service-hub X label, and place share/follow actions after work details and the listening archive. Each listening track shares its work URL or its own archive anchor. Share links open an X composer with the title, canonical HTTPS page URL and author handle; nothing is posted automatically. The listening archive uses the existing atelier artwork for its social preview. Do not add social feed embeds, tracking scripts or automatic posting.

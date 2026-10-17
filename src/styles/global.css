@@ -52,7 +52,6 @@ body.theme-night .site-footer__inner { padding-block: 40px; }
 body.theme-night .site-footer nav a { font-size: 11px; font-weight: 400; }
 body.theme-night .site-footer__inner > p { font-size: 10px; letter-spacing: .04em; }
 body.theme-night .site-header { background: #090d1bea; }
-body.theme-night .site-footer { background: #0d1222; }
 
 [hidden] {
   display: none !important;
