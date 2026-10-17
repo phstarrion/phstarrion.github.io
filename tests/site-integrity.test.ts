@@ -42,7 +42,7 @@ describe('complete site integrity', () => {
     const status = browser.document.querySelector('[data-work-filter-status]')!;
     expect(status.getAttribute('role')).toBe('status');
     browser.document.querySelector('[data-work-filter="video"]')!.dispatchEvent(new browser.MouseEvent('click', { bubbles: true }));
-    expect(status.textContent).toContain('All');
+    expect(status.textContent).toContain('絞り込みを解除');
     browser.document.querySelector('[data-work-filter="all"]')!.dispatchEvent(new browser.MouseEvent('click', { bubbles: true }));
     expect(status.textContent).toMatch(/\d+件の作品/);
     void browser.happyDOM.abort();

@@ -22,7 +22,7 @@ const works = sortWorksNewestFirst(
     <header class="works-archive__header">
       <div>
         <p class="works-archive__folio">The collection / 作品集</p>
-        <h1 id="works-title">Works</h1>
+        <h1 id="works-title">作品一覧</h1>
       </div>
       <p>音楽も、ビジュアルも。心にふれる作品を、今日の気分で見つけてください。</p>
     </header>
@@ -30,6 +30,7 @@ const works = sortWorksNewestFirst(
     <a class="text-link" href="/music/">この場所で聴ける曲を見る →</a>
     <WorkFilters />
     <p class="works-archive__result" role="status" aria-atomic="true" data-work-filter-status>{works.length}件の作品を表示しています。</p>
+    <button class="works-archive__reset" type="button" aria-controls="works-list" data-work-filter-reset hidden>絞り込みを解除して、すべての作品を見る</button>
 
     <div class="works-archive__grid" id="works-list">
       <WorkGrid works={works} variant="archive" />
@@ -43,6 +44,8 @@ const works = sortWorksNewestFirst(
     gap: var(--space-xl);
   }
   .works-archive__result { color: var(--color-muted); font-size: 13px; margin: 0; }
+  .works-archive__reset { justify-self: start; max-width: 100%; min-height: 44px; padding: 12px 16px; border: 1px solid var(--color-control-border); border-radius: 6px; background: var(--color-surface); color: var(--color-primary); font: inherit; cursor: pointer; }
+  .works-archive__reset[hidden] { display: none; }
 
   .works-archive__header {
     border-top: 1px solid var(--color-border);

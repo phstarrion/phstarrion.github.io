@@ -64,6 +64,40 @@ describe('site audio playback', () => {
     expect(pauseFirst).toHaveBeenCalledTimes(1);
   });
 
+  it.each(['source', 'audio'])('recovers from a %s error even while play is pending', async (target) => {
+    const { page, player, button } = interactivePlayer();
+    const source = page.createElement('source');
+    player.append(source);
+    const fallback = page.createElement('a');
+    fallback.className = 'track-player__suno';
+    player.parentElement!.append(fallback);
+    let rejectFirst!: (reason: Error) => void;
+    let finishRetry!: () => void;
+    const play = vi.spyOn(player, 'play')
+      .mockImplementationOnce(() => new Promise<void>((_, reject) => { rejectFirst = reject; }))
+      .mockImplementationOnce(() => new Promise<void>((resolve) => { finishRetry = resolve; }));
+    const reload = vi.spyOn(player, 'load').mockImplementation(() => {});
+    vi.spyOn(player, 'pause').mockImplementation(() => player.dispatchEvent(new Event('pause')));
+    initTrackPlayback(page);
+    button.click();
+    (target === 'source' ? source : player).dispatchEvent(new Event('error'));
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    expect(button.getAttribute('aria-disabled')).toBe('false');
+    expect(button.textContent).toBe('30秒試聴');
+    expect(page.querySelector('[data-audio-status]')?.textContent).toContain('Suno');
+    button.click();
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(play).toHaveBeenCalledTimes(2);
+    rejectFirst(new DOMException('Previous playback aborted', 'AbortError'));
+    await Promise.resolve();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
+    player.dispatchEvent(new Event('play'));
+    finishRetry();
+    await vi.waitFor(() => expect(button.textContent).toBe('一時停止'));
+    expect(button.getAttribute('aria-busy')).toBe('false');
+  });
+
   it('offers a fallback after an audio error and clears it after playback resumes', () => {
     const page = document.implementation.createHTMLDocument();
     page.body.innerHTML = '<div data-track-player><a class="track-player__suno" href="https://suno.com/">Suno</a><audio data-track-audio></audio><p role="status" data-audio-status></p></div>';

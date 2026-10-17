@@ -1,9 +1,9 @@
 ---
 const filters = [
-  { value: 'all', label: 'All' },
-  { value: 'music', label: 'Music' },
-  { value: 'visual', label: 'Visual' },
-  { value: 'video', label: 'Video' },
+  { value: 'all', label: 'すべて' },
+  { value: 'music', label: '音楽' },
+  { value: 'visual', label: 'イラスト' },
+  { value: 'video', label: '映像' },
 ] as const;
 
 /*
@@ -12,7 +12,7 @@ const filters = [
  * songs that are not built on breakbeats.
  */
 const styles = [
-  { value: 'all', label: 'All' },
+  { value: 'all', label: 'すべて' },
   { value: 'kawaii', label: 'Kawaii' },
   { value: 'dark', label: 'Dark' },
   { value: 'pop', label: 'Pop' },
@@ -40,7 +40,7 @@ const styles = [
     data-work-style-controls
     hidden
   >
-    <p class="work-filters__legend">Style</p>
+    <p class="work-filters__legend">曲の雰囲気</p>
     {styles.map(({ value, label }) => (
       <button
         class="work-filters__button"
@@ -64,6 +64,7 @@ const styles = [
   const styleButtons = styleControls?.querySelectorAll('[data-work-style]') ?? [];
   const cards = document.querySelectorAll('[data-category]');
   const status = document.querySelector('[data-work-filter-status]');
+  const reset = document.querySelector('[data-work-filter-reset]');
 
   let category = 'all';
   let style = 'all';
@@ -85,9 +86,10 @@ const styles = [
       card.hidden = !(matchesCategory && matchesStyle);
     });
     const count = [...cards].filter(card => !card.hidden).length;
+    if (reset) reset.hidden = count !== 0;
     if (status) status.textContent = count > 0
       ? `${count}件の作品を表示しています。`
-      : 'この条件の作品はまだありません。「All」でほかの作品をご覧ください。';
+      : 'この条件の作品はまだありません。絞り込みを解除して、ほかの作品をご覧ください。';
   };
 
   const syncUrl = () => {
@@ -120,6 +122,15 @@ const styles = [
   if (style !== 'all') category = 'music';
   render();
   if (controls) controls.hidden = false;
+
+  reset?.addEventListener('click', () => {
+    category = 'all';
+    style = 'all';
+    syncUrl();
+    // Move focus before hiding the reset button to keep keyboard navigation usable.
+    controls?.querySelector('[data-work-filter="all"]')?.focus();
+    render();
+  });
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {

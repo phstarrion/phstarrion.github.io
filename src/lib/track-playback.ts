@@ -10,6 +10,8 @@ export function initTrackPlayback(root: Document = document) {
     const action = toggle?.querySelector<HTMLElement>('[data-audio-action]');
     let playing = !player.paused && !player.ended;
     let loading = false;
+    let attempt = 0;
+    let needsReload = false;
     const render = () => {
       if (!toggle) return;
       toggle.setAttribute('aria-disabled', String(loading));
@@ -29,13 +31,20 @@ export function initTrackPlayback(root: Document = document) {
         if (loading) return;
         if (playing) { player.pause(); return; }
         loading = true;
+        const currentAttempt = ++attempt;
         if (status) status.textContent = '';
         render();
-        try { await player.play(); }
+        try {
+          if (needsReload) { player.load(); needsReload = false; }
+          await player.play();
+        }
         catch (error) {
+          if (currentAttempt !== attempt) return;
           playing = false;
           if (!(error instanceof DOMException && error.name === 'AbortError')) reportError();
-        } finally { loading = false; render(); }
+        } finally {
+          if (currentAttempt === attempt) { loading = false; render(); }
+        }
       });
       render();
       toggle.hidden = false;
@@ -51,10 +60,21 @@ export function initTrackPlayback(root: Document = document) {
     });
     player.addEventListener('pause', () => { playing = false; render(); });
     player.addEventListener('ended', () => { playing = false; render(); });
-    player.addEventListener('error', () => {
+    const handleMediaError = () => {
+      // A failed <source> may leave play() pending. Invalidate that request
+      // before allowing retry, so its eventual rejection cannot reset the UI.
+      attempt++;
+      loading = false;
       playing = false;
+      needsReload = true;
+      player.pause();
       render();
       reportError();
+    };
+    player.addEventListener('error', handleMediaError);
+    // The preview has one MP3 source; source errors do not bubble to audio.
+    player.querySelectorAll('source').forEach((source) => {
+      source.addEventListener('error', handleMediaError);
     });
   });
 }

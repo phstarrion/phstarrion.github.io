@@ -5,6 +5,30 @@ import { describe, expect, it } from 'vitest';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const parse = async (path: string) => new DOMParser().parseFromString((await readFile(join(root, 'dist', path), 'utf8')).replace(/<link\b[^>]*>/gi, ''), 'text/html');
 describe('30-second preview pages', () => {
+  it('links from music details directly to a different playable preview', async () => {
+    const catalog = await parse('music/index.html');
+    const files = (await readdir(join(root, 'dist', 'works'), { recursive: true })).filter(path => path.endsWith('index.html'));
+    let checked = 0;
+    for (const file of files) {
+      const page = await parse(`works/${file}`);
+      const link = page.querySelector('[data-next-preview]');
+      if (!page.querySelector('.work-detail--music')) {
+        expect(link).toBeNull();
+        continue;
+      }
+      expect(link).not.toBeNull();
+      expect(link?.closest('.work-detail__listening')).not.toBeNull();
+      const href = link!.getAttribute('href')!;
+      expect(href.startsWith('/music/#')).toBe(true);
+      const target = catalog.getElementById(href.split('#')[1]);
+      expect(target?.getAttribute('data-preview-available')).toBe('true');
+      expect(target?.querySelector('audio source')).not.toBeNull();
+      expect(target?.querySelector('audio source')?.getAttribute('src')).not.toBe(page.querySelector('audio source')?.getAttribute('src'));
+      expect(link?.textContent).toContain(target?.querySelector('h3')?.textContent);
+      checked++;
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
   it('packages only preview files and exposes user-initiated controls', async () => {
     const files = await readdir(join(root, 'dist'), { recursive: true });
     expect(files.filter((path) => path.endsWith('.mp3')).sort()).toEqual(['audio/aini-ikuyo-preview.mp3', 'audio/bitcoin-ga-ippai-preview.mp3', 'audio/futaribun-8bit-mix-preview.mp3', 'audio/hodoke-preview.mp3', 'audio/hoshi-ga-terasu-mahou-monogatari-preview.mp3', 'audio/maou-wo-taoshini-preview.mp3', 'audio/ogyogi-warukute-preview.mp3', 'audio/silent-ledger-remastered-preview.mp3', 'audio/ushiro-minaide-preview.mp3']);

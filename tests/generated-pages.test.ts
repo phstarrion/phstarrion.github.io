@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Window } from 'happy-dom';
+import { Window, type HTMLButtonElement as HappyButtonElement } from 'happy-dom';
 import { describe, expect, it } from 'vitest';
 
 // Vite rewrites dynamic new URL() asset references, so derive a real file path first.
@@ -352,10 +352,10 @@ describe('generated pages', () => {
     const filterableItems = [...page.querySelectorAll<HTMLElement>('[data-category]')];
 
     expect(filters.map((filter) => filter.textContent?.trim())).toEqual([
-      'All',
-      'Music',
-      'Visual',
-      'Video',
+      'すべて',
+      '音楽',
+      'イラスト',
+      '映像',
     ]);
     expect(filters.map((filter) => filter.getAttribute('aria-pressed'))).toEqual([
       'true',
@@ -418,6 +418,24 @@ describe('generated pages', () => {
       .toBe('true');
     expect([...browser.document.querySelectorAll('[data-category]')]
       .every((card) => !card.hasAttribute('hidden'))).toBe(true);
+  });
+
+  it('lets visitors recover from empty results without losing focus or attribution', async () => {
+    const browser = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, disableJavaScriptEvaluation: true }, url: 'https://example.com/works/?style=dark&utm_source=x#works-title' });
+    browser.document.write(await readMarkup('works/index.html'));
+    // Make this condition empty independently of future catalog additions.
+    browser.document.querySelectorAll('[data-style="dark"]').forEach(card => card.setAttribute('data-style', 'pop'));
+    browser.eval(browser.document.querySelector('script[data-work-filters]')?.textContent ?? '');
+    const reset = browser.document.querySelector('[data-work-filter-reset]') as HappyButtonElement;
+    expect(reset.hidden).toBe(false);
+    reset.focus();
+    reset.click();
+    expect(reset.hidden).toBe(true);
+    expect(browser.location.search).toBe('?utm_source=x');
+    expect(browser.location.hash).toBe('#works-title');
+    expect(browser.document.activeElement?.getAttribute('data-work-filter')).toBe('all');
+    expect([...browser.document.querySelectorAll('[data-category]')].every(card => !card.hasAttribute('hidden'))).toBe(true);
+    expect(browser.document.querySelector('[data-work-filter-status]')?.textContent).toContain('件の作品を表示');
   });
 
   it('builds a complete music work detail with one clearly named destination', async () => {
