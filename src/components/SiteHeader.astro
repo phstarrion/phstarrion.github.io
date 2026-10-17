@@ -1,11 +1,11 @@
 ---
 import { serviceUrls } from '../lib/services';
 const navigation = [
-  { href: '/music/', label: 'Music' },
-  { href: '/works/', label: 'Works' },
-  { href: '/games/', label: 'Games' },
-  { href: '/journal/', label: 'Journal' },
-  { href: '/about/', label: 'About' },
+  { href: '/music/', label: '曲を聴く' },
+  { href: '/works/', label: '作品一覧' },
+  { href: '/games/', label: 'ゲーム' },
+  { href: '/journal/', label: '制作ノート' },
+  { href: '/about/', label: '活動について' },
 ] as const;
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -31,7 +31,7 @@ const isCurrentRoute = (href: string) => {
         <ul>
           {navigation.map(({ href, label }) => (
             <li>
-              <a href={href} aria-label={`${label} / ${{Music:'曲を聴く',Works:'作品一覧',Games:'ゲーム',Journal:'制作ノート',About:'活動について'}[label]}`} aria-current={isCurrentRoute(href) ? 'page' : undefined}>
+              <a href={href} aria-current={isCurrentRoute(href) ? 'page' : undefined}>
                 {label}
               </a>
             </li>
@@ -92,6 +92,8 @@ const isCurrentRoute = (href: string) => {
 
   .site-header__menu {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   summary { justify-content: flex-end; }
@@ -183,6 +185,7 @@ const isCurrentRoute = (href: string) => {
 
     nav ul {
       display: flex;
+      flex-wrap: wrap;
       gap: clamp(12px, 2vw, 24px);
     }
   }
