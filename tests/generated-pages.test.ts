@@ -86,7 +86,7 @@ describe('generated pages', () => {
     expect(builtHtml).not.toMatch(/href=["'][^"']*tiktok\.com/i);
   });
 
-  it('retains the original creator portrait in the Home introduction', async () => {
+  it('retires the previous identity portrait from generated pages', async () => {
     const distDirectory = join(testDirectory, '..', 'dist');
     const htmlPaths = (await readdir(distDirectory, { recursive: true }))
       .filter((path) => path.endsWith('.html'));
@@ -101,7 +101,7 @@ describe('generated pages', () => {
       .filter(({ html }) => html.includes('/images/kanon-avatar.jpg'))
       .map(({ path }) => path);
 
-    expect(pagesWithPortrait.sort()).toEqual(['index.html']);
+    expect(pagesWithPortrait).toEqual([]);
   });
 
   it('builds a Japanese home page with one main landmark', async () => {
@@ -335,7 +335,7 @@ describe('generated pages', () => {
       }
     }
 
-    expect(page.querySelector('.atelier-about img[src="/images/kanon-avatar.jpg"]')).not.toBeNull();
+    expect(page.querySelector('.atelier-about__portrait')?.getAttribute('alt')).toContain('看板キャラクター');
   });
 
   it('removes transforms when reduced motion is requested', async () => {
