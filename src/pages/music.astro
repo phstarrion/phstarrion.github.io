@@ -57,6 +57,10 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
     <XActions title="Kanon Studioの音楽" />
   </section>
 </BaseLayout>
+<script>
+  import { initMusicIndex } from '../lib/music-index';
+  initMusicIndex();
+</script>
 <style>
   .music-room { width: 100%; min-width: 0; max-width: 960px; margin-inline: auto; }
   .room-intro { padding: clamp(28px, 6vw, 80px) 0 64px; }
