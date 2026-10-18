@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import mascot from '../assets/brand/mascot-reference.jpeg';
 import ServiceHub from '../components/ServiceHub.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -22,11 +24,11 @@ const practices = [
 
     <div class="about__profile">
       <figure>
-        <img
-          src="/images/kanon-avatar.jpg"
-          alt="Kanon Studioを象徴する、青い髪のキャラクターポートレート"
-          width="682"
-          height="1024"
+        <Image
+          src={mascot}
+          alt="Kanon Studioの看板キャラクター。白銀色の髪と紫の瞳、猫耳、ピンクの丸眼鏡、金色の星飾り"
+          width={352}
+          loading="eager"
           decoding="async"
         />
       </figure>
