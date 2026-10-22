@@ -360,7 +360,7 @@ describe('generated pages', () => {
 
   it('removes transforms when reduced motion is requested', async () => {
     const html = await readPage('index.html');
-    expect(html).toContain('@media(prefers-reduced-motion:reduce)');
+    expect(html).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)/);
     expect(html).toContain('transform:none!important');
   });
 
@@ -614,7 +614,7 @@ describe('generated pages', () => {
     expect(bare.length).toBeGreaterThan(0);
     expect(quotes.length).toBeGreaterThan(bare.length);
     expect(bare.every((quote) => quote.textContent?.includes('《'))).toBe(true);
-    expect(generated).toMatch(/blockquote\.lyric-line\{[^}]*background:none/);
+    expect(generated).toMatch(/blockquote\.lyric-line\{[^}]*background:(?:none|0 0)(?:;|\})/);
   });
 
   it('states the pulled line once instead of repeating the body copy', async () => {

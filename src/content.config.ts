@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 import { isIsoCalendarDate, validateWorkCoverMetadata } from './lib/content';
 
@@ -30,11 +31,11 @@ const workSchema = z
   })
   .superRefine((work, context) => {
     if (work.audio && work.category !== 'music') {
-      context.addIssue({ code: z.ZodIssueCode.custom, path: ['audio'], message: 'Only music works may include audio.' });
+      context.addIssue({ code: 'custom', path: ['audio'], message: 'Only music works may include audio.' });
     }
     if (!validateWorkCoverMetadata(work)) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['cover'],
         message:
           'Visual and video works require complete cover metadata; music covers must be complete or omitted.',
@@ -45,7 +46,7 @@ const workSchema = z
     // arrived for one of them can never fall through a gap in the archive filters.
     if (work.category === 'music' && !work.style) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['style'],
         message: 'Music works must declare a style of kawaii, dark or pop.',
       });
@@ -53,7 +54,7 @@ const workSchema = z
 
     if (work.category !== 'music' && work.style) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['style'],
         message: 'Only music works may declare a style.',
       });
@@ -64,14 +65,14 @@ const workSchema = z
 
     if (hasExternalUrl !== hasExternalLabel) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'externalUrl and externalLabel must be supplied together.',
       });
     }
 
     if (work.featured && !work.featuredOrder) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['featuredOrder'],
         message: 'Featured works require a positive featuredOrder.',
       });
@@ -79,7 +80,7 @@ const workSchema = z
 
     if (!work.featured && work.featuredOrder) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['featuredOrder'],
         message: 'Only featured works may define featuredOrder.',
       });
@@ -115,7 +116,7 @@ const journalSchema = z
 
     if (suppliedCoverFields > 0 && suppliedCoverFields < coverFields.length) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['cover'],
         message: 'A journal cover requires cover, coverWidth, coverHeight and coverAlt together.',
       });
@@ -123,7 +124,7 @@ const journalSchema = z
 
     if (entry.coverCaption && !entry.cover) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['coverCaption'],
         message: 'coverCaption requires a cover image.',
       });
