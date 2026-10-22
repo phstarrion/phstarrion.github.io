@@ -20,7 +20,7 @@ describe('GitHub Pages deployment workflow', () => {
     });
     expect(workflow.jobs.deploy.needs).toBe('build');
     expect(workflow.jobs.deploy.steps).toContainEqual(
-      expect.objectContaining({ uses: 'actions/deploy-pages@v4' }),
+      expect.objectContaining({ uses: expect.stringMatching(/^actions\/deploy-pages@[a-f0-9]{40}$/) }),
     );
   });
 });
