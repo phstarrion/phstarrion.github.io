@@ -49,3 +49,10 @@ Journal は `src/content/journal/*.md` に追加します。frontmatter は `tit
 自動再生・事前取得はせず、同時に再生できるのは1曲です。ページ移動すると再生は止まります。保存ボタンを対応ブラウザで隠しますが、試聴音源の取得を完全には防げません。非公開配信案は `feat/protected-audio` ブランチに保管しています。
 
 `main` への push（通常はレビュー済みの変更を main にマージしたとき）で GitHub Actions が `npm ci`、`npm run check`、`npm run test:run`、`npm run build` を順に実行します。すべて成功したビルドだけが GitHub Pages にデプロイされ、公開先は <https://phstarrion.github.io/> です。Actions の `workflow_dispatch` からも、同じ品質ゲートを通して手動実行できます。
+
+
+## Runtime and dependency updates
+
+Use Node.js 24.22.1 (`nvm use`, reading `.nvmrc`) and `npm ci` before development.
+GitHub Actions uses the same `.nvmrc`, checks pull requests, and only deploys `main` after successful checks, tests, and build.
+Dependabot checks npm and GitHub Actions dependencies weekly. Review update PRs and their checks before merging; updates are not automatically merged.

@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 
 const headingTags = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
 
@@ -29,6 +30,6 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   markdown: {
-    rehypePlugins: [asciiHeadingIds],
+    processor: unified({ rehypePlugins: [asciiHeadingIds] }),
   },
 });
