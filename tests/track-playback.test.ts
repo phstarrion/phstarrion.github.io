@@ -31,23 +31,55 @@ describe('site audio playback', () => {
     expect(button.textContent).toBe('30秒試聴');
   });
 
-  it('prevents repeat requests while loading and recovers after playback is rejected', async () => {
+  it('offers cancellation while loading and recovers after playback is rejected', async () => {
     const { page, player, button } = interactivePlayer();
     let reject!: (reason: Error) => void;
     const play = vi.spyOn(player, 'play').mockImplementation(() => new Promise<void>((_, fail) => { reject = fail; }));
     initTrackPlayback(page);
     button.click();
-    button.click();
     expect(play).toHaveBeenCalledTimes(1);
-    expect(button.getAttribute('aria-disabled')).toBe('true');
+    expect(button.getAttribute('aria-disabled')).toBe('false');
     expect(button.getAttribute('aria-busy')).toBe('true');
-    expect(button.textContent).toBe('読み込み中…');
+    expect(button.textContent).toBe('再生待ちを中止');
     reject(new Error('Network unavailable'));
-    await vi.waitFor(() => expect(button.getAttribute('aria-disabled')).toBe('false'));
+    await vi.waitFor(() => expect(button.getAttribute('aria-busy')).toBe('false'));
     expect(button.getAttribute('aria-busy')).toBe('false');
     expect(button.textContent).toBe('30秒試聴');
     expect(page.querySelector('[data-audio-status]')?.textContent).toContain('再生できませんでした');
     expect(player.hasAttribute('controls')).toBe(true);
+  });
+
+  it.each(['resolve', 'reject'])('cancels pending playback and ignores its late %s after retry', async (settlement) => {
+    const { page, player, button } = interactivePlayer();
+    let resolveFirst!: () => void;
+    let rejectFirst!: (error: Error) => void;
+    let resolveRetry!: () => void;
+    const play = vi.spyOn(player, 'play')
+      .mockImplementationOnce(() => new Promise<void>((resolve, reject) => { resolveFirst = resolve; rejectFirst = reject; }))
+      .mockImplementationOnce(() => new Promise<void>(resolve => { resolveRetry = resolve; }));
+    const pause = vi.spyOn(player, 'pause').mockImplementation(() => player.dispatchEvent(new Event('pause')));
+    initTrackPlayback(page);
+    button.focus();
+    button.click();
+    expect(button.getAttribute('aria-label')).toBe('テスト曲の再生待ちを中止する');
+    button.click();
+    expect(pause).toHaveBeenCalledTimes(1);
+    expect(play).toHaveBeenCalledTimes(1);
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    expect(button.textContent).toBe('30秒試聴');
+    expect(page.activeElement).toBe(button);
+    expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
+    button.click();
+    expect(play).toHaveBeenCalledTimes(2);
+    if (settlement === 'resolve') resolveFirst();
+    else rejectFirst(new DOMException('Cancelled', 'AbortError'));
+    await Promise.resolve();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(button.textContent).toBe('再生待ちを中止');
+    player.dispatchEvent(new Event('play'));
+    resolveRetry();
+    await vi.waitFor(() => expect(button.textContent).toBe('一時停止'));
+    expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
   });
 
   it('pauses other tracks when either native player starts', () => {
