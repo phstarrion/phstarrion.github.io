@@ -67,7 +67,14 @@ export function initTrackPlayback(root: Document = document) {
       players.forEach((other) => { if (other !== player) other.pause(); });
       if (status) status.textContent = '';
     });
-    player.addEventListener('pause', () => { playing = false; render(); });
+    player.addEventListener('pause', () => {
+      // pause is queued: a retry may already have changed paused back to false.
+      if (!player.paused) return;
+      attempt++;
+      loading = false;
+      playing = false;
+      render();
+    });
     player.addEventListener('ended', () => { playing = false; render(); });
     const handleMediaError = () => {
       // A failed <source> may leave play() pending. Invalidate that request

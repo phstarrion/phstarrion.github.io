@@ -82,6 +82,81 @@ describe('site audio playback', () => {
     expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
   });
 
+  it.each(['native control', 'another track'])('clears pending playback when paused by %s', async (source) => {
+    const { page, player, button } = interactivePlayer();
+    const other = page.createElement('audio');
+    other.dataset.trackAudio = '';
+    page.body.append(other);
+    let paused = true;
+    vi.spyOn(player, 'paused', 'get').mockImplementation(() => paused);
+    let rejectFirst!: (error: Error) => void;
+    let finishRetry!: () => void;
+    const play = vi.spyOn(player, 'play')
+      .mockImplementationOnce(() => {
+        paused = false;
+        return new Promise<void>((_, reject) => { rejectFirst = reject; });
+      })
+      .mockImplementationOnce(() => {
+        paused = false;
+        return new Promise<void>(resolve => { finishRetry = resolve; });
+      });
+    vi.spyOn(player, 'pause').mockImplementation(() => {
+      paused = true;
+      player.dispatchEvent(new Event('pause'));
+    });
+    vi.spyOn(other, 'pause').mockImplementation(() => {});
+    initTrackPlayback(page);
+    button.focus();
+    button.click();
+    if (source === 'native control') player.pause();
+    else other.dispatchEvent(new Event('play'));
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    expect(button.textContent).toBe('30秒試聴');
+    expect(page.activeElement).toBe(button);
+    button.click();
+    expect(play).toHaveBeenCalledTimes(2);
+    rejectFirst(new DOMException('Interrupted', 'AbortError'));
+    await Promise.resolve();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    player.dispatchEvent(new Event('play'));
+    finishRetry();
+    await vi.waitFor(() => expect(button.textContent).toBe('一時停止'));
+    expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
+  });
+
+  it('ignores a queued pause event after a retry has already started', async () => {
+    const { page, player, button } = interactivePlayer();
+    let paused = true;
+    vi.spyOn(player, 'paused', 'get').mockImplementation(() => paused);
+    let rejectFirst!: (error: Error) => void;
+    let finishRetry!: () => void;
+    vi.spyOn(player, 'play')
+      .mockImplementationOnce(() => {
+        paused = false;
+        return new Promise<void>((_, reject) => { rejectFirst = reject; });
+      })
+      .mockImplementationOnce(() => {
+        paused = false;
+        return new Promise<void>(resolve => { finishRetry = resolve; });
+      });
+    // Native pause changes paused immediately, but queues the event.
+    vi.spyOn(player, 'pause').mockImplementation(() => { paused = true; });
+    initTrackPlayback(page);
+    button.click();
+    button.click();
+    button.click();
+    player.dispatchEvent(new Event('pause'));
+    rejectFirst(new DOMException('Interrupted', 'AbortError'));
+    await Promise.resolve();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(button.textContent).toBe('再生待ちを中止');
+    player.dispatchEvent(new Event('play'));
+    finishRetry();
+    await vi.waitFor(() => expect(button.textContent).toBe('一時停止'));
+    expect(button.getAttribute('aria-busy')).toBe('false');
+    expect(page.querySelector('[data-audio-status]')?.textContent).toBe('');
+  });
+
   it('pauses other tracks when either native player starts', () => {
     const page = document.implementation.createHTMLDocument();
     page.body.innerHTML = '<audio data-track-audio></audio><audio data-track-audio></audio>';
