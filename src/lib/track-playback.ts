@@ -14,12 +14,12 @@ export function initTrackPlayback(root: Document = document) {
     let needsReload = false;
     const render = () => {
       if (!toggle) return;
-      toggle.setAttribute('aria-disabled', String(loading));
+      toggle.setAttribute('aria-disabled', 'false');
       toggle.setAttribute('aria-busy', String(loading));
-      toggle.dataset.playState = playing ? 'playing' : 'paused';
+      toggle.dataset.playState = playing || loading ? 'playing' : 'paused';
       const title = toggle.dataset.audioTitle ?? 'この曲';
-      if (action) action.textContent = loading ? '読み込み中…' : playing ? '一時停止' : '30秒試聴';
-      toggle.setAttribute('aria-label', loading ? `${title}の音源を読み込み中` : playing ? `${title}の試聴を一時停止する` : `${title}を30秒試聴する`);
+      if (action) action.textContent = loading ? '再生待ちを中止' : playing ? '一時停止' : '30秒試聴';
+      toggle.setAttribute('aria-label', loading ? `${title}の再生待ちを中止する` : playing ? `${title}の試聴を一時停止する` : `${title}を30秒試聴する`);
     };
     const reportError = () => {
       if (status) status.textContent = container?.querySelector('.track-player__suno')
@@ -28,7 +28,16 @@ export function initTrackPlayback(root: Document = document) {
     };
     if (toggle) {
       toggle.addEventListener('click', async () => {
-        if (loading) return;
+        if (loading) {
+          // Invalidate the pending promise before pausing. Its late result
+          // must not overwrite a subsequent attempt's state.
+          attempt++;
+          loading = false;
+          playing = false;
+          player.pause();
+          render();
+          return;
+        }
         if (playing) { player.pause(); return; }
         loading = true;
         const currentAttempt = ++attempt;
@@ -58,7 +67,14 @@ export function initTrackPlayback(root: Document = document) {
       players.forEach((other) => { if (other !== player) other.pause(); });
       if (status) status.textContent = '';
     });
-    player.addEventListener('pause', () => { playing = false; render(); });
+    player.addEventListener('pause', () => {
+      // pause is queued: a retry may already have changed paused back to false.
+      if (!player.paused) return;
+      attempt++;
+      loading = false;
+      playing = false;
+      render();
+    });
     player.addEventListener('ended', () => { playing = false; render(); });
     const handleMediaError = () => {
       // A failed <source> may leave play() pending. Invalidate that request
