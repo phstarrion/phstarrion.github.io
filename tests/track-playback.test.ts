@@ -171,13 +171,13 @@ describe('site audio playback', () => {
     expect(pauseFirst).toHaveBeenCalledTimes(1);
   });
 
-  it.each(['source', 'audio'])('recovers from a %s error even while play is pending', async (target) => {
+  it.each([['source', true], ['source', false], ['audio', true], ['audio', false]] as const)('recovers from a %s error while play is pending (Suno: %s)', async (target, hasSuno) => {
     const { page, player, button } = interactivePlayer();
     const source = page.createElement('source');
     player.append(source);
     const fallback = page.createElement('a');
     fallback.className = 'track-player__suno';
-    player.parentElement!.append(fallback);
+    if (hasSuno) player.parentElement!.append(fallback);
     let rejectFirst!: (reason: Error) => void;
     let finishRetry!: () => void;
     const play = vi.spyOn(player, 'play')
@@ -191,7 +191,9 @@ describe('site audio playback', () => {
     expect(button.getAttribute('aria-busy')).toBe('false');
     expect(button.getAttribute('aria-disabled')).toBe('false');
     expect(button.textContent).toBe('30秒試聴');
-    expect(page.querySelector('[data-audio-status]')?.textContent).toContain('Suno');
+    const message = page.querySelector('[data-audio-status]')!.textContent!;
+    expect(message).toContain('「30秒試聴」をもう一度');
+    expect(message.includes('Suno')).toBe(hasSuno);
     button.click();
     expect(reload).toHaveBeenCalledTimes(1);
     expect(play).toHaveBeenCalledTimes(2);

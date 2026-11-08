@@ -22,9 +22,10 @@ export function initTrackPlayback(root: Document = document) {
       toggle.setAttribute('aria-label', loading ? `${title}の再生待ちを中止する` : playing ? `${title}の試聴を一時停止する` : `${title}を30秒試聴する`);
     };
     const reportError = () => {
-      if (status) status.textContent = container?.querySelector('.track-player__suno')
-        ? '音源を再生できませんでした。下のSunoリンクからお聴きください。'
-        : '音源を再生できませんでした。ページを再読み込みしてお試しください。';
+      if (!status) return;
+      const retry = toggle ? '「30秒試聴」をもう一度押してください。' : '音声プレイヤーでもう一度お試しください。';
+      const fallback = container?.querySelector('.track-player__suno') ? 'Sunoでも聴けます。' : '';
+      status.textContent = '音源を再生できませんでした。' + retry + fallback;
     };
     if (toggle) {
       toggle.addEventListener('click', async () => {
