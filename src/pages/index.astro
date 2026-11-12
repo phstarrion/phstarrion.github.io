@@ -9,11 +9,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicPreview from '../components/MusicPreview.astro';
 import { getListeningCatalog } from '../lib/listening';
 import LikeButton from '../components/LikeButton.astro';
+import PortTeaser from '../components/PortTeaser.astro';
+import NagiShowcase from '../components/NagiShowcase.astro';
+import { paths } from '../lib/paths';
 
 const works = await getCollection('works');
 const recommendedTracks = getListeningCatalog(works).filter(track => track.previewAvailable !== false).slice(0, 3);
+const moreTracks = getListeningCatalog(works).filter(track => track.previewAvailable !== false).slice(3);
 const visualIds = ['visual-floral-arcade', 'visual-water-mirror', 'visual-etoile-violet'];
 const visualWorks = visualIds.map((id) => works.find((work) => work.id === id)!);
+const filmstrip = works.filter((work) => work.data.category === 'visual' && !visualIds.includes(work.id) && work.data.cover).sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime() || a.id.localeCompare(b.id)).slice(0, 10);
 const lightMotes = [
   { x: 59, y: 19, size: 2, duration: 17, delay: -3 },
   { x: 72, y: 32, size: 3, duration: 21, delay: -12 },
@@ -24,12 +29,13 @@ const lightMotes = [
 ];
 ---
 
-<BaseLayout title="Kanon Studio" description="Kanon Studioの音楽、ビジュアル、ブラウザゲーム。音と、夢の、つづき。" theme="night">
+<BaseLayout title="Kanon Studio" description="Kanon Studioの音楽、ビジュアル、ブラウザゲーム、解説動画。音と、夢の、つづき。" theme="night">
   <section class="hero" aria-labelledby="site-title">
     <h1 id="site-title" class="visually-hidden">Kanon Studio — 音と、夢の、つづき。</h1>
     <picture>
+      <source media="(max-width: 640px)" type="image/webp" srcset="/images/opt/atelier-moonlight-mobile-640.webp 640w, /images/opt/atelier-moonlight-mobile-1122.webp 1122w" sizes="100vw" width="1122" height="1402" />
       <source media="(max-width: 640px)" srcset="/images/atelier-moonlight-mobile.png" width="1122" height="1402" />
-      <img src="/images/atelier-moonlight.png" alt="月明かりが差す音楽室で、青い髪のKanonが創作する水彩イラスト" width="1536" height="1024" fetchpriority="high" decoding="async" />
+      <img src="/images/atelier-moonlight.png" alt="月明かりが差す音楽室で、青い髪のKanonが創作する水彩イラスト" width="1536" height="1024" fetchpriority="high" decoding="async" data-sizes="100vw" />
     </picture>
     <div class="hero__atmosphere" aria-hidden="true">
       <div class="hero__moonlight"></div>
@@ -44,6 +50,7 @@ const lightMotes = [
         <li><a href="#music-title">音楽を聴く <span aria-hidden="true">↓</span></a></li>
         <li><a href="#selected-works-title">イラストを見る <span aria-hidden="true">↓</span></a></li>
         <li><a href="#play-title">ゲームで遊ぶ <span aria-hidden="true">↓</span></a></li>
+        <li><a href="#watch-title">動画を見る <span aria-hidden="true">↓</span></a></li>
         <li><a href="#atelier-about-title">活動について <span aria-hidden="true">↓</span></a></li>
       </ul>
     </nav>
@@ -52,10 +59,11 @@ const lightMotes = [
       <section class="listening" aria-labelledby="listening-title">
         <header class="listening__heading"><h3 id="listening-title">新しく聴ける3曲</h3><p>気になる曲を、ここで30秒試聴。<br />音源のある曲から、新しい順に。</p></header>
         <ul class="listening-grid">
-          {recommendedTracks.map((track) => <li class="listening-card" data-home-track-id={track.id}>
+          {recommendedTracks.map((track) => <li class="listening-card" data-home-track-id={track.id} data-now-playing={track.id}>
             <a class="listening-card__art" href={track.detailUrl ?? `/music/#${track.id}`} aria-label={`${track.title}の${track.detailUrl ? '紹介を見る' : '試聴ページを開く'}`}>
               {track.cover ? <img src={track.cover} alt={track.coverAlt ?? `${track.title}のジャケット`} width="320" height="320" loading="lazy" decoding="async" /> : <svg viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="90" fill="#11182b" /><circle cx="110" cy="110" r="42" fill="#c4b7e6" /></svg>}
             </a>
+            <button class="jacket-play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></button>
             <div class="listening-card__copy"><h4>{track.title}</h4><p class="listening-card__headline">{track.headline}</p>{track.createdAt && <p class="genre">制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></p>}</div>
             <div class="listening-card__preview"><MusicPreview track={track} title={track.title} showHeadline={false} /></div>
             <div class="listening-card__actions">
@@ -66,21 +74,46 @@ const lightMotes = [
           </li>)}
         </ul>
       </section>
+      {moreTracks.length > 0 && <section class="shelf" aria-labelledby="shelf-title" data-reveal>
+        <header class="shelf__heading"><h3 id="shelf-title">つづけて聴く</h3><p>ジャケットを押すと、その場で30秒。ページを移っても音は続きます。</p></header>
+        <ul class="shelf__list">
+          {moreTracks.map((track) => <li class="shelf__item" data-now-playing={track.id}>
+            <button class="shelf__play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}>
+              {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" data-sizes="(max-width: 767px) 44vw, 180px" /> : <svg class="shelf__record" viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="90" fill="#11182b" /><circle cx="110" cy="110" r="42" fill="#c4b7e6" /></svg>}
+              <span class="shelf__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></span>
+            </button>
+            <a class="shelf__title" href={track.detailUrl ?? `/music/#${track.id}`} aria-label={`${track.title}の${track.detailUrl ? '紹介を見る' : '試聴ページを開く'}`}>{track.title}</a>
+          </li>)}
+        </ul>
+        <noscript><p class="shelf__noscript">試聴は<a href="/music/#tracks">リスニングルーム</a>でどうぞ。</p></noscript>
+      </section>}
     </section>
 
     <section class="home-section selected-works" aria-labelledby="selected-works-title">
       <header class="section-heading"><div><p class="eyebrow">02 / VISUALS</p><h2 id="selected-works-title" tabindex="-1">イラストを見る</h2><p class="section-description">キャラクターと、光や色で描いた世界。</p></div><a class="text-link" href="/works/?category=visual">すべてのビジュアル <span aria-hidden="true">↗</span></a></header>
       <WorkGrid works={visualWorks} variant="featured" />
+      {filmstrip.length > 0 && <div class="filmstrip" data-reveal>
+        <p class="filmstrip__label" id="filmstrip-title">ほかのイラスト</p>
+        <ul class="filmstrip__list" aria-labelledby="filmstrip-title">
+          {filmstrip.map((work) => <li><a href={paths.work(work.id)} aria-label={`${work.data.title}を見る`}><img src={work.data.cover} alt="" width={work.data.coverWidth} height={work.data.coverHeight} loading="lazy" decoding="async" data-sizes="(max-width: 767px) 40vw, 200px" /><span>{work.data.title}</span></a></li>)}
+        </ul>
+      </div>}
     </section>
 
     <section class="home-section play" aria-labelledby="play-title">
       <header class="section-heading"><div><p class="eyebrow">03 / PLAY</p><h2 id="play-title" tabindex="-1">ゲームで遊ぶ</h2><p class="section-description">音楽に合わせて遊ぶ、ブラウザゲーム。</p></div></header>
       <GameSpotlight />
+      <PortTeaser />
+    </section>
+
+    <section class="home-section watch" aria-labelledby="watch-title">
+      <header class="section-heading"><div><p class="eyebrow">04 / WATCH</p><h2 id="watch-title" tabindex="-1">動画を見る</h2><p class="section-description">地図と地形から「なぜ」を読み解く、解説動画シリーズ。</p></div><a class="text-link" href="/videos/">シリーズの一覧 <span aria-hidden="true">→</span></a></header>
+      <NagiShowcase variant="home" />
     </section>
 
     <section class="atelier-about" aria-labelledby="atelier-about-title">
       <Image class="atelier-about__portrait" src={mascot} alt="Kanon Studioの看板キャラクター。白銀色の髪と紫の瞳、猫耳、ピンクの丸眼鏡、金色の星飾り" width={192} loading="lazy" decoding="async" />
-      <div class="atelier-about__copy"><p class="eyebrow">04 / ABOUT KANON</p><h2 id="atelier-about-title" tabindex="-1">活動について</h2><p>音楽、ビジュアル、映像。<br />心に浮かんだ景色を、作品にしています。</p><a class="text-link" href="/about/">Kanon Studioについて <span aria-hidden="true">→</span></a></div>
+      <div class="atelier-about__copy"><p class="eyebrow">05 / ABOUT KANON</p><h2 id="atelier-about-title" tabindex="-1">活動について</h2><p>音楽、ビジュアル、ゲーム、映像。<br />心に浮かんだ景色を、作品にしています。</p><a class="text-link" href="/about/">Kanon Studioについて <span aria-hidden="true">→</span></a></div>
       <ServiceHub headingId="home-service-hub-title" heading="Follow Kanon" headingLevel="h3" />
     </section>
   </div>
@@ -88,7 +121,7 @@ const lightMotes = [
 
 <script>
   import { initHomeMotion } from '../lib/home-motion';
-  initHomeMotion();
+  document.addEventListener('astro:page-load', () => initHomeMotion());
 </script>
 
 <style>
@@ -120,8 +153,7 @@ const lightMotes = [
     .listening-card h4 { font-size: 21px; }
   }
   /* Motion is confined to Home; native scrolling and all links stay available. */
-  :global(body.theme-night .site-header) { position: relative; }
-  :global(body.theme-night) { scroll-padding-top: 92px; }
+    :global(body.theme-night) { scroll-padding-top: 92px; }
   :global(body.theme-night :is(h2, h3, section, article)[id]) { scroll-margin-top: 92px; }
   :global(.home-content .section-heading), :global(.listening-grid > li),
   :global(.selected-works .work-grid > li),
@@ -211,4 +243,70 @@ const lightMotes = [
     .atelier-about h2 { font-size: 19px; }
     .atelier-about :global(.service-hub) { grid-column: 2; border: 0; padding: 0; }
   }
+
+  /* —— 2026-11 renewal: listening shelf, filmstrip, richer cards —— */
+  .section-nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .section-nav a { width: 100%; justify-content: space-between; padding: 16px 18px; border-radius: 10px; background: linear-gradient(160deg, #161d36, #0f1528); font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; transition: border-color 200ms ease, transform 200ms ease, background 200ms ease; }
+  .section-nav a:hover { transform: translateY(-2px); background: linear-gradient(160deg, #1d2444, #131a31); }
+  .section-nav ul { counter-reset: section; }
+  .section-nav a::before { counter-increment: section; content: '0' counter(section); font-family: var(--font-body); font-size: 10px; letter-spacing: .14em; color: var(--color-muted); }
+  .section-nav a > span { margin-left: auto; }
+  .section-nav a { gap: 10px; }
+  .section-heading { background: linear-gradient(90deg, #131a30, #0c1122 85%); border-left-color: #c4b7e6; }
+  .listening-grid { align-items: stretch; }
+  .listening-card { position: relative; grid-template-rows: subgrid; grid-row: span 4; padding: 14px 14px 10px; border: 1px solid var(--color-border); border-radius: 14px; background: linear-gradient(180deg, #121930, #0c1122); transition: border-color 240ms ease, box-shadow 240ms ease; }
+  .listening-card:hover { border-color: #c4b7e666; }
+  .listening-card[data-now-playing-active] { border-color: #c4b7e6; box-shadow: 0 0 0 1px #c4b7e6, 0 18px 50px -18px #8f7bd699; }
+  .listening-card__art { border-radius: 8px; }
+  .listening-card :global(.music-preview) { padding: 0; border: 0; background: transparent; }
+  .listening-card :global(.track-player__toggle) { margin-bottom: 4px; border-radius: 999px; }
+  .listening-card :global(.track-player__suno) { margin-top: 10px; border: 0; padding-inline: 2px; }
+  .listening-card__actions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 16px; border-top: 1px solid var(--color-border); padding-top: 8px; }
+  .listening-card__actions :global(.work-like) { margin: 0 auto 0 0; }
+  .jacket-play { position: absolute; top: 26px; right: 26px; display: none; place-items: center; width: 52px; height: 52px; border: 0; border-radius: 50%; background: #c4b7e6f2; color: #101323; cursor: pointer; box-shadow: 0 8px 24px #05081299; transition: transform 180ms ease, background 180ms ease; }
+  :global(html.dock-ready) .jacket-play { display: grid; }
+  .jacket-play:hover { transform: scale(1.08); background: #ded4f5; }
+  .jacket-play svg, .shelf__icon svg { width: 24px; height: 24px; fill: currentColor; }
+  .pause-icon { display: none; }
+  [data-play-state="playing"] .play-icon { display: none; }
+  [data-play-state="playing"] .pause-icon { display: block; }
+  .shelf { margin-top: 56px; }
+  .shelf__heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; margin-bottom: 20px; }
+  .shelf__heading h3 { font-size: 20px; letter-spacing: .06em; }
+  .shelf__heading p { margin: 0; color: var(--color-muted); font-size: 12px; }
+  .shelf__list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 180px); gap: 18px; list-style: none; margin: 0 calc(var(--page-padding) * -1); padding: 4px var(--page-padding) 14px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--page-padding); scrollbar-width: thin; scrollbar-color: #c4b7e655 transparent; }
+  .shelf__item { min-width: 0; scroll-snap-align: start; }
+  .shelf__play { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #11182b; cursor: pointer; aspect-ratio: 1; }
+  .shelf__play img, .shelf__record { width: 100%; height: 100%; object-fit: cover; transition: transform 420ms ease, filter 240ms ease; }
+  .shelf__play:hover img { transform: scale(1.05); }
+  .shelf__icon { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #c4b7e6f2; color: #101323; box-shadow: 0 6px 18px #05081299; }
+  .shelf__item[data-now-playing-active] .shelf__play { outline: 2px solid #c4b7e6; outline-offset: 3px; }
+  .shelf__title { display: block; margin-top: 10px; color: var(--color-ink); font-family: var(--font-display); font-size: 13px; line-height: 1.6; text-decoration: none; min-height: 44px; }
+  .shelf__title:hover { color: var(--color-primary-hover); text-decoration: underline; text-underline-offset: 4px; }
+  .shelf__noscript { color: var(--color-muted); font-size: 12px; }
+  :global(html:not(.dock-ready)) .shelf__icon { display: none; }
+  .filmstrip { margin-top: 64px; }
+  .filmstrip__label { margin: 0 0 16px; color: var(--color-muted); font-size: 12px; letter-spacing: .08em; }
+  .filmstrip__list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(140px, 190px); gap: 14px; list-style: none; margin: 0 calc(var(--page-padding) * -1); padding: 4px var(--page-padding) 14px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--page-padding); scrollbar-width: thin; scrollbar-color: #c4b7e655 transparent; }
+  .filmstrip__list li { scroll-snap-align: start; min-width: 0; }
+  .filmstrip__list a { position: relative; display: block; border-radius: 8px; overflow: hidden; aspect-ratio: 3 / 4; background: #11182b; color: #f4f3fc; text-decoration: none; }
+  .filmstrip__list img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; transition: transform 480ms ease; }
+  .filmstrip__list a:hover img, .filmstrip__list a:focus-visible img { transform: scale(1.06); }
+  .filmstrip__list span { position: absolute; inset: auto 0 0; padding: 28px 10px 8px; background: linear-gradient(transparent, #070a16e6); font-size: 11px; line-height: 1.5; opacity: 0; transition: opacity 240ms ease; }
+  .filmstrip__list a:hover span, .filmstrip__list a:focus-visible span { opacity: 1; }
+  @media (hover: none) { .filmstrip__list span { opacity: 1; } }
+  .play :global(.game-spotlight) { align-items: center; }
+  @media (max-width: 1023px) { .section-nav ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 767px) {
+    .section-nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .section-nav a { padding: 12px; font-size: 13px; }
+    .listening-card { grid-row: auto; grid-template-rows: auto auto auto auto; padding: 12px 12px 8px; border-bottom: 1px solid var(--color-border); }
+    .listening-grid { gap: 20px; }
+    .jacket-play { top: 24px; right: 24px; }
+    .shelf { margin-top: 40px; }
+    .shelf__list { grid-auto-columns: 44vw; gap: 12px; }
+    .filmstrip { margin-top: 40px; }
+    .filmstrip__list { grid-auto-columns: 40vw; }
+  }
+  @media (prefers-reduced-motion: reduce) { .shelf__list, .filmstrip__list { scroll-behavior: auto; } }
 </style>

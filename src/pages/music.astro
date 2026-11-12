@@ -32,11 +32,12 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
     </header>
     <div class="collection-heading"><h2 id="tracks" tabindex="-1">楽曲</h2><p>試聴できる曲を先に、各グループ内は新しい日付順 / 制作日・未確認の場合は公開日</p></div>
     <ol class="track-list">
-      {tracks.map((track, index) => <li class="room-track" id={track.id} tabindex="-1" aria-labelledby={`${track.id}-title`} data-track-id={track.id} data-preview-available={track.previewAvailable === false ? "false" : "true"}>
+      {tracks.map((track, index) => <li class="room-track" id={track.id} tabindex="-1" aria-labelledby={`${track.id}-title`} data-track-id={track.id} data-now-playing={track.id} data-preview-available={track.previewAvailable === false ? "false" : "true"}>
         <div class="track-art" aria-hidden="true">
           {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <svg class="record-art" viewBox="0 0 220 220" width="220" height="220" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="92" fill="#11182b" /><g fill="none" stroke="#373c54" stroke-width="2"><circle cx="110" cy="110" r="82" /><circle cx="110" cy="110" r="72" /><circle cx="110" cy="110" r="62" /></g><circle cx="110" cy="110" r="42" fill="#c4b7e6" /><circle cx="110" cy="110" r="9" fill="#11182b" /></svg>}
           <span class="track-number">{String(index + 1).padStart(2, '0')}</span>
         </div>
+        {track.previewAvailable !== false && <button class="jacket-play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></button>}
         <div class="track-copy">
           <p class="track-date">{track.createdAt ? <>制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></> : track.publishedAt ? <>公開日 <time datetime={track.publishedAt}>{track.publishedAt.replaceAll('-', '.')}</time><span> · 制作日未確認</span></> : '制作日未確認'}</p>
           <p class="track-headline">{track.headline}</p>
@@ -59,7 +60,7 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
 </BaseLayout>
 <script>
   import { initMusicIndex } from '../lib/music-index';
-  initMusicIndex();
+  document.addEventListener('astro:page-load', () => initMusicIndex());
 </script>
 <style>
   .music-room { width: 100%; min-width: 0; max-width: 960px; margin-inline: auto; }
@@ -108,4 +109,49 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
     .tags { margin-bottom: 0; }
     .room-intro { padding-bottom: 40px; }
   }
+
+  /* —— 2026-11 renewal: jacket grid. Square jackets stay prominent; the page is a third as long. —— */
+  .music-room { max-width: 1200px; }
+  .room-intro { max-width: 760px; }
+  .track-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; padding-top: 32px; }
+  .room-track { position: relative; grid-template-columns: minmax(0, 1fr); grid-template-areas: "art" "copy" "player"; grid-template-rows: auto auto 1fr; row-gap: 16px; padding: 14px 14px 10px; border: 1px solid var(--color-border); border-radius: 14px; background: linear-gradient(180deg, #121930, #0c1122); transition: border-color 240ms ease, box-shadow 240ms ease; }
+  .room-track:hover { border-color: #c4b7e666; }
+  .room-track[data-now-playing-active] { border-color: #c4b7e6; box-shadow: 0 0 0 1px #c4b7e6, 0 18px 50px -18px #8f7bd699; }
+  .room-track[data-preview-available="false"] { background: transparent; }
+  .track-art { border-radius: 8px; }
+  .track-art img { transition: transform 480ms ease; }
+  .room-track:hover .track-art img { transform: scale(1.03); }
+  .jacket-play { grid-area: art; align-self: end; justify-self: end; margin: 0 12px 12px 0; z-index: 1; display: none; place-items: center; width: 52px; height: 52px; border: 0; border-radius: 50%; background: #c4b7e6f2; color: #101323; cursor: pointer; box-shadow: 0 8px 24px #05081299; transition: transform 180ms ease, background 180ms ease; }
+  :global(html.dock-ready) .jacket-play { display: grid; }
+  .jacket-play:hover { transform: scale(1.08); background: #ded4f5; }
+  .jacket-play svg { width: 24px; height: 24px; fill: currentColor; }
+  .pause-icon { display: none; }
+  [data-play-state="playing"] .play-icon { display: none; }
+  [data-play-state="playing"] .pause-icon { display: block; }
+  .track-date { margin-bottom: 8px; }
+  h3 { font-size: 19px; line-height: 1.6; }
+  .tags { margin: 12px 0 0; gap: 6px; }
+  .room-track__player { display: flex; flex-direction: column; align-items: start; justify-content: end; }
+  .room-track__player > :global(*) { max-width: 100%; }
+  .room-track__player :global(.track-player) { width: 100%; }
+  .room-track__player :global(.track-player__toggle) { border-radius: 999px; min-height: 48px; margin-bottom: 4px; }
+  :global(html.dock-ready) .room-track__player :global(.track-player__toggle) { display: none; }
+  .room-track__player :global(.track-player__suno) { margin-top: 6px; border: 0; padding-inline: 2px; }
+  .room-track__player :global(.music-preview) { width: 100%; padding: 14px; background: transparent; }
+  .room-track__player :global(.work-like) { margin-block: 6px 0; }
+  .track-index-return { margin-top: 0; }
+  @media (max-width: 1023px) { .track-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) {
+    .track-list { gap: 14px 12px; padding-top: 20px; }
+    .room-track { padding: 10px 10px 6px; row-gap: 10px; border-radius: 12px; }
+    .track-art { max-width: none; }
+    .jacket-play { width: 46px; height: 46px; margin: 0 8px 8px 0; }
+    h3 { font-size: 15px; }
+    .track-headline, .tags, .track-index-return { display: none; }
+    .room-track__player :global(.x-actions) { display: none; }
+    .room-track__player :global(.track-player__suno), .room-track__player :global(.text-link) { font-size: 11px; min-height: 44px; }
+    .room-track__player :global(.music-preview__note) { display: none; }
+    .room-track__player :global(.music-preview__pending) { font-size: 14px; }
+  }
+  @media (max-width: 359px) { .track-list { grid-template-columns: minmax(0, 1fr); } }
 </style>

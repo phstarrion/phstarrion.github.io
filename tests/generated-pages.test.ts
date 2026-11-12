@@ -301,7 +301,8 @@ describe('generated pages', () => {
     expect(hero?.getAttribute('fetchpriority')).toBe('high');
     expect(hero?.alt.length).toBeGreaterThan(12);
     expect([hero?.width, hero?.height]).toEqual([1536, 1024]);
-    const mobileArt = page.querySelector('.hero source');
+    const mobileArt = page.querySelector('.hero source:not([type])');
+    expect(page.querySelector('.hero source[type="image/webp"]')?.getAttribute('srcset')).toContain('/images/opt/atelier-moonlight-mobile-640.webp');
     expect(mobileArt?.getAttribute('media')).toBe('(max-width: 640px)');
     expect(mobileArt?.getAttribute('srcset')).toBe('/images/atelier-moonlight-mobile.png');
     expect(mobileArt?.getAttribute('width')).toBe('1122');
@@ -652,14 +653,14 @@ describe('generated pages', () => {
   it('provides clear category headings and keyboard-accessible section destinations', async () => {
     const home = parseBody(await readMarkup('index.html'));
     const links = [...home.querySelectorAll('.section-nav a')];
-    expect(links.map(link => link.textContent?.replace('↓', '').trim())).toEqual(['音楽を聴く', 'イラストを見る', 'ゲームで遊ぶ', '活動について']);
+    expect(links.map(link => link.textContent?.replace('↓', '').trim())).toEqual(['音楽を聴く', 'イラストを見る', 'ゲームで遊ぶ', '動画を見る', '活動について']);
     for (const link of links) {
       const heading = home.getElementById(link.getAttribute('href')!.slice(1))!;
       expect(heading.tagName).toBe('H2');
       expect(heading.getAttribute('tabindex')).toBe('-1');
       expect(heading.textContent).toBe(link.textContent?.replace('↓', '').trim());
     }
-    expect(home.querySelectorAll('.home-section > .section-heading .section-description')).toHaveLength(3);
+    expect(home.querySelectorAll('.home-section > .section-heading .section-description')).toHaveLength(4);
     expect(home.querySelector('#game-spotlight-title')?.tagName).toBe('H3');
   });
 

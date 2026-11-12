@@ -12,7 +12,8 @@
     "test:accessibility": "vitest run tests/accessibility.test.ts",
     "pretest:run": "npm run build",
     "test:run": "vitest run",
-    "check": "astro check"
+    "check": "astro check",
+    "images": "node scripts/optimize-images.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

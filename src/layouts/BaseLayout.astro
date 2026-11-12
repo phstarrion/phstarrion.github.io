@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import PlayerDock from '../components/PlayerDock.astro';
+import { ClientRouter } from 'astro:transitions';
 
 import { xHandle } from '../lib/services';
 
@@ -15,7 +17,7 @@ interface Props {
   theme?: 'default' | 'night';
 }
 
-const { title, description, image, imageAlt, type = 'website', publishedTime, theme = 'default' } = Astro.props;
+const { title, description, image, imageAlt, type = 'website', publishedTime, theme = 'night' } = Astro.props;
 const site = Astro.site ?? new URL('https://phstarrion.github.io/');
 const canonicalPath = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
@@ -66,6 +68,7 @@ const imageUrl = new URL(socialImage, site);
     {xHandle && <meta name="twitter:site" content={xHandle} />}
     {xHandle && <meta name="twitter:creator" content={xHandle} />}
     <title>{title}</title>
+    <ClientRouter fallback="swap" />
   </head>
   <body class:list={{ 'theme-night': theme === 'night' }}>
     <a class="skip-link" href="#main-content">本文へ移動</a>
@@ -74,11 +77,24 @@ const imageUrl = new URL(socialImage, site);
       <slot />
     </main>
     <SiteFooter />
+    <PlayerDock />
   </body>
 </html>
 
 <script>
   import { initLikes, recordVisit } from '../lib/engagement';
-  initLikes();
-  void recordVisit();
+  import { initPlayerDock } from '../lib/player-dock';
+  import { initSiteNavigation } from '../lib/site-navigation';
+  import { initTrackPlayback } from '../lib/track-playback';
+  import { initReveal } from '../lib/reveal';
+
+  // Runs on the first load and after every in-site navigation (the dock keeps playing between pages).
+  document.addEventListener('astro:page-load', () => {
+    initSiteNavigation();
+    initTrackPlayback();
+    initPlayerDock();
+    initLikes();
+    initReveal();
+    void recordVisit();
+  });
 </script>

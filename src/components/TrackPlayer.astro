@@ -24,10 +24,6 @@ const audioId = `audio-${trackId}`;
   {sunoUrl && <a class="track-player__suno" href={sunoUrl} rel="noopener noreferrer" aria-label={`${title}の続きはSunoでフル再生`}>続きはSunoでフル再生 <span aria-hidden="true">↗</span></a>}
 </div>
 
-<script>
-  import { initTrackPlayback } from '../lib/track-playback';
-  initTrackPlayback();
-</script>
 
 <style>
   .track-player { min-width: 0; }

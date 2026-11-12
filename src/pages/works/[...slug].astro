@@ -69,7 +69,7 @@ const nextPreview = isMusic
   imageAlt={work.data.coverAlt}
   type="article"
   publishedTime={work.data.publishedAt}
-  theme={isMusic ? 'night' : 'default'}
+  theme="night"
 >
   <article class:list={["work-detail", {"work-detail--music": isMusic}]}>
     <a class="work-detail__back" href={isMusic ? "/music/" : paths.works}>{isMusic ? "← Music / 曲を聴く" : "← Works"}</a>

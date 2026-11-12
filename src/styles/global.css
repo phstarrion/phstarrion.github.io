@@ -149,3 +149,19 @@ main {
 main, .site-header, .site-footer { overflow-wrap: anywhere; }
 main > *, .site-header__inner > * { min-width: 0; }
 [id] { scroll-margin-block-start: 24px; }
+
+/* Scroll reveal (src/lib/reveal.ts). */
+[data-reveal] { transition: opacity 620ms cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms), transform 620ms cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms); }
+.reveal-pending { opacity: 0; transform: translate3d(0, 20px, 0); }
+@media (prefers-reduced-motion: reduce) { .reveal-pending { opacity: 1; } }
+
+/* Page transitions: a short cross-fade; the listening dock is persisted and never animates. */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 260ms; }
+::view-transition-group(player-dock) { animation: none; }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Sticky translucent header keeps navigation and the way home within reach on every page. */
+body.theme-night .site-header { position: sticky; top: 0; z-index: 30; background: #090d1bd9; -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); }
+@media (max-width: 767px) { body.theme-night .site-header { position: relative; } }
