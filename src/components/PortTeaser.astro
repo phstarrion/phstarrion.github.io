@@ -23,7 +23,7 @@ const Heading = headingLevel;
   </div>
 </section>
 <style>
-  .port { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 64px); align-items: center; margin-top: clamp(48px, 6vw, 80px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--color-border); }
+  .port { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 64px); align-items: center; margin-top: 32px; padding: clamp(16px, 2.4vw, 28px); border: 2.5px solid var(--pop-plum); border-radius: 30px; background: var(--pop-sky-soft); box-shadow: 0 8px 0 var(--pop-sky); }
   .port__scene { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: #7fb7b9; border: 3px solid #e9ecff; box-shadow: 0 0 0 3px #0c1350, 0 24px 60px -24px #000c; image-rendering: pixelated; }
   .port__chart { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
   .port__ship { position: absolute; left: 9%; top: 8%; width: 46%; height: auto; image-rendering: auto; filter: drop-shadow(0 10px 8px #1b3a4a66); animation: port-bob 5s ease-in-out infinite alternate; }
@@ -36,13 +36,13 @@ const Heading = headingLevel;
   .port__dialog p { margin: 0; font-size: 12px; line-height: 1.7; letter-spacing: .06em; }
   .port__dialog b { display: block; color: #38e6f6; font-weight: 500; font-size: 11px; }
   .port__status { margin: 0 0 12px; font-size: 10px; letter-spacing: .18em; color: var(--color-muted); }
-  .port__status span { display: inline-block; margin-right: 10px; padding: 3px 10px; border: 1px solid #e5be70; border-radius: 999px; color: #e5be70; letter-spacing: .08em; }
-  .port :is(h2, h3) { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.3vw, 30px); letter-spacing: .035em; margin: 0; }
-  .port__lead { margin: 12px 0 0; color: var(--color-primary); font-size: 15px; }
+  .port__status span { display: inline-block; margin-right: 10px; padding: 3px 10px; border: 2px solid var(--pop-plum); border-radius: 999px; background: var(--pop-yellow); color: var(--pop-plum); font-weight: 700; letter-spacing: .08em; }
+  .port :is(h2, h3) { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 2.8vw, 36px); letter-spacing: .035em; margin: 0; color: var(--pop-plum); }
+  .port__lead { margin: 12px 0 0; color: var(--color-primary); font-size: 15px; font-weight: 700; }
   .port__description { margin: 12px 0 0; color: var(--color-muted); font-size: 14px; line-height: 1.95; }
   .port__features { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
   .port__features li { position: relative; padding-left: 20px; font-size: 13px; color: var(--color-ink); }
-  .port__features li::before { content: '◆'; position: absolute; left: 0; top: 1px; font-size: 9px; color: #e5be70; }
+  .port__features li::before { content: '◆'; position: absolute; left: 0; top: 1px; font-size: 10px; color: var(--pop-pink); }
   .port__note { margin: 20px 0 0; font-size: 12px; color: var(--color-muted); }
   .port .button { margin-top: 20px; }
   @media (max-width: 767px) { .port { grid-template-columns: 1fr; } .port__town { transform: scale(1.1); } }

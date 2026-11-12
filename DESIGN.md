@@ -1,5 +1,17 @@
 # Kanon Studio — Moonlit Atelier
 
+## November 12, 2026 — Milky Pop redesign (review candidate, not deployed)
+
+The user then asked to change the whole design to a cute, pop look with cute fonts and a hero that shows off animation technique, and chose **Milky Pastel** colours with **ことにゃん as the hero lead**. This supersedes the night palette, the image-only atelier hero and “no hero copy” for every route. The earlier decisions below are history.
+
+- **Palette** (`body.theme-pop` in `global.css`, applied to every page): cream canvas #FFF8F4 with a faint lavender dot grid, plum ink #3F3559, primary purple #7450C8, accents pink #FF8FB8 / mint #7ADCC4 / yellow #FFD45E / sky #8EC9FF / lavender #B9A2FF. Text and control-edge contrast is covered by `tests/contrast-tokens.test.ts`.
+- **Type**: Mochiy Pop One for headings, Zen Maru Gothic 400/500/700 for body, Fredoka for Latin display. Self-hosted through `@fontsource` (no Google Fonts request).
+- **Shape language**: 2.5px plum outlines, 18–30px radii, solid offset “sticker” shadows in an accent colour, pill buttons that press down, tilted cards, scalloped footer edge, marker-highlight headings.
+- **Hero**: cut-out sticker of 琴音 (background removed from the user's cherry-blossom illustration, white sticker edge added) inside a ringed halo with rotating text. Techniques: per-letter spring-in logo, waving tagline, morphing colour blobs, pointer parallax on the sticker and floating icons, canvas star/heart bursts on tap, a pokeable mascot with a speech bubble, an equaliser and beat-bob while a preview plays, a tilted marquee band, and a scroll-driven exit where supported. The primary button plays the newest preview in the dock.
+- The speech-bubble sounds (「にゃ♪」「きらっ☆」 …) are playful interface text, not character canon.
+- All motion is progressive enhancement and is disabled under reduced motion; animations pause when the hero is off screen.
+- The atelier watercolour of 花音 remains on the Characters page and as the journal/social artwork.
+
 ## November 12, 2026 — Experience renewal (review candidate, not deployed)
 
 The user asked for a rich, smart, site-wide improvement and chose: keep the world (image-only atelier hero, navy × lavender, approved mascot, existing works and links) and renew the experience. New content requested: songs after September 19, かのんの港町, なぎの地図ノート. Publish only after the user reviews the preview.

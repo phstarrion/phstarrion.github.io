@@ -34,7 +34,7 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
     <ol class="track-list">
       {tracks.map((track, index) => <li class="room-track" id={track.id} tabindex="-1" aria-labelledby={`${track.id}-title`} data-track-id={track.id} data-now-playing={track.id} data-preview-available={track.previewAvailable === false ? "false" : "true"}>
         <div class="track-art" aria-hidden="true">
-          {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <svg class="record-art" viewBox="0 0 220 220" width="220" height="220" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="92" fill="#11182b" /><g fill="none" stroke="#373c54" stroke-width="2"><circle cx="110" cy="110" r="82" /><circle cx="110" cy="110" r="72" /><circle cx="110" cy="110" r="62" /></g><circle cx="110" cy="110" r="42" fill="#c4b7e6" /><circle cx="110" cy="110" r="9" fill="#11182b" /></svg>}
+          {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" /> : <svg class="record-art" viewBox="0 0 220 220" width="220" height="220" focusable="false"><rect width="220" height="220" fill="#efe8ff" /><circle cx="110" cy="110" r="92" fill="#3f3559" /><g fill="none" stroke="#5a4f78" stroke-width="2"><circle cx="110" cy="110" r="82" /><circle cx="110" cy="110" r="72" /><circle cx="110" cy="110" r="62" /></g><circle cx="110" cy="110" r="42" fill="#ffd45e" /><circle cx="110" cy="110" r="9" fill="#3f3559" /></svg>}
           <span class="track-number">{String(index + 1).padStart(2, '0')}</span>
         </div>
         {track.previewAvailable !== false && <button class="jacket-play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></button>}
@@ -90,7 +90,7 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
   .room-track__player { grid-area: player; min-width: 0; }
   .room-track__player :global(audio) { min-width: 0; max-width: 100%; }
   .track-art img, .record-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .track-number { position: absolute; left: 12px; bottom: 12px; background: #090d1be6; padding: 4px 9px; color: #f4f3fc; font-size: 11px; }
+  .track-number { position: absolute; left: 10px; bottom: 10px; display: grid; place-items: center; min-width: 30px; height: 30px; border: 2px solid var(--pop-plum); border-radius: 50%; background: #fff; color: var(--pop-plum); font-family: var(--font-latin); font-weight: 700; font-size: 12px; }
   .track-date { margin: 0 0 16px; }
   .track-headline { color: var(--color-primary); font-size: 13px; line-height: 1.9; margin: 0 0 8px; }
   h3 { font-size: clamp(20px, 3vw, 27px); line-height: 1.7; margin: 0; font-weight: 500; overflow-wrap: anywhere; }
@@ -114,16 +114,17 @@ const playableCount = tracks.filter(track => track.previewAvailable !== false).l
   .music-room { max-width: 1200px; }
   .room-intro { max-width: 760px; }
   .track-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; padding-top: 32px; }
-  .room-track { position: relative; grid-template-columns: minmax(0, 1fr); grid-template-areas: "art" "copy" "player"; grid-template-rows: auto auto 1fr; row-gap: 16px; padding: 14px 14px 10px; border: 1px solid var(--color-border); border-radius: 14px; background: linear-gradient(180deg, #121930, #0c1122); transition: border-color 240ms ease, box-shadow 240ms ease; }
-  .room-track:hover { border-color: #c4b7e666; }
-  .room-track[data-now-playing-active] { border-color: #c4b7e6; box-shadow: 0 0 0 1px #c4b7e6, 0 18px 50px -18px #8f7bd699; }
-  .room-track[data-preview-available="false"] { background: transparent; }
-  .track-art { border-radius: 8px; }
+  .room-track { position: relative; grid-template-columns: minmax(0, 1fr); grid-template-areas: "art" "copy" "player"; grid-template-rows: auto auto 1fr; row-gap: 16px; padding: 14px 14px 10px; border: 2.5px solid var(--pop-plum); border-radius: 24px; background: #fff; box-shadow: 0 6px 0 var(--pop-lav); transition: transform 240ms cubic-bezier(.3,1.5,.5,1), box-shadow 240ms ease; }
+  .room-track:nth-child(3n+2) { box-shadow: 0 6px 0 var(--pop-pink); } .room-track:nth-child(3n) { box-shadow: 0 6px 0 var(--pop-mint); }
+  .room-track:hover { transform: translateY(-4px); }
+  .room-track[data-now-playing-active] { background: var(--pop-yellow-soft); }
+  .room-track[data-preview-available="false"] { background: #fffdfb; border-style: dashed; box-shadow: none; }
+  .track-art { border-radius: 14px; border: 2.5px solid var(--pop-plum); }
   .track-art img { transition: transform 480ms ease; }
   .room-track:hover .track-art img { transform: scale(1.03); }
-  .jacket-play { grid-area: art; align-self: end; justify-self: end; margin: 0 12px 12px 0; z-index: 1; display: none; place-items: center; width: 52px; height: 52px; border: 0; border-radius: 50%; background: #c4b7e6f2; color: #101323; cursor: pointer; box-shadow: 0 8px 24px #05081299; transition: transform 180ms ease, background 180ms ease; }
+  .jacket-play { grid-area: art; align-self: end; justify-self: end; margin: 0 12px 12px 0; z-index: 1; display: none; place-items: center; width: 52px; height: 52px; border: 2.5px solid var(--pop-plum); border-radius: 50%; background: var(--pop-yellow); color: var(--pop-plum); cursor: pointer; box-shadow: 0 4px 0 var(--pop-plum); transition: transform 180ms cubic-bezier(.3,1.7,.5,1); }
   :global(html.dock-ready) .jacket-play { display: grid; }
-  .jacket-play:hover { transform: scale(1.08); background: #ded4f5; }
+  .jacket-play:hover { transform: scale(1.12) rotate(8deg); }
   .jacket-play svg { width: 24px; height: 24px; fill: currentColor; }
   .pause-icon { display: none; }
   [data-play-state="playing"] .play-icon { display: none; }

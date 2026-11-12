@@ -111,10 +111,13 @@ describe('generated pages', () => {
     expect(html).toContain('Kanon Studio');
   });
 
-  it('loads the specified Japanese display and body fonts', async () => {
+  it('self-hosts the pop display and rounded body fonts', async () => {
     const html = await readPage('index.html');
-    expect(html).toContain('fonts.googleapis.com/css2?family=Noto+Sans+JP');
-    expect(html).toContain('family=Zen+Maru+Gothic:wght@500;700');
+    expect(html).not.toContain('fonts.googleapis.com');
+    const { readdir, readFile: read } = await import('node:fs/promises');
+    const assets = (await readdir('dist/_astro')).filter((file) => file.endsWith('.css'));
+    const css = (await Promise.all(assets.map((file) => read(`dist/_astro/${file}`, 'utf8')))).join('\n') + html;
+    for (const family of ['Mochiy Pop One', 'Zen Maru Gothic', 'Fredoka']) expect(css).toContain(family);
   });
 
   it('includes safe global navigation and verified service links', async () => {
@@ -297,16 +300,13 @@ describe('generated pages', () => {
     expect(page.querySelector('h1')?.textContent).toBe('Kanon Studio — 音と、夢の、つづき。');
     expect(page.querySelector('.hero .visually-hidden')).not.toBeNull();
     const hero = page.querySelector<HTMLImageElement>('.hero img');
-    expect(hero?.getAttribute('src')).toBe('/images/atelier-moonlight.png');
+    expect(hero?.getAttribute('src')).toBe('/images/characters/kotone-sticker.webp');
     expect(hero?.getAttribute('fetchpriority')).toBe('high');
-    expect(hero?.alt.length).toBeGreaterThan(12);
-    expect([hero?.width, hero?.height]).toEqual([1536, 1024]);
-    const mobileArt = page.querySelector('.hero source:not([type])');
-    expect(page.querySelector('.hero source[type="image/webp"]')?.getAttribute('srcset')).toContain('/images/opt/atelier-moonlight-mobile-640.webp');
-    expect(mobileArt?.getAttribute('media')).toBe('(max-width: 640px)');
-    expect(mobileArt?.getAttribute('srcset')).toBe('/images/atelier-moonlight-mobile.png');
-    expect(mobileArt?.getAttribute('width')).toBe('1122');
-    expect(mobileArt?.getAttribute('height')).toBe('1402');
+    expect(hero?.alt).toContain('琴音');
+    expect([hero?.width, hero?.height]).toEqual([1132, 930]);
+    expect(page.querySelector('.hero [data-kotone]')?.getAttribute('aria-label')).toBe('ことにゃんをつつく');
+    expect(page.querySelector('.hero h1')?.getAttribute('aria-label')).toBe('Kanon Studio — 音と、夢の、つづき。');
+    expect(page.querySelector('.hero .hero__marquee')?.getAttribute('aria-hidden')).toBe('true');
     expect(page.querySelector('.listening .track-player__suno')?.getAttribute('href')).toBe(
       'https://suno.com/song/34781c64-8d02-451d-bd30-216b61306fe0',
     );
@@ -643,10 +643,10 @@ describe('generated pages', () => {
     expect(home.body.textContent).not.toContain('FEATURED / 今夜の一曲');
     expect(home.body.textContent).not.toContain('PRESS PLAY / この場所で聴く');
     const journal = parseBody(await readMarkup('journal/index.html'));
-    expect(await readMarkup('journal/index.html')).toContain('class="theme-night"');
+    expect(await readMarkup('journal/index.html')).toContain('class="theme-pop"');
     expect(journal.querySelector('h1')?.textContent).toBe('制作ノート');
     const article = parseBody(await readMarkup('journal/ryuseimachi/index.html'));
-    expect(await readMarkup('journal/ryuseimachi/index.html')).toContain('class="theme-night"');
+    expect(await readMarkup('journal/ryuseimachi/index.html')).toContain('class="theme-pop"');
     expect(article.querySelector('a[href="/works/ryuseimachi/"]')?.textContent).toContain('紹介・試聴');
   });
 

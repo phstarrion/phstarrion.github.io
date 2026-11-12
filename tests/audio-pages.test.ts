@@ -62,7 +62,7 @@ it('lists every available preview with honest date labels', async () => {
 it('unifies legacy music pages and uses named alternate previews without broken audio', async()=> {
   for (const slug of ['hodoke','bitcoin-ga-ippai','silent-ledger','futaribun-no-save-point','sugar-crash-protocol']) {
     const page=await parse(`works/${slug}/index.html`);
-    expect(page.body.classList.contains('theme-night')).toBe(true);
+    expect(page.body.classList.contains('theme-pop')).toBe(true);
     if(slug==='sugar-crash-protocol') {
       expect(page.querySelector('[data-preview-state="pending"]')?.textContent).toContain('音源は準備中');
       expect(page.querySelector('audio[data-track-audio]')).toBeNull();

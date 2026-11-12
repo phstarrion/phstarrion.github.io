@@ -19,28 +19,43 @@ const moreTracks = getListeningCatalog(works).filter(track => track.previewAvail
 const visualIds = ['visual-floral-arcade', 'visual-water-mirror', 'visual-etoile-violet'];
 const visualWorks = visualIds.map((id) => works.find((work) => work.id === id)!);
 const filmstrip = works.filter((work) => work.data.category === 'visual' && !visualIds.includes(work.id) && work.data.cover).sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime() || a.id.localeCompare(b.id)).slice(0, 10);
-const lightMotes = [
-  { x: 59, y: 19, size: 2, duration: 17, delay: -3 },
-  { x: 72, y: 32, size: 3, duration: 21, delay: -12 },
-  { x: 83, y: 20, size: 2, duration: 19, delay: -8 },
-  { x: 65, y: 58, size: 2, duration: 23, delay: -17 },
-  { x: 89, y: 47, size: 3, duration: 20, delay: -5 },
-  { x: 77, y: 70, size: 2, duration: 25, delay: -19 },
-];
+const heroTitle = ['Kanon', 'Studio'];
+const heroTagline = '音と、夢の、つづき。';
+const marquee = ['MUSIC', 'ILLUSTRATION', 'GAME', 'MOVIE', 'KANON STUDIO', 'ことにゃん'];
 ---
 
-<BaseLayout title="Kanon Studio" description="Kanon Studioの音楽、ビジュアル、ブラウザゲーム、解説動画。音と、夢の、つづき。" theme="night">
-  <section class="hero" aria-labelledby="site-title">
-    <h1 id="site-title" class="visually-hidden">Kanon Studio — 音と、夢の、つづき。</h1>
-    <picture>
-      <source media="(max-width: 640px)" type="image/webp" srcset="/images/opt/atelier-moonlight-mobile-640.webp 640w, /images/opt/atelier-moonlight-mobile-1122.webp 1122w" sizes="100vw" width="1122" height="1402" />
-      <source media="(max-width: 640px)" srcset="/images/atelier-moonlight-mobile.png" width="1122" height="1402" />
-      <img src="/images/atelier-moonlight.png" alt="月明かりが差す音楽室で、青い髪のKanonが創作する水彩イラスト" width="1536" height="1024" fetchpriority="high" decoding="async" data-sizes="100vw" />
-    </picture>
-    <div class="hero__atmosphere" aria-hidden="true">
-      <div class="hero__moonlight"></div>
-      {lightMotes.map((mote) => <span class="hero__mote" style={`--x:${mote.x}%;--y:${mote.y}%;--size:${mote.size}px;--duration:${mote.duration}s;--delay:${mote.delay}s;`}></span>)}
+<BaseLayout title="Kanon Studio" description="Kanon Studioの音楽、ビジュアル、ブラウザゲーム、解説動画。音と、夢の、つづき。" image="/images/social/kanon-studio-v1.jpg">
+  <section class="hero" aria-labelledby="site-title" data-hero>
+    <canvas class="hero__canvas" aria-hidden="true" data-hero-canvas></canvas>
+    <div class="hero__blobs" aria-hidden="true"><span class="blob blob--a"></span><span class="blob blob--b"></span><span class="blob blob--c"></span></div>
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <p class="hero__hello"><span>WELCOME TO</span></p>
+        <h1 id="site-title" class="hero__title" aria-label={`Kanon Studio — ${heroTagline}`}><span class="hero__logo" aria-hidden="true">{heroTitle.map((word, w) => <span class="hero__word">{[...word].map((letter, i) => <span class="hero__letter" style={`--i:${w * 5 + i}`}>{letter}</span>)}</span><Fragment>{w === 0 ? ' ' : ''}</Fragment>)}</span><span class="visually-hidden"> — </span><span class="hero__tagline" aria-hidden="true">{[...heroTagline].map((letter, i) => <span style={`--i:${i}`}>{letter}</span>)}</span></h1>
+        <p class="hero__lead">音楽、イラスト、ゲーム、動画。<br />ぜんぶ、ここであそべます。</p>
+        <div class="hero__actions">
+          {recommendedTracks[0] && <button class="button hero__play" type="button" data-dock-play={recommendedTracks[0].id} data-dock-title={recommendedTracks[0].title} data-play-state="paused" aria-label={`${recommendedTracks[0].title}を30秒試聴する`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg><span>新曲を30秒きく</span></button>}
+          <a class="button button--ghost" href="/characters/">ことにゃんに会う <span aria-hidden="true">→</span></a>
+        </div>
+        <noscript><p class="hero__noscript"><a href="/music/#tracks">30秒試聴はこちら</a></p></noscript>
+      </div>
+      <div class="hero__stage" data-hero-stage>
+        <svg class="hero__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><defs><path id="hero-ring-path" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0" /></defs><text><textPath href="#hero-ring-path">KANON STUDIO ★ MUSIC &amp; LITTLE WONDERS ★ KOTONYAN ★ </textPath></text></svg>
+        <span class="hero__halo" aria-hidden="true"></span>
+        <button class="hero__kotone" type="button" aria-label="ことにゃんをつつく" data-kotone>
+          <img src="/images/characters/kotone-sticker.webp" srcset="/images/characters/kotone-sticker-566.webp 566w, /images/characters/kotone-sticker.webp 1132w" sizes="(max-width: 899px) 86vw, 560px" alt="頬杖をつく看板キャラクターの琴音（ことにゃん）。白銀の髪、紫の瞳、ねこ耳に金色の星飾り" width="1132" height="930" fetchpriority="high" decoding="async" />
+        </button>
+        <p class="hero__bubble" aria-live="polite" data-kotone-bubble>つついてみて</p>
+        <div class="hero__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <svg class="deco deco--star" style="--d:.9;--x:4%;--y:10%;--tilt:-12deg;--c:var(--pop-yellow)" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1.5 3.2 6.6 7.3 1-5.3 5.1 1.3 7.3L12 18l-6.5 3.5 1.3-7.3L1.5 9.1l7.3-1Z" /></svg>
+        <svg class="deco deco--note" style="--d:.5;--x:86%;--y:6%;--tilt:10deg;--c:var(--pop-pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v11.2A3.5 3.5 0 1 0 11 17V7h7V3z" /></svg>
+        <svg class="deco deco--heart" style="--d:.7;--x:92%;--y:58%;--tilt:14deg;--c:var(--pop-pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 3.2 12.4a5.5 5.5 0 0 1 7.8-7.8l1 1.1 1-1.1a5.5 5.5 0 0 1 7.8 7.8Z" /></svg>
+        <svg class="deco deco--spark" style="--d:1.2;--x:0%;--y:62%;--tilt:0deg;--c:var(--pop-mint)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c.8 6 3 8.800 10 11-7 2.200-9.200 5-10 11-.8-6-3-8.800-10-11 7-2.200 9.200-5 10-11Z" /></svg>
+        <svg class="deco deco--star" style="--d:.4;--x:74%;--y:84%;--tilt:18deg;--c:var(--pop-sky)" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1.5 3.2 6.6 7.3 1-5.3 5.1 1.3 7.3L12 18l-6.5 3.500 1.3-7.3L1.5 9.1l7.3-1Z" /></svg>
+        <svg class="deco deco--note" style="--d:1;--x:14%;--y:86%;--tilt:-8deg;--c:var(--pop-lav)" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v10.2A3.500 3.500 0 1 0 10 17V8.500l8-2V13a3.500 3.500 0 1 0 2 3V2z" /></svg>
+      </div>
     </div>
+    <div class="hero__marquee" aria-hidden="true"><div class="hero__marquee-track">{[0, 1].map(() => <span>{marquee.map((word) => <Fragment><b>{word}</b><svg viewBox="0 0 24 24"><path d="m12 1.500 3.200 6.600 7.300 1-5.300 5.100 1.300 7.300L12 18l-6.500 3.500 1.300-7.300L1.500 9.100l7.300-1Z" /></svg></Fragment>)}</span>)}</div></div>
   </section>
 
   <div class="home-content">
@@ -54,14 +69,14 @@ const lightMotes = [
         <li><a href="#atelier-about-title">活動について <span aria-hidden="true">↓</span></a></li>
       </ul>
     </nav>
-    <section class="music home-section" aria-labelledby="music-title">
-      <header class="section-heading"><div><p class="eyebrow">01 / MUSIC</p><h2 id="music-title" tabindex="-1">音楽を聴く</h2><p class="section-description">30秒の試聴から、曲の紹介や歌詞の物語へ。</p></div><a class="text-link" href="/music/#tracks">30秒試聴できる曲をもっと聴く <span aria-hidden="true">→</span></a></header>
+    <section class="music home-section" style="--accent:var(--pop-lav);--accent-soft:var(--pop-lav-soft)" aria-labelledby="music-title">
+      <header class="section-heading"><div><p class="eyebrow"><span>01</span>MUSIC</p><h2 id="music-title" tabindex="-1">音楽を聴く</h2><p class="section-description">30秒の試聴から、曲の紹介や歌詞の物語へ。</p></div><a class="text-link" href="/music/#tracks">30秒試聴できる曲をもっと聴く <span aria-hidden="true">→</span></a></header>
       <section class="listening" aria-labelledby="listening-title">
         <header class="listening__heading"><h3 id="listening-title">新しく聴ける3曲</h3><p>気になる曲を、ここで30秒試聴。<br />音源のある曲から、新しい順に。</p></header>
         <ul class="listening-grid">
           {recommendedTracks.map((track) => <li class="listening-card" data-home-track-id={track.id} data-now-playing={track.id}>
             <a class="listening-card__art" href={track.detailUrl ?? `/music/#${track.id}`} aria-label={`${track.title}の${track.detailUrl ? '紹介を見る' : '試聴ページを開く'}`}>
-              {track.cover ? <img src={track.cover} alt={track.coverAlt ?? `${track.title}のジャケット`} width="320" height="320" loading="lazy" decoding="async" /> : <svg viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="90" fill="#11182b" /><circle cx="110" cy="110" r="42" fill="#c4b7e6" /></svg>}
+              {track.cover ? <img src={track.cover} alt={track.coverAlt ?? `${track.title}のジャケット`} width="320" height="320" loading="lazy" decoding="async" /> : <svg viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#efe8ff" /><circle cx="110" cy="110" r="90" fill="#3f3559" /><circle cx="110" cy="110" r="42" fill="#ffd45e" /></svg>}
             </a>
             <button class="jacket-play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></button>
             <div class="listening-card__copy"><h4>{track.title}</h4><p class="listening-card__headline">{track.headline}</p>{track.createdAt && <p class="genre">制作日 <time datetime={track.createdAt}>{track.createdAt.replaceAll('-', '.')}</time></p>}</div>
@@ -79,7 +94,7 @@ const lightMotes = [
         <ul class="shelf__list">
           {moreTracks.map((track) => <li class="shelf__item" data-now-playing={track.id}>
             <button class="shelf__play" type="button" data-dock-play={track.id} data-dock-title={track.title} data-play-state="paused" aria-label={`${track.title}を30秒試聴する`}>
-              {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" data-sizes="(max-width: 767px) 44vw, 180px" /> : <svg class="shelf__record" viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#292440" /><circle cx="110" cy="110" r="90" fill="#11182b" /><circle cx="110" cy="110" r="42" fill="#c4b7e6" /></svg>}
+              {track.cover ? <img src={track.cover} alt="" width="320" height="320" loading="lazy" decoding="async" data-sizes="(max-width: 767px) 44vw, 180px" /> : <svg class="shelf__record" viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"><rect width="220" height="220" fill="#efe8ff" /><circle cx="110" cy="110" r="90" fill="#3f3559" /><circle cx="110" cy="110" r="42" fill="#ffd45e" /></svg>}
               <span class="shelf__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path class="play-icon" d="M8 5v14l11-7z" /><path class="pause-icon" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg></span>
             </button>
             <a class="shelf__title" href={track.detailUrl ?? `/music/#${track.id}`} aria-label={`${track.title}の${track.detailUrl ? '紹介を見る' : '試聴ページを開く'}`}>{track.title}</a>
@@ -89,8 +104,8 @@ const lightMotes = [
       </section>}
     </section>
 
-    <section class="home-section selected-works" aria-labelledby="selected-works-title">
-      <header class="section-heading"><div><p class="eyebrow">02 / VISUALS</p><h2 id="selected-works-title" tabindex="-1">イラストを見る</h2><p class="section-description">キャラクターと、光や色で描いた世界。</p></div><a class="text-link" href="/works/?category=visual">すべてのビジュアル <span aria-hidden="true">↗</span></a></header>
+    <section class="home-section selected-works" style="--accent:var(--pop-pink);--accent-soft:var(--pop-pink-soft)" aria-labelledby="selected-works-title">
+      <header class="section-heading"><div><p class="eyebrow"><span>02</span>VISUALS</p><h2 id="selected-works-title" tabindex="-1">イラストを見る</h2><p class="section-description">キャラクターと、光や色で描いた世界。</p></div><a class="text-link" href="/works/?category=visual">すべてのビジュアル <span aria-hidden="true">↗</span></a></header>
       <WorkGrid works={visualWorks} variant="featured" />
       {filmstrip.length > 0 && <div class="filmstrip" data-reveal>
         <p class="filmstrip__label" id="filmstrip-title">ほかのイラスト</p>
@@ -100,20 +115,20 @@ const lightMotes = [
       </div>}
     </section>
 
-    <section class="home-section play" aria-labelledby="play-title">
-      <header class="section-heading"><div><p class="eyebrow">03 / PLAY</p><h2 id="play-title" tabindex="-1">ゲームで遊ぶ</h2><p class="section-description">音楽に合わせて遊ぶ、ブラウザゲーム。</p></div></header>
+    <section class="home-section play" style="--accent:var(--pop-mint);--accent-soft:var(--pop-mint-soft)" aria-labelledby="play-title">
+      <header class="section-heading"><div><p class="eyebrow"><span>03</span>PLAY</p><h2 id="play-title" tabindex="-1">ゲームで遊ぶ</h2><p class="section-description">音楽に合わせて遊ぶ、ブラウザゲーム。</p></div></header>
       <GameSpotlight />
       <PortTeaser />
     </section>
 
-    <section class="home-section watch" aria-labelledby="watch-title">
-      <header class="section-heading"><div><p class="eyebrow">04 / WATCH</p><h2 id="watch-title" tabindex="-1">動画を見る</h2><p class="section-description">地図と地形から「なぜ」を読み解く、解説動画シリーズ。</p></div><a class="text-link" href="/videos/">シリーズの一覧 <span aria-hidden="true">→</span></a></header>
+    <section class="home-section watch" style="--accent:var(--pop-sky);--accent-soft:var(--pop-sky-soft)" aria-labelledby="watch-title">
+      <header class="section-heading"><div><p class="eyebrow"><span>04</span>WATCH</p><h2 id="watch-title" tabindex="-1">動画を見る</h2><p class="section-description">地図と地形から「なぜ」を読み解く、解説動画シリーズ。</p></div><a class="text-link" href="/videos/">シリーズの一覧 <span aria-hidden="true">→</span></a></header>
       <NagiShowcase variant="home" />
     </section>
 
     <section class="atelier-about" aria-labelledby="atelier-about-title">
       <Image class="atelier-about__portrait" src={mascot} alt="Kanon Studioの看板キャラクター、琴音。白銀色の髪と紫の瞳、猫耳、ピンクの丸眼鏡、金色の星飾り" width={192} loading="lazy" decoding="async" />
-      <div class="atelier-about__copy"><p class="eyebrow">05 / ABOUT KANON</p><h2 id="atelier-about-title" tabindex="-1">活動について</h2><p>音楽、ビジュアル、ゲーム、映像。<br />心に浮かんだ景色を、作品にしています。</p><p class="atelier-about__mascot">看板キャラクターは、<a href="/characters/">瀬尾 琴音（ことにゃん）</a>。</p><a class="text-link" href="/about/">Kanon Studioについて <span aria-hidden="true">→</span></a></div>
+      <div class="atelier-about__copy"><p class="eyebrow"><span>05</span>ABOUT</p><h2 id="atelier-about-title" tabindex="-1">活動について</h2><p>音楽、ビジュアル、ゲーム、映像。<br />心に浮かんだ景色を、作品にしています。</p><p class="atelier-about__mascot">看板キャラクターは、<a href="/characters/">瀬尾 琴音（ことにゃん）</a>。</p><a class="text-link" href="/about/">Kanon Studioについて <span aria-hidden="true">→</span></a></div>
       <ServiceHub headingId="home-service-hub-title" heading="Follow Kanon" headingLevel="h3" />
     </section>
   </div>
@@ -121,193 +136,215 @@ const lightMotes = [
 
 <script>
   import { initHomeMotion } from '../lib/home-motion';
-  document.addEventListener('astro:page-load', () => initHomeMotion());
+  import { initHeroPlay } from '../lib/hero-play';
+  document.addEventListener('astro:page-load', () => { initHomeMotion(); initHeroPlay(); });
 </script>
 
 <style>
-  .listening { margin-bottom: 0; }
-  .listening__heading { margin-bottom: 28px; }
-  .listening__heading h3 { font-size: 26px; letter-spacing: .06em; }
-  .listening__heading > p:last-child { color: var(--color-muted); font-size: 13px; line-height: 1.9; margin: 12px 0 0; }
-  .listening-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; list-style: none; padding: 0; margin: 0; }
-  .listening-card { min-width: 0; display: grid; grid-template-rows: auto 1fr auto auto; align-content: start; gap: 20px; }
-  .listening-card__preview, .listening-card__actions { min-width: 0; }
-  .listening-card__actions { display: flex; flex-direction: column; align-items: start; }
-  .listening-card__actions :global(.work-like) { margin-block: 0 8px; }
-  .listening-card__art { display: block; overflow: hidden; border-radius: 4px; }
-  .listening-card__art svg { display: block; width: 100%; height: auto; aspect-ratio: 1; }
-  .listening-card__art img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: center; transition: transform 400ms ease; }
-  .listening-card__art:hover img { transform: scale(1.025); }
-  .listening-card__copy { padding: 0; }
-  .listening-card__headline { color: var(--color-primary); font-size: 13px; line-height: 1.9; margin: 12px 0 8px; }
-  .listening-card h4 { font-family: var(--font-display); font-size: 21px; font-weight: 500; letter-spacing: .04em; line-height: 1.6; margin: 0; }
-  @media (max-width: 767px) {
-    .listening-grid { grid-template-columns: 1fr; gap: 36px; }
-    .listening__heading h3 { font-size: 23px; }
-    .listening-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; gap: 16px; align-items: start; padding-bottom: 24px; border-bottom: 1px solid var(--color-border); }
-    .listening-card__art { width: 100%; max-width: 480px; justify-self: center; }
-    .listening-card__art img { display: block; aspect-ratio: 1; object-position: center; }
-    .listening-card__preview, .listening-card__actions { grid-column: 1 / -1; }
-    .listening-card__copy { padding: 0; }
-    .listening-card__headline { font-size: 12px; margin-bottom: 6px; }
-    .listening-card h4 { font-size: 21px; }
-  }
-  /* Motion is confined to Home; native scrolling and all links stay available. */
-    :global(body.theme-night) { scroll-padding-top: 92px; }
-  :global(body.theme-night :is(h2, h3, section, article)[id]) { scroll-margin-top: 92px; }
-  :global(.home-content .section-heading), :global(.listening-grid > li),
-  :global(.selected-works .work-grid > li),
-  :global(.play .game-spotlight), .atelier-about {
-    opacity: 1; transform: none;
-    transition: opacity 700ms ease var(--reveal-delay, 0ms), transform 700ms cubic-bezier(.22, 1, .36, 1) var(--reveal-delay, 0ms);
-  }
-  :global(.home-content .motion-pending) { opacity: 0; transform: translate3d(0, 22px, 0); }
-  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-    .hero picture { transform: translate3d(0, var(--art-shift, 0px), 0) scale(1.05); }
-    .hero__atmosphere { transform: translate3d(0, var(--light-shift, 0px), 0); }
-  }
-  @media (max-width: 767px) { :global(.home-content .motion-pending) { transform: translate3d(0, 12px, 0); } }
-  @media (prefers-reduced-motion: reduce) { :global(.home-content .motion-pending) { opacity: 1; } }
-  :global(body.theme-night main) { max-width: none; padding: 0; }
+  :global(body.theme-pop main) { max-width: none; padding: 0; }
   .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-  .hero { position: relative; isolation: isolate; overflow: hidden; background: #161b32; }
-  .hero__atmosphere { position: absolute; inset: 0; pointer-events: none; }
-  .hero__moonlight { position: absolute; inset: 0; background: radial-gradient(ellipse at 73% 17%, #fff5d8 0%, #e1e9ff66 26%, transparent 61%); opacity: .09; animation: moonlight-breathe 4s ease-in-out 1; }
-  .hero__mote { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); border-radius: 50%; background: #fff7df; box-shadow: 0 0 7px 2px #ffefc54d; opacity: 0; animation: mote-drift 4s ease-in-out 1; }
-  @keyframes moonlight-breathe { 0%, 100% { opacity: .07; } 50% { opacity: .21; } }
-  @keyframes mote-drift { 0%, 100% { opacity: 0; transform: translate3d(-5px, 12px, 0); } 25% { opacity: .45; } 55% { opacity: .65; transform: translate3d(8px, -10px, 0); } 80% { opacity: .2; } }
-  @media (prefers-reduced-motion: reduce) { .hero__moonlight { animation: none; opacity: .07; } .hero__mote { display: none; } }
-  .hero picture { display: block; }
-  .hero img { display: block; width: 100%; height: min(76vw, 760px); max-height: calc(100svh - 76px); object-fit: cover; object-position: center 52%; }
-  /* Open, editorial spacing lets the artwork carry each section. */
-  .hero::after { content: ''; position: absolute; inset: auto 0 0; height: 18%; background: linear-gradient(transparent, #090d1b); pointer-events: none; }
-  .home-content { max-width: 1200px; margin-inline: auto; padding: 0 var(--page-padding) 88px; }
-  .home-section { padding-top: clamp(64px, 8vw, 112px); }
-  .section-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 36px; padding: 24px 28px; border-left: 3px solid var(--color-primary); border-radius: 0 8px 8px 0; background: var(--color-surface); }
-  .section-heading > div { min-width: 0; }
-  .section-heading h2 { font-size: clamp(28px, 3.5vw, 36px); font-weight: 700; letter-spacing: .04em; }
-  .section-description { color: var(--color-muted); font-size: 13px; line-height: 1.9; margin: 8px 0 0; }
-  .section-nav { padding-top: 32px; }
-  .section-nav > p { color: var(--color-muted); font-size: 13px; margin: 0 0 12px; }
-  .section-nav ul { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; margin: 0; padding: 0; }
-  .section-nav a { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-surface); color: var(--color-ink); font-size: 13px; text-decoration: none; }
-  .section-nav a:hover { border-color: var(--color-primary); color: var(--color-primary-hover); }
-  .section-nav a span { color: var(--color-primary); }
-  .home-section + .home-section { margin-top: clamp(48px, 6vw, 80px); padding-top: 40px; border-top: 1px solid #ffffff35; }
-  .eyebrow { color: var(--color-primary); font-size: 10px; font-weight: 500; letter-spacing: .18em; margin: 0 0 10px; }
-  h2, h3 { font-family: var(--font-display); font-weight: 500; margin: 0; }
-  h2 { font-size: 28px; line-height: 1.5; letter-spacing: .08em; }
-  .genre { font-size: 10px; letter-spacing: .04em; color: var(--color-muted); }
-  .selected-works :global(.work-grid--featured) { gap: 32px; }
-  .selected-works :global(.work-card__caption) { padding-top: 18px; gap: 8px; }
-  .selected-works :global(.work-card__category) { font-size: 9px; font-weight: 400; letter-spacing: .16em; color: var(--color-primary); }
-  .selected-works :global(.work-card__year) { font-size: 11px; }
-  .selected-works :global(.work-card__caption h3) { font-size: 16px; }
-  .play :global(.game-spotlight) { margin: 0; border: 0; padding: 0; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 5vw, 72px); }
-  .play :global(.game-spotlight > div) { padding-block: 24px; }
-  .play :global(.game-spotlight .art) { border-radius: 4px; }
-  .play :global(.game-spotlight .art img) { height: auto; aspect-ratio: 6 / 5; object-position: center 24%; }
-  .play :global(.game-spotlight h3) { font-size: clamp(22px, 2.3vw, 30px); letter-spacing: .035em; }
-  .play :global(.game-spotlight .button) { margin-top: 18px; background: transparent; color: var(--color-primary); border-color: var(--color-border); }
-  .play :global(.game-spotlight .button:hover) { background: var(--color-lavender); border-color: var(--color-primary); }
-  .atelier-about { display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 32px; margin-top: 112px; border-top: 1px solid var(--color-border); padding-top: 56px; }
-  .atelier-about__portrait { width: 96px; height: 120px; object-fit: cover; object-position: center top; border-radius: 48px 48px 4px 4px; }
-  .atelier-about h2 { font-size: 23px; letter-spacing: .03em; }
-  .atelier-about__copy > p:not(.eyebrow) { color: var(--color-muted); font-size: 13px; line-height: 1.95; margin: 14px 0 6px; }
-  .atelier-about__mascot a { color: var(--color-primary); text-underline-offset: 4px; }
-  .atelier-about :global(.service-hub) { border-left: 1px solid var(--color-border); padding-left: 40px; }
-  .atelier-about :global(.service-hub__name) { font-size: 13px; text-decoration: none; }
-  .atelier-about :global(.service-hub a:hover) { text-decoration: underline; text-underline-offset: 5px; }
-  @media (max-width: 767px) {
-    .hero__mote:nth-last-child(-n+2) { display: none; }
-    /* Keep the existing portrait source, 4:5 framing and centered face. */
-    .hero img { height: auto; max-height: none; aspect-ratio: 4 / 5; object-position: center; }
-    .hero::after { height: 12%; }
-    .home-content { padding-bottom: 48px; }
-    .home-section { padding-top: 56px; }
-    .home-content .selected-works :global(.work-grid--featured > li:first-child .work-card__media img) { aspect-ratio: 4 / 5; object-position: center; }
-    .section-heading { gap: 12px; margin-bottom: 24px; padding: 20px; }
-    .section-heading h2 { font-size: 28px; }
-    .section-nav ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .section-nav a { width: 100%; justify-content: space-between; padding: 10px 12px; font-size: 12px; }
-    .section-heading > .text-link { font-size: 10px; gap: 8px; }
-    h2 { font-size: 23px; }
-    .selected-works :global(.work-grid--featured) { gap: 28px 16px; }
-    .selected-works :global(.work-card__caption) { gap: 6px; padding-top: 12px; }
-    .selected-works :global(.work-card__caption h3) { font-size: 14px; }
-    .selected-works :global(.work-card__year) { font-size: 10px; }
-    .play :global(.game-spotlight) { grid-template-columns: 1fr; gap: 0; }
-    .play :global(.game-spotlight .art img) { aspect-ratio: 6 / 5; }
-    .play :global(.game-spotlight > div) { padding: 24px 0 0; }
-    .atelier-about { grid-template-columns: 64px minmax(0, 1fr); gap: 24px 20px; margin-top: 64px; padding-top: 32px; }
-    .atelier-about__portrait { width: 64px; height: 84px; align-self: start; }
-    .atelier-about h2 { font-size: 19px; }
-    .atelier-about :global(.service-hub) { grid-column: 2; border: 0; padding: 0; }
-  }
-
-  /* —— 2026-11 renewal: listening shelf, filmstrip, richer cards —— */
-  .section-nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-  .section-nav a { width: 100%; justify-content: space-between; padding: 16px 18px; border-radius: 10px; background: linear-gradient(160deg, #161d36, #0f1528); font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; transition: border-color 200ms ease, transform 200ms ease, background 200ms ease; }
-  .section-nav a:hover { transform: translateY(-2px); background: linear-gradient(160deg, #1d2444, #131a31); }
-  .section-nav ul { counter-reset: section; }
-  .section-nav a::before { counter-increment: section; content: '0' counter(section); font-family: var(--font-body); font-size: 10px; letter-spacing: .14em; color: var(--color-muted); }
-  .section-nav a > span { margin-left: auto; }
-  .section-nav a { gap: 10px; }
-  .section-heading { background: linear-gradient(90deg, #131a30, #0c1122 85%); border-left-color: #c4b7e6; }
-  .listening-grid { align-items: stretch; }
-  .listening-card { position: relative; grid-template-rows: subgrid; grid-row: span 4; padding: 14px 14px 10px; border: 1px solid var(--color-border); border-radius: 14px; background: linear-gradient(180deg, #121930, #0c1122); transition: border-color 240ms ease, box-shadow 240ms ease; }
-  .listening-card:hover { border-color: #c4b7e666; }
-  .listening-card[data-now-playing-active] { border-color: #c4b7e6; box-shadow: 0 0 0 1px #c4b7e6, 0 18px 50px -18px #8f7bd699; }
-  .listening-card__art { border-radius: 8px; }
-  .listening-card :global(.music-preview) { padding: 0; border: 0; background: transparent; }
-  .listening-card :global(.track-player__toggle) { margin-bottom: 4px; border-radius: 999px; }
-  .listening-card :global(.track-player__suno) { margin-top: 10px; border: 0; padding-inline: 2px; }
-  .listening-card__actions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 16px; border-top: 1px solid var(--color-border); padding-top: 8px; }
-  .listening-card__actions :global(.work-like) { margin: 0 auto 0 0; }
-  .jacket-play { position: absolute; top: 26px; right: 26px; display: none; place-items: center; width: 52px; height: 52px; border: 0; border-radius: 50%; background: #c4b7e6f2; color: #101323; cursor: pointer; box-shadow: 0 8px 24px #05081299; transition: transform 180ms ease, background 180ms ease; }
-  :global(html.dock-ready) .jacket-play { display: grid; }
-  .jacket-play:hover { transform: scale(1.08); background: #ded4f5; }
-  .jacket-play svg, .shelf__icon svg { width: 24px; height: 24px; fill: currentColor; }
   .pause-icon { display: none; }
   [data-play-state="playing"] .play-icon { display: none; }
   [data-play-state="playing"] .pause-icon { display: block; }
-  .shelf { margin-top: 56px; }
-  .shelf__heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; margin-bottom: 20px; }
-  .shelf__heading h3 { font-size: 20px; letter-spacing: .06em; }
-  .shelf__heading p { margin: 0; color: var(--color-muted); font-size: 12px; }
-  .shelf__list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 180px); gap: 18px; list-style: none; margin: 0 calc(var(--page-padding) * -1); padding: 4px var(--page-padding) 14px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--page-padding); scrollbar-width: thin; scrollbar-color: #c4b7e655 transparent; }
-  .shelf__item { min-width: 0; scroll-snap-align: start; }
-  .shelf__play { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #11182b; cursor: pointer; aspect-ratio: 1; }
-  .shelf__play img, .shelf__record { width: 100%; height: 100%; object-fit: cover; transition: transform 420ms ease, filter 240ms ease; }
-  .shelf__play:hover img { transform: scale(1.05); }
-  .shelf__icon { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #c4b7e6f2; color: #101323; box-shadow: 0 6px 18px #05081299; }
-  .shelf__item[data-now-playing-active] .shelf__play { outline: 2px solid #c4b7e6; outline-offset: 3px; }
-  .shelf__title { display: block; margin-top: 10px; color: var(--color-ink); font-family: var(--font-display); font-size: 13px; line-height: 1.6; text-decoration: none; min-height: 44px; }
-  .shelf__title:hover { color: var(--color-primary-hover); text-decoration: underline; text-underline-offset: 4px; }
-  .shelf__noscript { color: var(--color-muted); font-size: 12px; }
-  :global(html:not(.dock-ready)) .shelf__icon { display: none; }
-  .filmstrip { margin-top: 64px; }
-  .filmstrip__label { margin: 0 0 16px; color: var(--color-muted); font-size: 12px; letter-spacing: .08em; }
-  .filmstrip__list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(140px, 190px); gap: 14px; list-style: none; margin: 0 calc(var(--page-padding) * -1); padding: 4px var(--page-padding) 14px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--page-padding); scrollbar-width: thin; scrollbar-color: #c4b7e655 transparent; }
-  .filmstrip__list li { scroll-snap-align: start; min-width: 0; }
-  .filmstrip__list a { position: relative; display: block; border-radius: 8px; overflow: hidden; aspect-ratio: 3 / 4; background: #11182b; color: #f4f3fc; text-decoration: none; }
-  .filmstrip__list img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; transition: transform 480ms ease; }
-  .filmstrip__list a:hover img, .filmstrip__list a:focus-visible img { transform: scale(1.06); }
-  .filmstrip__list span { position: absolute; inset: auto 0 0; padding: 28px 10px 8px; background: linear-gradient(transparent, #070a16e6); font-size: 11px; line-height: 1.5; opacity: 0; transition: opacity 240ms ease; }
-  .filmstrip__list a:hover span, .filmstrip__list a:focus-visible span { opacity: 1; }
-  @media (hover: none) { .filmstrip__list span { opacity: 1; } }
-  .play :global(.game-spotlight) { align-items: center; }
-  @media (max-width: 1023px) { .section-nav ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @media (max-width: 767px) {
-    .section-nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-    .section-nav a { padding: 12px; font-size: 13px; }
-    .listening-card { grid-row: auto; grid-template-rows: auto auto auto auto; padding: 12px 12px 8px; border-bottom: 1px solid var(--color-border); }
-    .listening-grid { gap: 20px; }
-    .jacket-play { top: 24px; right: 24px; }
-    .shelf { margin-top: 40px; }
-    .shelf__list { grid-auto-columns: 44vw; gap: 12px; }
-    .filmstrip { margin-top: 40px; }
-    .filmstrip__list { grid-auto-columns: 40vw; }
+
+  /* ───────── Hero ───────── */
+  .hero { position: relative; isolation: isolate; overflow: hidden; overflow: clip; margin-top: -84px; padding-top: 84px; background: linear-gradient(180deg, #f3ebff 0%, #ffeef5 55%, #fff8f4 100%); touch-action: manipulation; }
+  .hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+  .hero__blobs { position: absolute; inset: 0; z-index: -1; filter: blur(2px); }
+  .blob { position: absolute; border-radius: 44% 56% 62% 38% / 48% 42% 58% 52%; animation: blob-morph 14s ease-in-out infinite alternate; }
+  .blob--a { width: 46vw; height: 46vw; max-width: 620px; max-height: 620px; right: -6%; top: 4%; background: #ffd9e8; }
+  .blob--b { width: 30vw; height: 30vw; max-width: 380px; max-height: 380px; left: -8%; top: 46%; background: #d9f5ec; animation-duration: 18s; animation-delay: -6s; }
+  .blob--c { width: 22vw; height: 22vw; max-width: 280px; max-height: 280px; left: 34%; top: -8%; background: #fff0b8; animation-duration: 11s; animation-delay: -3s; }
+  @keyframes blob-morph { 0% { border-radius: 44% 56% 62% 38% / 48% 42% 58% 52%; transform: rotate(0) scale(1); } 100% { border-radius: 60% 40% 38% 62% / 40% 60% 42% 58%; transform: rotate(24deg) scale(1.08); } }
+  .hero__inner { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: center; gap: clamp(16px, 3vw, 48px); max-width: 1200px; margin-inline: auto; padding: clamp(28px, 5vw, 64px) var(--page-padding) clamp(36px, 5vw, 64px); }
+  .hero__hello { margin: 0 0 6px; }
+  .hero__hello span { display: inline-block; padding: 5px 14px; border: 2.5px solid var(--pop-plum); border-radius: 999px; background: #fff; font-family: var(--font-latin); font-weight: 600; font-size: 12px; letter-spacing: .16em; color: var(--pop-plum); transform: rotate(-4deg); animation: pop-in 600ms cubic-bezier(.3,1.5,.5,1) both; }
+  .hero__title { margin: 0; line-height: 1; }
+  .hero__logo { display: block; font-family: var(--font-latin); font-weight: 700; font-size: clamp(54px, 9.4vw, 128px); letter-spacing: -.01em; line-height: .98; color: var(--pop-plum); }
+  .hero__word { display: block; white-space: nowrap; }
+  .hero__word:nth-child(2) { color: var(--color-primary); margin-left: .36em; }
+  .hero__letter { display: inline-block; animation: letter-drop 900ms cubic-bezier(.2,1.7,.4,1) both; animation-delay: calc(var(--i) * 70ms + 150ms); text-shadow: 0 .05em 0 #ffffff, 0 .09em 0 #3f355920; transition: transform 220ms cubic-bezier(.3,1.8,.5,1), color 200ms ease; }
+  .hero__letter:hover { transform: translateY(-.12em) rotate(-6deg) scale(1.08); color: var(--pop-pink); }
+  @keyframes letter-drop { 0% { opacity: 0; transform: translateY(-.7em) rotate(-14deg) scale(.6); } 100% { opacity: 1; transform: none; } }
+  .hero__tagline { display: inline-block; margin-top: clamp(14px, 2vw, 22px); padding: 8px 18px; border-radius: 14px; background: var(--pop-plum); color: #fff; font-family: var(--font-display); font-size: clamp(16px, 2.2vw, 24px); letter-spacing: .1em; transform: rotate(-2deg); box-shadow: 5px 5px 0 var(--pop-yellow); }
+  .hero__tagline span { display: inline-block; animation: tagline-wave 2.6s ease-in-out infinite; animation-delay: calc(var(--i) * 90ms); }
+  @keyframes tagline-wave { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-.22em); } }
+  .hero__lead { margin: clamp(20px, 3vw, 32px) 0 0; font-size: clamp(15px, 1.6vw, 18px); font-weight: 700; line-height: 1.9; color: var(--pop-plum); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 22px; }
+  :global(body.theme-pop) .hero__play { gap: 10px; cursor: pointer; background: var(--pop-pink); }
+  :global(body.theme-pop) .hero__play:hover { background: #ffa6c6; }
+  .hero__play svg { width: 22px; height: 22px; fill: currentColor; }
+  :global(body.theme-pop) .button--ghost { background: #fff; }
+  :global(body.theme-pop) .button--ghost:hover { background: var(--pop-lav-soft); }
+  :global(html:not(.dock-ready)) .hero__play { display: none; }
+  .hero__noscript { margin: 12px 0 0; font-size: 13px; }
+
+  .hero__stage { --px: 0; --py: 0; position: relative; aspect-ratio: 1 / .92; max-width: 600px; width: 100%; justify-self: center; animation: pop-in 800ms cubic-bezier(.3,1.4,.5,1) 200ms both; }
+  .hero__halo { position: absolute; inset: 9% 7% 3% 7%; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #ffffff 0 46%, #fff6c9 47% 58%, #ffd1e3 59% 70%, #d8c9ff 71% 100%); border: 3px solid var(--pop-plum); box-shadow: 0 10px 0 #3f355922; transform: translate(calc(var(--px) * -10px), calc(var(--py) * -10px)); transition: transform 500ms cubic-bezier(.2,.8,.2,1); }
+  .hero__ring { position: absolute; inset: -2% -4% -8% -4%; width: 108%; height: 110%; animation: pop-spin 38s linear infinite; pointer-events: none; }
+  .hero__ring text { font-family: var(--font-latin); font-weight: 600; font-size: 10.6px; letter-spacing: .2em; fill: var(--pop-plum); }
+  .hero__kotone { position: absolute; inset: 4% 3% 0 3%; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 40%; -webkit-tap-highlight-color: transparent; transform: translate(calc(var(--px) * 16px), calc(var(--py) * 12px)); transition: transform 500ms cubic-bezier(.2,.8,.2,1); clip-path: inset(-10% -10% 6% -10% round 0 0 46% 46%); }
+  .hero__kotone img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 8px 0 #3f35591f); transform-origin: 50% 100%; animation: kotone-breathe 4.2s ease-in-out infinite; }
+  @keyframes kotone-breathe { 0%, 100% { transform: scale(1) rotate(-.6deg); } 50% { transform: scale(1.018, 1.03) rotate(.6deg); } }
+  .hero__kotone:global(.is-poked) img { animation: kotone-poke 620ms cubic-bezier(.3,1.6,.5,1); }
+  @keyframes kotone-poke { 0% { transform: scale(1); } 22% { transform: scale(1.1, .86); } 48% { transform: scale(.93, 1.1) translateY(-4%); } 72% { transform: scale(1.04, .97); } 100% { transform: scale(1); } }
+  .hero:global(.is-playing) .hero__kotone img { animation: kotone-beat 706ms cubic-bezier(.4,0,.2,1) infinite; }
+  @keyframes kotone-beat { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.02, .975) translateY(1.4%); } }
+  .hero__bubble { position: absolute; left: 0; top: 20%; margin: 0; padding: 9px 16px; border: 2.5px solid var(--pop-plum); border-radius: 18px 18px 18px 4px; background: #fff; font-family: var(--font-display); font-size: clamp(12px, 1.4vw, 15px); color: var(--pop-plum); box-shadow: 4px 4px 0 var(--pop-mint); transform: rotate(-6deg) translate(calc(var(--px) * 26px), calc(var(--py) * 20px)); z-index: 3; animation: pop-in 700ms cubic-bezier(.3,1.5,.5,1) 1300ms both; pointer-events: none; }
+  .hero__bubble:global(.is-pop) { animation: bubble-pop 420ms cubic-bezier(.3,1.8,.5,1); }
+  @keyframes bubble-pop { 0% { scale: .7; } 100% { scale: 1; } }
+  .hero__eq { position: absolute; right: 4%; bottom: 20%; display: flex; align-items: end; gap: 4px; height: 34px; padding: 8px 10px; border: 2.5px solid var(--pop-plum); border-radius: 14px; background: #fff; opacity: 0; scale: .6; transition: opacity 240ms ease, scale 320ms cubic-bezier(.3,1.6,.5,1); z-index: 3; }
+  .hero__eq i { width: 5px; height: 6px; border-radius: 3px; background: var(--pop-pink); }
+  .hero__eq i:nth-child(2) { background: var(--pop-yellow); } .hero__eq i:nth-child(3) { background: var(--pop-mint); } .hero__eq i:nth-child(4) { background: var(--pop-sky); } .hero__eq i:nth-child(5) { background: var(--pop-lav); }
+  .hero:global(.is-playing) .hero__eq { opacity: 1; scale: 1; }
+  .hero:global(.is-playing) .hero__eq i { animation: eq-bar 620ms ease-in-out infinite alternate; animation-delay: calc(var(--n, 0) * -130ms); }
+  .hero__eq i:nth-child(2) { --n: 1; } .hero__eq i:nth-child(3) { --n: 2; } .hero__eq i:nth-child(4) { --n: 3; } .hero__eq i:nth-child(5) { --n: 4; }
+  @keyframes eq-bar { from { height: 5px; } to { height: 18px; } }
+  .deco { position: absolute; left: var(--x); top: var(--y); width: clamp(26px, 4.4vw, 52px); height: auto; fill: var(--c); stroke: var(--pop-plum); stroke-width: 1.4; stroke-linejoin: round; overflow: visible; translate: calc(var(--px) * var(--d) * 44px) calc(var(--py) * var(--d) * 36px); transition: translate 600ms cubic-bezier(.2,.8,.2,1); animation: pop-float calc(3.2s + var(--d) * 1.6s) ease-in-out infinite alternate; z-index: 2; pointer-events: none; }
+  .deco--spark { animation-name: spark-twinkle; }
+  @keyframes spark-twinkle { from { transform: scale(.75) rotate(0); } to { transform: scale(1.15) rotate(40deg); } }
+  .hero__marquee { position: relative; z-index: 4; margin: 0 -3vw; padding: 12px 0; background: var(--pop-plum); color: #fff; transform: rotate(-1.4deg); border-block: 3px solid var(--pop-plum); box-shadow: 0 6px 0 var(--pop-yellow); overflow: hidden; }
+  .hero__marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+  .hero__marquee-track > span { display: flex; align-items: center; gap: 22px; padding-right: 22px; }
+  .hero__marquee b { font-family: var(--font-latin); font-weight: 600; font-size: 15px; letter-spacing: .18em; white-space: nowrap; }
+  .hero__marquee svg { width: 16px; height: 16px; fill: var(--pop-yellow); flex: none; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .hero:global(.is-offscreen) :is(.blob, .hero__ring, .hero__marquee-track, .deco, .hero__kotone img, .hero__tagline span) { animation-play-state: paused; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__inner { animation: hero-leave linear both; animation-timeline: view(); animation-range: exit 0% exit 90%; }
+      @keyframes hero-leave { to { transform: translateY(40px) scale(.96); opacity: .5; } }
+    }
   }
-  @media (prefers-reduced-motion: reduce) { .shelf__list, .filmstrip__list { scroll-behavior: auto; } }
+
+  /* ───────── Sections ───────── */
+  .home-content { max-width: 1200px; margin-inline: auto; padding: 0 var(--page-padding) 88px; }
+  .section-nav { padding-top: 56px; }
+  .section-nav > p { margin: 0 0 14px; font-family: var(--font-display); font-size: 15px; color: var(--pop-plum); }
+  .section-nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; list-style: none; margin: 0; padding: 0; counter-reset: section; }
+  .section-nav a { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 12px 16px; border: 2.5px solid var(--pop-plum); border-radius: 18px; background: #fff; color: var(--pop-plum); font-family: var(--font-display); font-size: 14px; text-decoration: none; box-shadow: 0 5px 0 var(--tile, var(--pop-lav)); transition: transform 180ms cubic-bezier(.3,1.7,.5,1), box-shadow 180ms ease, background-color 180ms ease; }
+  .section-nav li:nth-child(2) a { --tile: var(--pop-pink); } .section-nav li:nth-child(3) a { --tile: var(--pop-mint); } .section-nav li:nth-child(4) a { --tile: var(--pop-sky); } .section-nav li:nth-child(5) a { --tile: var(--pop-yellow); }
+  .section-nav a::before { counter-increment: section; content: '0' counter(section); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--tile, var(--pop-lav)); font-family: var(--font-latin); font-weight: 700; font-size: 12px; flex: none; }
+  .section-nav a > span { margin-left: auto; }
+  .section-nav a:hover { transform: translateY(-4px) rotate(-1.5deg); box-shadow: 0 9px 0 var(--tile, var(--pop-lav)); }
+  .home-section { padding-top: clamp(72px, 9vw, 120px); }
+  .section-heading { position: relative; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 24px; margin-bottom: 36px; }
+  .section-heading > div { min-width: 0; }
+  .eyebrow { display: flex; width: fit-content; align-items: center; gap: 10px; margin: 0 0 12px; padding: 4px 14px 4px 4px; border: 2.5px solid var(--pop-plum); border-radius: 999px; background: #fff; font-family: var(--font-latin); font-weight: 600; font-size: 12px; letter-spacing: .16em; color: var(--pop-plum); }
+  .eyebrow span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent, var(--pop-yellow)); letter-spacing: 0; }
+  .section-heading h2 { position: relative; display: inline-block; margin: 0; font-size: clamp(30px, 4.6vw, 52px); line-height: 1.35; color: var(--pop-plum); background: linear-gradient(transparent 62%, var(--accent, var(--pop-yellow)) 62% 92%, transparent 92%); padding-inline: .1em; }
+  .section-description { margin: 12px 0 0; color: var(--color-muted); font-size: 14px; font-weight: 500; line-height: 1.9; }
+  h3 { margin: 0; }
+  .genre { font-size: 11px; color: var(--color-muted); }
+
+  /* Listening cards */
+  .listening__heading { margin-bottom: 24px; }
+  .listening__heading h3 { font-size: 22px; color: var(--pop-plum); }
+  .listening__heading > p:last-child { margin: 8px 0 0; color: var(--color-muted); font-size: 13px; line-height: 1.9; }
+  .listening-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; list-style: none; padding: 0; margin: 0; align-items: stretch; }
+  .listening-card { position: relative; min-width: 0; display: grid; grid-template-rows: subgrid; grid-row: span 4; gap: 16px; padding: 14px 14px 10px; border: 2.5px solid var(--pop-plum); border-radius: 26px; background: #fff; box-shadow: 0 7px 0 var(--pop-lav); transition: transform 240ms cubic-bezier(.3,1.5,.5,1), box-shadow 240ms ease; }
+  .listening-card:nth-child(2) { box-shadow: 0 7px 0 var(--pop-pink); } .listening-card:nth-child(3) { box-shadow: 0 7px 0 var(--pop-mint); }
+  .listening-card:hover { transform: translateY(-5px) rotate(-.6deg); }
+  .listening-card[data-now-playing-active] { background: var(--pop-yellow-soft); animation: card-beat 706ms ease-in-out infinite; }
+  @keyframes card-beat { 50% { transform: translateY(-3px) scale(1.008); } }
+  .listening-card__art { display: block; overflow: hidden; border-radius: 16px; border: 2.5px solid var(--pop-plum); }
+  .listening-card__art img, .listening-card__art svg { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; transition: transform 420ms ease; }
+  .listening-card__art:hover img { transform: scale(1.05); }
+  .listening-card h4 { margin: 0; font-size: 19px; line-height: 1.6; color: var(--pop-plum); }
+  .listening-card__headline { margin: 8px 0 6px; color: var(--color-primary); font-size: 13px; font-weight: 700; line-height: 1.8; }
+  .listening-card__preview, .listening-card__actions { min-width: 0; }
+  .listening-card :global(.music-preview) { padding: 0; border: 0; background: transparent; }
+  .listening-card :global(.track-player__toggle) { margin-bottom: 4px; }
+  .listening-card :global(.track-player__suno) { margin-top: 10px; border: 0; padding-inline: 2px; }
+  .listening-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; border-top: 2px dashed var(--color-border); padding-top: 8px; }
+  .listening-card__actions :global(.work-like) { margin: 0 auto 0 0; }
+  .jacket-play { position: absolute; top: 28px; right: 28px; display: none; place-items: center; width: 54px; height: 54px; border: 2.5px solid var(--pop-plum); border-radius: 50%; background: var(--pop-yellow); color: var(--pop-plum); cursor: pointer; box-shadow: 0 4px 0 var(--pop-plum); transition: transform 180ms cubic-bezier(.3,1.7,.5,1); }
+  :global(html.dock-ready) .jacket-play { display: grid; }
+  .jacket-play:hover { transform: scale(1.12) rotate(8deg); }
+  .jacket-play svg, .shelf__icon svg { width: 24px; height: 24px; fill: currentColor; }
+
+  /* Shelf + filmstrip */
+  .shelf { margin-top: 56px; }
+  .shelf__heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; margin-bottom: 18px; }
+  .shelf__heading h3 { font-size: 20px; color: var(--pop-plum); }
+  .shelf__heading p { margin: 0; color: var(--color-muted); font-size: 12px; }
+  .shelf__list, .filmstrip__list { display: grid; grid-auto-flow: column; gap: 18px; list-style: none; margin: 0 calc(var(--page-padding) * -1); padding: 6px var(--page-padding) 18px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--page-padding); scrollbar-width: thin; scrollbar-color: var(--pop-lav) transparent; }
+  .shelf__list { grid-auto-columns: minmax(150px, 176px); }
+  .shelf__item { min-width: 0; scroll-snap-align: start; }
+  .shelf__item:nth-child(odd) { rotate: -1.5deg; } .shelf__item:nth-child(even) { rotate: 1.5deg; translate: 0 6px; }
+  .shelf__play { position: relative; display: block; width: 100%; padding: 0; border: 2.5px solid var(--pop-plum); border-radius: 18px; overflow: hidden; background: var(--pop-lav-soft); cursor: pointer; aspect-ratio: 1; box-shadow: 0 5px 0 #3f355922; transition: transform 220ms cubic-bezier(.3,1.7,.5,1); }
+  .shelf__play:hover { transform: translateY(-5px) scale(1.03); }
+  .shelf__play img, .shelf__record { width: 100%; height: 100%; object-fit: cover; }
+  .shelf__icon { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 42px; height: 42px; border: 2.5px solid var(--pop-plum); border-radius: 50%; background: var(--pop-yellow); color: var(--pop-plum); }
+  :global(html:not(.dock-ready)) .shelf__icon { display: none; }
+  .shelf__item[data-now-playing-active] .shelf__play { box-shadow: 0 0 0 4px var(--pop-pink); animation: card-beat 706ms ease-in-out infinite; }
+  .shelf__title { display: block; margin-top: 12px; min-height: 44px; color: var(--pop-plum); font-size: 13px; font-weight: 700; line-height: 1.6; text-decoration: none; }
+  .shelf__title:hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
+  .shelf__noscript { color: var(--color-muted); font-size: 12px; }
+  .selected-works :global(.work-grid--featured) { gap: 32px; }
+  .selected-works :global(.work-card__caption h3) { font-size: 16px; }
+  .filmstrip { margin-top: 56px; }
+  .filmstrip__label { margin: 0 0 12px; font-family: var(--font-display); font-size: 16px; color: var(--pop-plum); }
+  .filmstrip__list { grid-auto-columns: minmax(140px, 184px); }
+  .filmstrip__list li { scroll-snap-align: start; min-width: 0; }
+  .filmstrip__list li:nth-child(odd) { rotate: 1.6deg; } .filmstrip__list li:nth-child(even) { rotate: -1.6deg; translate: 0 8px; }
+  .filmstrip__list a { position: relative; display: block; padding: 8px 8px 30px; border: 2.5px solid var(--pop-plum); border-radius: 14px; background: #fff; color: var(--pop-plum); text-decoration: none; box-shadow: 0 5px 0 #3f355922; transition: transform 240ms cubic-bezier(.3,1.7,.5,1), rotate 240ms ease; }
+  .filmstrip__list a:hover, .filmstrip__list a:focus-visible { transform: translateY(-8px) scale(1.04); }
+  .filmstrip__list img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 22%; border-radius: 8px; }
+  .filmstrip__list span { position: absolute; inset: auto 8px 7px; font-size: 11px; font-weight: 700; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+
+  /* Games */
+  .play :global(.game-spotlight) { margin: 0; padding: clamp(16px, 2.4vw, 28px); grid-template-columns: .85fr 1.15fr; gap: clamp(24px, 4vw, 56px); align-items: center; border: 2.5px solid var(--pop-plum); border-radius: 30px; background: #fff; box-shadow: 0 8px 0 var(--pop-mint); }
+  .play :global(.game-spotlight .art) { border-radius: 20px; border: 2.5px solid var(--pop-plum); }
+  .play :global(.game-spotlight .art img) { height: auto; aspect-ratio: 6 / 5; object-position: center 24%; }
+  .play :global(.game-spotlight h3) { font-family: var(--font-latin); font-weight: 700; font-size: clamp(26px, 3vw, 40px); letter-spacing: .01em; color: var(--pop-plum); }
+  .play :global(.game-spotlight .eyebrow) { border: 0; padding: 0; background: none; }
+  .play :global(.game-spotlight .button) { margin-top: 18px; }
+
+  /* About */
+  .atelier-about { display: grid; grid-template-columns: 112px 1fr auto; align-items: center; gap: 28px; margin-top: clamp(72px, 9vw, 120px); padding: clamp(20px, 3vw, 36px); border: 2.5px solid var(--pop-plum); border-radius: 30px; background: var(--pop-yellow-soft); box-shadow: 0 8px 0 var(--pop-yellow); }
+  .atelier-about__portrait { width: 112px; height: 112px; object-fit: cover; object-position: center top; border-radius: 50%; border: 2.5px solid var(--pop-plum); background: #fff; animation: pop-wiggle 5s ease-in-out infinite; }
+  .atelier-about h2 { margin: 0; font-size: 24px; color: var(--pop-plum); }
+  .atelier-about .eyebrow { --accent: var(--pop-yellow); }
+  .atelier-about__copy > p:not(.eyebrow) { color: var(--pop-plum); font-size: 14px; line-height: 1.95; margin: 10px 0 4px; }
+  .atelier-about__mascot a { color: var(--color-primary); text-underline-offset: 4px; }
+  .atelier-about :global(.service-hub) { border-left: 2px dashed #3f355940; padding-left: 32px; }
+  .atelier-about :global(.service-hub__name) { font-size: 13px; text-decoration: none; }
+
+  /* Home reveal (home-motion.ts) */
+  :global(.home-content .section-heading), :global(.listening-grid > li), :global(.selected-works .work-grid > li), :global(.play .game-spotlight), .atelier-about { transition: opacity 520ms ease var(--reveal-delay, 0ms), transform 620ms cubic-bezier(.3,1.5,.5,1) var(--reveal-delay, 0ms), box-shadow 240ms ease; }
+  :global(.home-content .motion-pending) { opacity: 0; transform: translate3d(0, 28px, 0) scale(.95) rotate(-1deg); }
+
+  @media (max-width: 1023px) { .section-nav ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 899px) {
+    .hero__inner { grid-template-columns: 1fr; text-align: center; padding-top: 20px; }
+    .hero__copy { order: 2; }
+    .hero__stage { order: 1; max-width: 440px; }
+    .hero__word:nth-child(2) { margin-left: 0; }
+    .hero__actions { justify-content: center; }
+    .hero__logo { font-size: clamp(52px, 17vw, 96px); }
+  }
+  @media (max-width: 767px) {
+    .hero { margin-top: 0; padding-top: 0; }
+    .section-nav { padding-top: 44px; }
+    .section-nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; }
+    .section-nav a { padding: 10px 12px; font-size: 13px; min-height: 52px; }
+    .listening-grid { grid-template-columns: 1fr; gap: 26px; }
+    .listening-card { grid-row: auto; grid-template-rows: auto auto auto auto; }
+    .listening-card__art { width: 100%; max-width: 480px; justify-self: center; }
+    .shelf__list { grid-auto-columns: 42vw; gap: 14px; }
+    .filmstrip__list { grid-auto-columns: 40vw; gap: 14px; }
+    .selected-works :global(.work-grid--featured) { gap: 28px 16px; }
+    .home-content .selected-works :global(.work-grid--featured > li:first-child .work-card__media img) { aspect-ratio: 4 / 5; object-position: center; }
+    .play :global(.game-spotlight) { grid-template-columns: 1fr; gap: 16px; }
+    .atelier-about { grid-template-columns: 72px minmax(0, 1fr); gap: 18px; }
+    .atelier-about__portrait { width: 72px; height: 72px; align-self: start; }
+    .atelier-about :global(.service-hub) { grid-column: 1 / -1; border: 0; padding: 0; }
+    .hero__marquee b { font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.home-content .motion-pending) { opacity: 1; }
+    .hero__letter, .hero__hello span, .hero__stage, .hero__bubble { animation: none; opacity: 1; }
+  }
+
 </style>

@@ -32,35 +32,35 @@ const catalog: DockTrack[] = getListeningCatalog(await getCollection('works'))
 </aside>
 
 <style is:global>
-  .dock { position: fixed; inset: auto 0 0 0; z-index: 40; background: #0d1224f2; -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); border-top: 1px solid #c9b9e83d; color: #f4f3fc; --dock-accent: #c4b7e6; --color-focus: #f2b8e8; padding-bottom: env(safe-area-inset-bottom, 0px); animation: dock-rise 320ms cubic-bezier(.2,.8,.2,1); }
+  .dock { position: fixed; inset: auto 0 0 0; z-index: 40; background: #fffffff5; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 3px solid #3f3559; color: #3f3559; --dock-accent: #ff8fb8; --color-focus: #d6418a; box-shadow: 0 -6px 0 #ffd45e; padding-bottom: env(safe-area-inset-bottom, 0px); animation: dock-rise 320ms cubic-bezier(.2,.8,.2,1); }
   .dock[hidden] { display: none; }
   @keyframes dock-rise { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
   .dock__seek { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 14px; margin: -7px 0 -3px; background: transparent; cursor: pointer; position: relative; z-index: 1; }
-  .dock__seek::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(90deg, var(--dock-accent) var(--dock-progress, 0%), #ffffff26 var(--dock-progress, 0%)); }
-  .dock__seek::-moz-range-track { height: 3px; background: #ffffff26; }
-  .dock__seek::-moz-range-progress { height: 3px; background: var(--dock-accent); }
-  .dock__seek::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; margin-top: -5px; border-radius: 50%; background: #f5f1fa; border: 2px solid var(--dock-accent); }
-  .dock__seek::-moz-range-thumb { width: 11px; height: 11px; border-radius: 50%; background: #f5f1fa; border: 2px solid var(--dock-accent); }
+  .dock__seek::-webkit-slider-runnable-track { height: 5px; background: linear-gradient(90deg, var(--dock-accent) var(--dock-progress, 0%), #e6dcf7 var(--dock-progress, 0%)); }
+  .dock__seek::-moz-range-track { height: 5px; background: #e6dcf7; }
+  .dock__seek::-moz-range-progress { height: 5px; background: var(--dock-accent); }
+  .dock__seek::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border-radius: 50%; background: #ffd45e; border: 2.5px solid #3f3559; }
+  .dock__seek::-moz-range-thumb { width: 11px; height: 11px; border-radius: 50%; background: #ffd45e; border: 2.5px solid #3f3559; }
   .dock__inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px 18px; max-width: 1200px; margin-inline: auto; padding: 8px var(--page-padding) 10px; }
-  .dock__art { display: block; width: 52px; height: 52px; border-radius: 6px; overflow: hidden; background: #292440; flex: none; }
+  .dock__art { display: block; width: 52px; height: 52px; border-radius: 14px; border: 2.5px solid #3f3559; overflow: hidden; background: #efe8ff; flex: none; }
   .dock__art img { width: 100%; height: 100%; object-fit: cover; }
   .dock__meta { min-width: 0; }
-  .dock__eyebrow { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 10px; letter-spacing: .08em; color: var(--dock-accent); }
-  .dock__time { color: #a8aec4; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+  .dock__eyebrow { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: #7450c8; }
+  .dock__time { color: #6b5f85; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
   .dock__title { margin: 2px 0 0; font-family: var(--font-display); font-size: 15px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .dock__status { margin: 0; font-size: 11px; color: #ffb4ab; }
+  .dock__status { margin: 0; font-size: 11px; color: #b3261e; }
   .dock__status:empty { display: none; }
   .dock__bars { display: inline-flex; align-items: end; gap: 2px; height: 11px; }
-  .dock__bars i { width: 2px; height: 3px; background: currentColor; border-radius: 1px; }
+  .dock__bars i { width: 3px; height: 3px; background: #ff8fb8; border-radius: 2px; }
   .dock[data-state="playing"] .dock__bars i { animation: dock-bar 900ms ease-in-out infinite alternate; }
   .dock__bars i:nth-child(2) { animation-delay: -300ms !important; } .dock__bars i:nth-child(3) { animation-delay: -620ms !important; } .dock__bars i:nth-child(4) { animation-delay: -150ms !important; }
   @keyframes dock-bar { from { height: 3px; } to { height: 11px; } }
   .dock__controls { display: flex; align-items: center; gap: 4px; }
   .dock button { font-family: inherit; cursor: pointer; }
-  .dock__skip, .dock__close { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: #d9d4ea; transition: background-color 160ms ease; }
-  .dock__skip:hover, .dock__close:hover { background: #ffffff14; }
-  .dock__toggle { display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--dock-accent); color: #101323; transition: transform 160ms ease, background-color 160ms ease; }
-  .dock__toggle:hover { background: #ded4f5; transform: scale(1.05); }
+  .dock__skip, .dock__close { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: #3f3559; transition: background-color 160ms ease; }
+  .dock__skip:hover, .dock__close:hover { background: #efe8ff; }
+  .dock__toggle { display: grid; place-items: center; width: 50px; height: 50px; border: 2.5px solid #3f3559; border-radius: 50%; background: #ffd45e; color: #3f3559; box-shadow: 0 4px 0 #3f3559; transition: transform 160ms cubic-bezier(.3,1.7,.5,1), background-color 160ms ease; }
+  .dock__toggle:hover { background: #ffe07f; transform: scale(1.08) rotate(6deg); }
   .dock svg { width: 22px; height: 22px; fill: currentColor; }
   .dock .pause-icon { display: none; }
   .dock [data-play-state="playing"] .play-icon { display: none; }
@@ -68,11 +68,11 @@ const catalog: DockTrack[] = getListeningCatalog(await getCollection('works'))
   .dock[data-state="loading"] .dock__toggle { animation: dock-pulse 900ms ease-in-out infinite; }
   @keyframes dock-pulse { 50% { opacity: .55; } }
   .dock__extras { display: flex; align-items: center; gap: 10px; }
-  .dock__continuous { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border: 1px solid #837b9b; border-radius: 999px; background: transparent; font-size: 11px; color: #d9d4ea; white-space: nowrap; }
+  .dock__continuous { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border: 2px solid #8b76bf; border-radius: 999px; background: #fff; font-size: 11px; font-weight: 700; color: #3f3559; white-space: nowrap; }
   .dock__check { width: 12px; height: 12px; border: 1.5px solid currentColor; border-radius: 3px; }
-  .dock__continuous[aria-pressed="true"] { border-color: var(--dock-accent); color: #f4f3fc; }
-  .dock__continuous[aria-pressed="true"] .dock__check { background: var(--dock-accent); border-color: var(--dock-accent); box-shadow: inset 0 0 0 2px #0d1224; }
-  .dock__suno { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 4px; font-size: 11px; color: var(--dock-accent); text-decoration: none; white-space: nowrap; }
+  .dock__continuous[aria-pressed="true"] { border-color: #3f3559; background: #ddf7f0; }
+  .dock__continuous[aria-pressed="true"] .dock__check { background: #3f3559; border-color: #3f3559; box-shadow: inset 0 0 0 2px #ddf7f0; }
+  .dock__suno { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 4px; font-size: 11px; font-weight: 700; color: #7450c8; text-decoration: none; white-space: nowrap; }
   .dock__suno:hover { text-decoration: underline; text-underline-offset: 4px; }
   .dock__suno[hidden] { display: none; }
   html.dock-open body { padding-bottom: 84px; }
@@ -82,7 +82,7 @@ const catalog: DockTrack[] = getListeningCatalog(await getCollection('works'))
     .dock__art { width: 44px; height: 44px; }
     .dock__skip[data-dock-prev] { display: none; }
     .dock__art { grid-column: 1; grid-row: 1; } .dock__meta { grid-column: 2; grid-row: 1; } .dock__controls { grid-column: 3; grid-row: 1; } .dock__close { grid-column: 4; grid-row: 1; }
-    .dock__extras { grid-column: 1 / -1; grid-row: 2; justify-content: space-between; border-top: 1px solid #ffffff14; margin-top: 2px; }
+    .dock__extras { grid-column: 1 / -1; grid-row: 2; justify-content: space-between; border-top: 2px dashed #e6dcf7; margin-top: 2px; }
     .dock__continuous { border: 0; padding-inline: 0; }
     .dock__title { font-size: 14px; }
     html.dock-open body { padding-bottom: 124px; }
