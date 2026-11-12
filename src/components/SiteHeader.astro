@@ -4,6 +4,8 @@ const navigation = [
   { href: '/music/', label: '曲を聴く' },
   { href: '/works/', label: '作品一覧' },
   { href: '/games/', label: 'ゲーム' },
+  { href: '/videos/', label: '動画' },
+  { href: '/characters/', label: 'キャラクター' },
   { href: '/journal/', label: '制作ノート' },
   { href: '/about/', label: '活動について' },
 ] as const;
@@ -43,10 +45,6 @@ const isCurrentRoute = (href: string) => {
   </div>
 </header>
 
-<script>
-  import { initSiteNavigation } from '../lib/site-navigation';
-  initSiteNavigation();
-</script>
 
 <style>
   .site-header { background: var(--color-surface); }

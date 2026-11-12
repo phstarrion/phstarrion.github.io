@@ -1,0 +1,50 @@
+---
+import { kanonPort } from '../lib/projects';
+interface Props { headingLevel?: 'h2' | 'h3'; }
+const { headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+<section class="port" aria-labelledby="port-title" data-reveal>
+  <div class="port__scene" aria-hidden="true">
+    <img class="port__chart" src="/images/games/kanon-port/chart.png" alt="" width="250" height="186" loading="lazy" decoding="async" />
+    <img class="port__ship" src="/images/games/kanon-port/caravel.webp" alt="" width="400" height="393" loading="lazy" decoding="async" />
+    <div class="port__town"><img src="/images/games/kanon-port/tree.png" alt="" width="56" height="62" loading="lazy" /><img src="/images/games/kanon-port/tavern.png" alt="" width="84" height="56" loading="lazy" /><img src="/images/games/kanon-port/inn.png" alt="" width="84" height="56" loading="lazy" /><img class="port__sprite" src="/images/games/kanon-port/kanon-sprite.png" alt="" width="31" height="40" loading="lazy" /></div>
+    <div class="port__dialog"><img src="/images/games/kanon-port/kanon-bust.png" alt="" width="82" height="96" loading="lazy" /><p><b>かのん</b>{kanonPort.genre}</p></div>
+  </div>
+  <div class="port__copy">
+    <p class="port__status"><span>{kanonPort.status}</span> NEXT GAME</p>
+    <Heading id="port-title">{kanonPort.title}</Heading>
+    <p class="port__lead">{kanonPort.lead}</p>
+    <p class="port__description">{kanonPort.description}</p>
+    <ul class="port__features">{kanonPort.features.map((feature) => <li>{feature}</li>)}</ul>
+    {kanonPort.playUrl
+      ? <a class="button" href={kanonPort.playUrl} rel="noopener noreferrer">ブラウザで遊ぶ <span aria-hidden="true">↗</span></a>
+      : <p class="port__note">公開の準備ができたら、ここから遊べるようになります。</p>}
+  </div>
+</section>
+<style>
+  .port { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 64px); align-items: center; margin-top: 32px; padding: clamp(16px, 2.4vw, 28px); border: 2.5px solid var(--pop-plum); border-radius: 30px; background: var(--pop-sky-soft); box-shadow: 0 8px 0 var(--pop-sky); }
+  .port__scene { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: #7fb7b9; border: 3px solid #e9ecff; box-shadow: 0 0 0 3px #0c1350, 0 24px 60px -24px #000c; image-rendering: pixelated; }
+  .port__chart { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+  .port__ship { position: absolute; left: 9%; top: 8%; width: 46%; height: auto; image-rendering: auto; filter: drop-shadow(0 10px 8px #1b3a4a66); animation: port-bob 5s ease-in-out infinite alternate; }
+  @keyframes port-bob { from { transform: translateY(0) rotate(-1.2deg); } to { transform: translateY(6px) rotate(1.2deg); } }
+  .port__town { position: absolute; right: 4%; top: 30%; display: flex; align-items: end; gap: 2px; transform: scale(1.5); transform-origin: right center; }
+  .port__town img { image-rendering: pixelated; }
+  .port__sprite { margin-left: -70px; margin-bottom: -18px; position: relative; }
+  .port__dialog { position: absolute; inset: auto 4% 5% 4%; display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: #1b2a86f2; border: 2px solid #e9ecff; box-shadow: 0 0 0 2px #0c1350; border-radius: 5px; color: #f4f2ff; image-rendering: auto; }
+  .port__dialog img { width: 54px; height: auto; image-rendering: pixelated; flex: none; }
+  .port__dialog p { margin: 0; font-size: 12px; line-height: 1.7; letter-spacing: .06em; }
+  .port__dialog b { display: block; color: #38e6f6; font-weight: 500; font-size: 11px; }
+  .port__status { margin: 0 0 12px; font-size: 10px; letter-spacing: .18em; color: var(--color-muted); }
+  .port__status span { display: inline-block; margin-right: 10px; padding: 3px 10px; border: 2px solid var(--pop-plum); border-radius: 999px; background: var(--pop-yellow); color: var(--pop-plum); font-weight: 700; letter-spacing: .08em; }
+  .port :is(h2, h3) { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 2.8vw, 36px); letter-spacing: .035em; margin: 0; color: var(--pop-plum); }
+  .port__lead { margin: 12px 0 0; color: var(--color-primary); font-size: 15px; font-weight: 700; }
+  .port__description { margin: 12px 0 0; color: var(--color-muted); font-size: 14px; line-height: 1.95; }
+  .port__features { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .port__features li { position: relative; padding-left: 20px; font-size: 13px; color: var(--color-ink); }
+  .port__features li::before { content: '◆'; position: absolute; left: 0; top: 1px; font-size: 10px; color: var(--pop-pink); }
+  .port__note { margin: 20px 0 0; font-size: 12px; color: var(--color-muted); }
+  .port .button { margin-top: 20px; }
+  @media (max-width: 767px) { .port { grid-template-columns: 1fr; } .port__town { transform: scale(1.1); } }
+  @media (prefers-reduced-motion: reduce) { .port__ship { animation: none; } }
+</style>

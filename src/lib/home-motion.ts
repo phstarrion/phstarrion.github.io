@@ -1,5 +1,9 @@
 /** Progressive enhancement: every work remains visible without JavaScript. */
+let disposeHomeMotion: (() => void) | undefined;
+
 export function initHomeMotion() {
+  disposeHomeMotion?.();
+  disposeHomeMotion = undefined;
   const hero = document.querySelector<HTMLElement>('.hero');
   if (!hero || !('IntersectionObserver' in window)) return;
 
@@ -72,4 +76,15 @@ export function initHomeMotion() {
   reducedMotion.addEventListener('change', configure);
   desktop.addEventListener('change', configure);
   configure();
+  // In-site navigation re-runs this initializer; drop the previous page's listeners first.
+  disposeHomeMotion = () => {
+    observer?.disconnect();
+    heroObserver.disconnect();
+    if (frame) window.cancelAnimationFrame(frame);
+    window.removeEventListener('scroll', requestParallax);
+    window.removeEventListener('resize', requestParallax);
+    window.removeEventListener('pageshow', configure);
+    reducedMotion.removeEventListener('change', configure);
+    desktop.removeEventListener('change', configure);
+  };
 }

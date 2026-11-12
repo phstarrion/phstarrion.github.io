@@ -1,5 +1,34 @@
 # Kanon Studio — Moonlit Atelier
 
+## November 12, 2026 — Milky Pop redesign (review candidate, not deployed)
+
+The user then asked to change the whole design to a cute, pop look with cute fonts and a hero that shows off animation technique, and chose **Milky Pastel** colours with **ことにゃん as the hero lead**. This supersedes the night palette, the image-only atelier hero and “no hero copy” for every route. The earlier decisions below are history.
+
+- **Palette** (`body.theme-pop` in `global.css`, applied to every page): cream canvas #FFF8F4 with a faint lavender dot grid, plum ink #3F3559, primary purple #7450C8, accents pink #FF8FB8 / mint #7ADCC4 / yellow #FFD45E / sky #8EC9FF / lavender #B9A2FF. Text and control-edge contrast is covered by `tests/contrast-tokens.test.ts`.
+- **Type**: Mochiy Pop One for headings, Zen Maru Gothic 400/500/700 for body, Fredoka for Latin display. Self-hosted through `@fontsource` (no Google Fonts request).
+- **Shape language**: 2.5px plum outlines, 18–30px radii, solid offset “sticker” shadows in an accent colour, pill buttons that press down, tilted cards, scalloped footer edge, marker-highlight headings.
+- **Hero**: cut-out sticker of 琴音 (background removed from the user's cherry-blossom illustration, white sticker edge added) inside a ringed halo with rotating text. Techniques: per-letter spring-in logo, waving tagline, morphing colour blobs, pointer parallax on the sticker and floating icons, canvas star/heart bursts on tap, a pokeable mascot with a speech bubble, an equaliser and beat-bob while a preview plays, a tilted marquee band, and a scroll-driven exit where supported. The primary button plays the newest preview in the dock.
+- The speech-bubble sounds (「にゃ♪」「きらっ☆」 …) are playful interface text, not character canon.
+- All motion is progressive enhancement and is disabled under reduced motion; animations pause when the hero is off screen.
+- The atelier watercolour of 花音 remains on the Characters page and as the journal/social artwork.
+
+## November 12, 2026 — Experience renewal (review candidate, not deployed)
+
+The user asked for a rich, smart, site-wide improvement and chose: keep the world (image-only atelier hero, navy × lavender, approved mascot, existing works and links) and renew the experience. New content requested: songs after September 19, かのんの港町, なぎの地図ノート. Publish only after the user reviews the preview.
+
+- **Listening dock**: one persistent player at the bottom of every page. It opens only after the visitor presses play, shows jacket, title, seek bar, previous/next and a Suno link, and keeps playing while the visitor moves between pages (Astro `ClientRouter` + `transition:persist`). 「つづけて再生」 is on by default and continues to the next 30-second preview after one ends; the visitor can turn it off and the choice is remembered. Nothing plays on page load. This supersedes “No cross-page playback persistence”. Without JavaScript each page keeps its native `<audio controls>`; with the dock active those duplicate native bars are hidden and the dock provides seeking.
+- **All routes use the night theme** so page transitions never flash between palettes. The light tokens remain in `tokens.css`.
+- **Home**: category tiles (01–05), three newest playable songs as equal-height cards with a play button on the jacket, a horizontally scrolling 「つづけて聴く」 shelf for the remaining playable songs, the three curated illustrations plus an 「ほかのイラスト」 filmstrip, both games, a new 「動画を見る」 section, About. No hero copy was added.
+- **Music**: jacket grid (3 / 2 columns; 2 on phones) in place of one full-width row per song. Square jackets stay prominent; the page is roughly a third as long. On phones the headline, tags, share row and “back to index” link are hidden to keep cards short; they remain on the song's detail page and on wider screens.
+- **Games**: かのんの港町 is introduced as 制作中 using the game's own pixel assets. No play link until `kanonPort.playUrl` in `src/lib/projects.ts` is set to a verified public URL.
+- **Videos** (`/videos/`): なぎの地図ノート with its five series and three real episode titles each. No watch link until `nagi.youtubeUrl` is set; the page says 視聴リンクは準備中 instead of implying a destination. The map backdrop is credited to 国土地理院.
+- **New songs**: 青になるまで and Red Light, Still Waiting are listed as 音源は準備中 with their Suno links. No jacket or preview was added because neither file could be retrieved in this session; add them with the existing preview workflow.
+- **Likes**: `LikeButton` renders only for IDs in `src/data/engagement-works.json`, so a work can be published before it is registered with the reaction backend.
+- **Performance**: `npm run images` writes WebP derivatives to `public/images/opt/`; the build adds them as `srcset` while every `src` keeps the original file. Hero: 2.7 MB PNG → about 155 KB (desktop) / 85 KB (phone).
+- **Motion**: `data-reveal` scroll reveals (site-wide helper), short cross-fade page transitions, artwork morph between a work card and its detail page, a gently bobbing ship. All are disabled under reduced motion and none gates content.
+- **Characters** (`/characters/`): the user named the mascot **琴音（ことね）**, nickname **ことにゃん** (2026-11-12). This supersedes “name not decided”. Full name decided the same day: **瀬尾・リラ・琴音（せお ことね / Kotone Lyra Seo）**; the family name keeps the 瀬 shared by 鳴瀬花音・黒瀬ひな・瀬戸なぎ, and リラ is Lyra. Roots (a European half-background is being considered) and personality are still undecided: leave `origin` in `src/lib/characters.ts` null until the user decides, and do not invent biography. The page uses the user-supplied cherry-blossom illustration, cropped to the upper body, and introduces 花音 and 瀬戸なぎ with facts the user has stated.
+- Not verified: Safari and real devices, lock-screen media controls, the reaction backend with the new markup, link-preview crops.
+
 ## October 17, 2026 — Shared link identity
 
 Use `public/images/social/kanon-studio-v1.jpg` as the default link-preview image. It combines the existing atelier scene, the approved mascot and the studio/creator names at 1200×630. Home and Music use this default; pages with an explicit artwork image retain it. The page hero is independent. Provide image descriptions for Open Graph and X metadata; declare dimensions and JPEG type for the default card. The file name is versioned so a future asset replacement need not reuse the same image URL. Platform cropping and cache refresh are controlled by the sharing platform and are not verified by local HTML tests. Do not post to SNS as part of an asset update.

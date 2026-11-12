@@ -1,14 +1,17 @@
 ---
 interface Props { workId: string; title: string; }
 const {workId,title} = Astro.props;
+// Only works registered with the reaction backend can receive likes (see DESIGN.md, Reliable likes).
+import confirmedWorks from '../data/engagement-works.json';
+const enabled = (confirmedWorks as string[]).includes(workId);
 ---
-<div class="work-like" data-like-container>
+{enabled && <div class="work-like" data-like-container>
   <button class="work-like__button" type="button" data-like-work={workId} data-like-title={title} aria-label={`${title}にいいね`} aria-pressed="false" disabled>
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
     <span data-like-label>いいね</span>
   </button>
   <span class="work-like__status" data-like-status role="status" aria-live="polite"></span>
-</div>
+</div>}
 <style>
   .work-like { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; position:relative; margin-block:16px; }
   .work-like__button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; padding:10px 18px; border:1px solid var(--color-control-border); border-radius:999px; color:var(--color-primary); background:var(--color-surface); font:inherit; font-size:13px; cursor:pointer; transition:background 180ms,color 180ms; }

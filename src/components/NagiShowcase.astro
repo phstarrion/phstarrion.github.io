@@ -1,0 +1,57 @@
+---
+import { nagi } from '../lib/projects';
+interface Props { variant: 'home' | 'page'; }
+const { variant } = Astro.props;
+const Title = variant === 'home' ? 'h3' : 'h2';
+const SeriesTitle = variant === 'home' ? 'h4' : 'h3';
+const series = variant === 'home' ? nagi.series.slice(0, 5) : nagi.series;
+---
+<div class:list={['nagi', `nagi--${variant}`]}>
+  <div class="nagi__stage" data-reveal>
+    <img class="nagi__map" src="/images/nagi/map-setouchi.webp" alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+    <img class="nagi__host" src="/images/nagi/nagi-waku.webp" alt="地図を手にした解説役の瀬戸なぎ。茶色の髪に青緑のスカーフ、探検ジャケット" width="410" height="900" loading="lazy" decoding="async" />
+    <div class="nagi__plate">
+      <p class="nagi__eyebrow">EXPLAINER SERIES</p>
+      <Title class="nagi__title">{nagi.name}</Title>
+      <p class="nagi__host-name">解説：{nagi.host}</p>
+    </div>
+    <p class="nagi__credit">地図：国土地理院の標高データを加工して作成</p>
+  </div>
+  <div class="nagi__body">
+    <p class="nagi__lead">{nagi.lead}</p>
+    <ul class="nagi__series">
+      {series.map((item) => <li data-reveal>
+        <SeriesTitle>{item.title}</SeriesTitle>
+        <p class="nagi__theme">{item.theme}</p>
+        {variant === 'page' && <ul class="nagi__episodes">{item.episodes.map((episode) => <li>「{episode}」</li>)}</ul>}
+        {variant === 'home' && <p class="nagi__sample">「{item.episodes[0]}」ほか</p>}
+      </li>)}
+    </ul>
+    {nagi.youtubeUrl
+      ? <a class="button" href={nagi.youtubeUrl} rel="noopener noreferrer">YouTubeで見る <span aria-hidden="true">↗</span></a>
+      : <p class="nagi__note">視聴リンクは準備中です。</p>}
+  </div>
+</div>
+<style>
+  .nagi { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .nagi__stage { position: relative; aspect-ratio: 5 / 4; border-radius: 28px; border: 2.5px solid var(--pop-plum); box-shadow: 0 8px 0 var(--pop-sky); overflow: hidden; background: #10263a; isolation: isolate; }
+  .nagi__map { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.7) brightness(.62) hue-rotate(-8deg); transform: scale(1.08); }
+  .nagi__stage::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, #090d1bd9 0%, #090d1b66 45%, transparent 75%), linear-gradient(transparent 60%, #090d1bcc); z-index: 1; }
+  .nagi__host { position: absolute; right: 2%; bottom: -34%; width: auto; height: 128%; z-index: 2; filter: drop-shadow(0 12px 24px #0009); }
+  .nagi__plate { position: absolute; left: 7%; top: 12%; z-index: 3; max-width: 56%; }
+  .nagi__eyebrow { margin: 0 0 10px; font-size: 10px; letter-spacing: .2em; color: #8fe0d2; }
+  .nagi__title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.6vw, 32px); line-height: 1.4; letter-spacing: .04em; color: #f4f3fc; }
+  .nagi__host-name { margin: 10px 0 0; font-size: 12px; color: #d9d4ea; }
+  .nagi__credit { position: absolute; left: 12px; bottom: 8px; z-index: 3; margin: 0; font-size: 9px; color: #ffffffb3; }
+  .nagi__lead { margin: 0 0 20px; color: var(--color-ink); font-size: 15px; line-height: 1.95; }
+  .nagi__series { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .nagi__series > li { display: grid; grid-template-columns: minmax(96px, 9em) minmax(0, 1fr); gap: 4px 20px; padding: 12px 16px; border: 2px solid var(--pop-plum); border-radius: 16px; background: #fff; box-shadow: 0 3px 0 var(--pop-sky); }
+  .nagi__series :is(h3, h4) { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 15px; letter-spacing: .04em; color: var(--color-kanon-blue); }
+  .nagi__theme { margin: 0; font-size: 13px; font-weight: 700; color: var(--color-ink); }
+  .nagi__sample { grid-column: 2; margin: 0; font-size: 12px; color: var(--color-muted); }
+  .nagi__episodes { grid-column: 2; list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; font-size: 13px; color: var(--color-muted); }
+  .nagi__note { margin: 20px 0 0; font-size: 12px; color: var(--color-muted); }
+  .nagi .button { margin-top: 24px; }
+  @media (max-width: 899px) { .nagi { grid-template-columns: 1fr; } .nagi__stage { aspect-ratio: 4 / 3; } }
+  @media (max-width: 480px) { .nagi__series > li { grid-template-columns: 1fr; } .nagi__sample, .nagi__episodes { grid-column: 1; } }
+</style>

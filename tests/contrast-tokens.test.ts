@@ -5,6 +5,7 @@ const css = readFileSync('src/styles/global.css', 'utf8');
 const themes = [
   ['default', readFileSync('src/styles/tokens.css', 'utf8')],
   ['night', css.split('body.theme-night {')[1].split('}')[0]],
+  ['pop', css.split('body.theme-pop {')[1].split('}')[0]],
 ] as const;
 function luminance(hex: string) {
   const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)

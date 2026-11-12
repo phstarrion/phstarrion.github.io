@@ -26,6 +26,7 @@ const { cover, coverAlt, coverWidth, coverHeight } = work.data;
     {cover && coverAlt && coverWidth && coverHeight ? (
       <div class="work-card__media">
         <img
+          transition:name={`work-art-${work.id}`}
           src={cover}
           alt={coverAlt}
           width={coverWidth}
