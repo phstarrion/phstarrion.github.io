@@ -6,14 +6,17 @@ export const kotone = {
   name: '琴音',
   reading: 'ことね',
   nickname: 'ことにゃん',
-  /** Decided later: family name and its reading. */
-  familyName: null as string | null,
-  familyReading: null as string | null,
+  familyName: '瀬尾' as string | null,
+  familyReading: 'せお' as string | null,
+  /** Middle name: Lyra, the constellation of the harp. */
+  middleName: 'リラ',
+  fullName: '瀬尾・リラ・琴音',
+  romanName: 'Kotone Lyra Seo',
   /** Decided later: background such as roots or birthplace. */
   origin: null as string | null,
   role: 'Kanon Studioの看板キャラクター',
   lead: '星と音の名前をもつ、スタジオの顔。',
-  nameNote: '「琴」は、夜空のこと座と、音を奏でる琴から。プロデューサーの花音（かのん）と、同じ「音」の字でつながっています。',
+  nameNote: '「琴」は、夜空のこと座と、音を奏でる琴から。ミドルネームの「リラ」も、こと座（Lyra）の名前です。プロデューサーの花音（かのん）とは、同じ「音」の字でつながっています。',
   traits: [
     { label: '髪', value: '白銀にラベンダーがかかった、ふわふわのロング' },
     { label: '瞳', value: 'むらさき' },

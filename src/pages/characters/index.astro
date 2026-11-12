@@ -5,8 +5,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { companions, kotone, kotoneDisplayName, kotoneDisplayReading } from '../../lib/characters';
 ---
 <BaseLayout
-  title={`Characters — ${kotone.name}（${kotone.nickname}） | Kanon Studio`}
-  description={`Kanon Studioの看板キャラクター、${kotone.name}（${kotone.nickname}）と仲間たちの紹介。`}
+  title={`Characters — ${kotoneDisplayName}（${kotone.nickname}） | Kanon Studio`}
+  description={`Kanon Studioの看板キャラクター、${kotoneDisplayName}（${kotone.nickname}）と仲間たちの紹介。`}
   image="/images/characters/kotone-sakura.jpeg"
   imageAlt="桜の下のベンチで頬杖をつく、白銀の髪とねこ耳の琴音"
 >
@@ -25,6 +25,7 @@ import { companions, kotone, kotoneDisplayName, kotoneDisplayReading } from '../
         <p class="lead">{kotone.lead}</p>
         <p class="name-note">{kotone.nameNote}</p>
         <dl class="traits">
+          <div><dt>フルネーム</dt><dd>{kotone.fullName}<span class="roman" lang="en">{kotone.romanName}</span></dd></div>
           {kotone.origin && <div><dt>ルーツ</dt><dd>{kotone.origin}</dd></div>}
           {kotone.traits.map((trait) => <div><dt>{trait.label}</dt><dd>{trait.value}</dd></div>)}
         </dl>
@@ -73,7 +74,7 @@ import { companions, kotone, kotoneDisplayName, kotoneDisplayReading } from '../
   .lead-character__star { position: absolute; right: 4%; top: 6%; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: #10101d; border: 1px solid #e5be7066; animation: star-twinkle 5s ease-in-out infinite; }
   .lead-character__star svg { width: 22px; height: 22px; fill: #e5be70; }
   @keyframes star-twinkle { 0%, 100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(8deg) scale(1.12); } }
-  h1 { font-size: clamp(44px, 8vw, 84px); font-weight: 700; letter-spacing: .08em; line-height: 1.5; }
+  h1 { font-size: clamp(40px, 6.4vw, 72px); font-weight: 700; letter-spacing: .08em; line-height: 1.5; }
   .nickname { margin: 4px 0 0; color: var(--color-muted); font-size: 13px; letter-spacing: .08em; }
   .nickname strong { margin-left: 10px; color: var(--color-primary); font-family: var(--font-display); font-size: 24px; font-weight: 700; letter-spacing: .06em; }
   .lead { margin: 28px 0 0; font-family: var(--font-display); font-size: clamp(17px, 2vw, 21px); line-height: 1.8; }
@@ -82,6 +83,7 @@ import { companions, kotone, kotoneDisplayName, kotoneDisplayReading } from '../
   .traits div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--color-border); }
   .traits dt { color: var(--color-primary); font-size: 12px; letter-spacing: .06em; }
   .traits dd { margin: 0; font-size: 14px; }
+  .roman { display: block; margin-top: 2px; color: var(--color-muted); font-size: 11px; letter-spacing: .08em; }
   .growing { margin: 18px 0 0; color: var(--color-muted); font-size: 12px; }
   .sheet { display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); align-items: center; padding: clamp(24px, 4vw, 40px); border: 1px solid var(--color-border); border-radius: 16px; background: linear-gradient(160deg, #141b33, #0c1122); }
   .sheet__portrait { width: 176px; height: 176px; object-fit: cover; object-position: center top; border-radius: 50%; border: 1px solid #c9b9e8; }
