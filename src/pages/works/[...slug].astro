@@ -84,6 +84,7 @@ const nextPreview = isMusic
     {cover && coverAlt && coverWidth && coverHeight ? (
       <figure class="work-detail__media">
         <img
+          transition:name={`work-art-${work.id}`}
           src={cover}
           alt={coverAlt}
           width={coverWidth}

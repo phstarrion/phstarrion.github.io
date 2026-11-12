@@ -81,10 +81,11 @@ const catalog: DockTrack[] = getListeningCatalog(await getCollection('works'))
     .dock__inner { grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 4px 10px; padding-top: 6px; }
     .dock__art { width: 44px; height: 44px; }
     .dock__skip[data-dock-prev] { display: none; }
-    .dock__extras { grid-column: 1 / -1; justify-content: space-between; border-top: 1px solid #ffffff14; margin-top: 2px; }
+    .dock__art { grid-column: 1; grid-row: 1; } .dock__meta { grid-column: 2; grid-row: 1; } .dock__controls { grid-column: 3; grid-row: 1; } .dock__close { grid-column: 4; grid-row: 1; }
+    .dock__extras { grid-column: 1 / -1; grid-row: 2; justify-content: space-between; border-top: 1px solid #ffffff14; margin-top: 2px; }
     .dock__continuous { border: 0; padding-inline: 0; }
     .dock__title { font-size: 14px; }
-    html.dock-open body { padding-bottom: 132px; }
+    html.dock-open body { padding-bottom: 124px; }
   }
   @media (prefers-reduced-motion: reduce) { .dock, .dock__bars i, .dock__toggle { animation: none !important; } .dock[data-state="playing"] .dock__bars i:nth-child(odd) { height: 9px; } .dock[data-state="playing"] .dock__bars i:nth-child(even) { height: 6px; } }
 </style>
